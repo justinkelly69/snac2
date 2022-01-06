@@ -29,7 +29,7 @@ const NodeList: FunctionComponent = (props) => {
       {
         paths.map((p, i) => {
           const node = nodes[i];
-          return (<li key={i}>{p}, {node.S}:{node.N}{'--'}{getPath(node).join('_')}{'--'}{getType(node)}</li>);
+          return (<li key={i}>"{p}" {node.S}:{node.N}{'--'}{getPath(node).join('_')}{'--'}{getType(node)}</li>);
         })
       }
     </ul>

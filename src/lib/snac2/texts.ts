@@ -23,6 +23,19 @@ export const createTextNode = (node: TextNodeArgs): TextNodeType => {
     }
     return newTextNode;
 }
+export interface TextNodeBlankArgs {
+    treeId: string,
+    path: Array<number>,
+    index: number,
+};
+export const createBlankText = (args: TextNodeBlankArgs) => {
+    return createTextNode({
+        text: '',
+        treeId: args.treeId,
+        path: args.path,
+        index: args.index,
+    })
+}
 
 export interface TextNodeCloneArgs extends TextNodeType {
     treeId: string,
