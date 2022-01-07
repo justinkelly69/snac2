@@ -8,7 +8,6 @@ export interface PINodeArgs {
     selected?: boolean,
     treeId: string,
     path: Array<number>,
-    index: number,
 };
 
 export interface PINodeType extends Node {
@@ -18,7 +17,7 @@ export interface PINodeType extends Node {
 
 export const createPINode = (node: PINodeArgs): PINodeType => {
     const newPINode: PINodeType = {
-        _: setId('P', node.treeId, node.path, node.index),
+        _: setId('P', node.treeId, node.path),
         L: node.lang,
         B: node.body,
         o: node.open || false,
@@ -30,7 +29,6 @@ export const createPINode = (node: PINodeArgs): PINodeType => {
 export interface PINodeCloneArgs extends PINodeType {
     treeId: string,
     path: Array<number>,
-    index: number,
 };
 
 export const clonePINode = (node: PINodeCloneArgs): PINodeType => {
@@ -41,6 +39,5 @@ export const clonePINode = (node: PINodeCloneArgs): PINodeType => {
         selected: node.q,
         treeId: node.treeId,
         path: node.path,
-        index: node.index,
     });
 };

@@ -7,7 +7,6 @@ export interface TextNodeArgs {
     selected?: boolean,
     treeId: string,
     path: Array<number>,
-    index: number,
 };
 
 export interface TextNodeType extends Node {
@@ -16,7 +15,7 @@ export interface TextNodeType extends Node {
 
 export const createTextNode = (node: TextNodeArgs): TextNodeType => {
     const newTextNode: TextNodeType = {
-        _: setId('T', node.treeId, node.path, node.index),
+        _: setId('T', node.treeId, node.path),
         T: node.text,
         o: node.open || false,
         q: node.selected || false,
@@ -26,21 +25,18 @@ export const createTextNode = (node: TextNodeArgs): TextNodeType => {
 export interface TextNodeBlankArgs {
     treeId: string,
     path: Array<number>,
-    index: number,
 };
 export const createBlankText = (args: TextNodeBlankArgs) => {
     return createTextNode({
         text: '',
         treeId: args.treeId,
         path: args.path,
-        index: args.index,
     })
 }
 
 export interface TextNodeCloneArgs extends TextNodeType {
     treeId: string,
     path: Array<number>,
-    index: number,
 };
 
 export const cloneTextNode = (node: TextNodeCloneArgs): TextNodeType => {
@@ -50,6 +46,5 @@ export const cloneTextNode = (node: TextNodeCloneArgs): TextNodeType => {
         selected: node.q,
         treeId: node.treeId,
         path: node.path,
-        index: node.index,
     });
 }

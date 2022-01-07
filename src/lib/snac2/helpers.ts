@@ -1,7 +1,7 @@
 import { NodeType, ChildNodeType } from './elements';
 
-export const setId = (nodeType: NodeType, treeId: string, path: Array<number>, index: number): string => {
-    const fullPath = [...path, index].join(',');
+export const setId = (nodeType: NodeType, treeId: string, path: Array<number>): string => {
+    let fullPath = [...path].join(',');
     return `${nodeType}:${treeId}:${fullPath}`;
 }
 

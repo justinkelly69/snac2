@@ -7,7 +7,6 @@ export interface CDATANodeArgs {
     selected?: boolean,
     treeId: string,
     path: Array<number>,
-    index: number,
 };
 
 export interface CDATANodeType extends Node {
@@ -16,7 +15,7 @@ export interface CDATANodeType extends Node {
 
 export const createCDATANode = (node: CDATANodeArgs): CDATANodeType => {
     const newCDATANode: CDATANodeType = {
-        _: setId('D', node.treeId, node.path, node.index),
+        _: setId('D', node.treeId, node.path),
         D: node.cdata,
         o: node.open || false,
         q: node.selected || false,
@@ -27,7 +26,6 @@ export const createCDATANode = (node: CDATANodeArgs): CDATANodeType => {
 export interface CDATANodeCloneArgs extends CDATANodeType {
     treeId: string,
     path: Array<number>,
-    index: number,
 };
 
 export const cloneCDATANode = (node: CDATANodeCloneArgs): CDATANodeType => {
@@ -37,6 +35,5 @@ export const cloneCDATANode = (node: CDATANodeCloneArgs): CDATANodeType => {
         selected: node.q,
         treeId: node.treeId,
         path: node.path,
-        index: node.index,
     });
 }

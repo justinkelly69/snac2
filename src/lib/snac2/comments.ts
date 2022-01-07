@@ -7,7 +7,6 @@ export interface CommentNodeArgs {
     selected?: boolean,
     treeId: string,
     path: Array<number>,
-    index: number,
 };
 
 export interface CommentNodeType extends Node {
@@ -16,7 +15,7 @@ export interface CommentNodeType extends Node {
 
 export const createCommentNode = (node: CommentNodeArgs): CommentNodeType => {
     const newCommentNode: CommentNodeType = {
-        _: setId('M', node.treeId, node.path, node.index),
+        _: setId('M', node.treeId, node.path),
         M: node.comment,
         o: node.open || false,
         q: node.selected || false,
@@ -27,7 +26,6 @@ export const createCommentNode = (node: CommentNodeArgs): CommentNodeType => {
 export interface CommentNodeCloneArgs extends CommentNodeType {
     treeId: string,
     path: Array<number>,
-    index: number,
 };
 
 export const cloneCommentNode = (node: CommentNodeCloneArgs): CommentNodeType => {
@@ -37,6 +35,5 @@ export const cloneCommentNode = (node: CommentNodeCloneArgs): CommentNodeType =>
         selected: node.q,
         treeId: node.treeId,
         path: node.path,
-        index: node.index,
     });
 };

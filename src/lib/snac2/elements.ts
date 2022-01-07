@@ -27,7 +27,6 @@ export interface ElementNodeArgs {
     selected?: boolean,
     treeId: string,
     path: Array<number>,
-    index: number,
 };
 
 export interface ElementNodeType extends Node {
@@ -39,7 +38,7 @@ export interface ElementNodeType extends Node {
 };
 
 export const createElementNode = (args: ElementNodeArgs): ElementNodeType => ({
-    _: setId('N', args.treeId, args.path, args.index),
+    _: setId('N', args.treeId, args.path),
     S: args.ns || '@',
     N: args.name,
     A: cloneAttributes(args.attributes || {}),
@@ -47,7 +46,6 @@ export const createElementNode = (args: ElementNodeArgs): ElementNodeType => ({
         kids: args.children || [],
         treeId: args.treeId,
         path: args.path,
-        index: args.index,
     }),
     a: args.aOpen || false,
     o: args.open || true,
@@ -57,7 +55,6 @@ export const createElementNode = (args: ElementNodeArgs): ElementNodeType => ({
 export interface ElementNodeCloneArgs extends ElementNodeType {
     treeId: string,
     path: Array<number>,
-    index: number,
 }
 
 export const cloneElementNode = (args: ElementNodeCloneArgs): ElementNodeType => {
@@ -71,7 +68,6 @@ export const cloneElementNode = (args: ElementNodeCloneArgs): ElementNodeType =>
         selected: args.q,
         treeId: args.treeId,
         path: args.path,
-        index: args.index,
     })
 }
 
