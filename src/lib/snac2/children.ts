@@ -3,8 +3,8 @@ import { ChildNodeType, cloneElementNode, NodeType, ElementNodeType } from './el
 import { cloneTextNode, createBlankText, TextNodeType } from './texts';
 import { cloneCDATANode, CDATANodeType } from './cdata';
 import { cloneCommentNode, CommentNodeType } from './comments';
-import { clonePINode, PINodeType } from './processing-instructions';
-import { cloneIPNode, IPNodeType } from './insert-points';
+import { clonePINode, PINodeType } from './pis';
+import { cloneIPNode, IPNodeType } from './ips';
 
 export interface ElementChildrenArgs {
     kids: Array<ChildNodeType>,

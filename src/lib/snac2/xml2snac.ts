@@ -4,7 +4,7 @@ import { AttributesNodeType } from './attributes';
 import { createTextNode, TextNodeType } from './texts';
 import { createCDATANode, CDATANodeType } from './cdata';
 import { createCommentNode, CommentNodeType } from './comments';
-import { createPINode, PINodeType } from './processing-instructions';
+import { createPINode, PINodeType } from './pis';
 
 type XMLSnacChild = X2SElement | X2SText | X2SCDATA | X2SComment | X2SPI;
 
@@ -58,7 +58,7 @@ interface X2SChildren {
 
 export const xml2snac = (xml: string) => {
     const out = xml2js(xml, { compact: false }).elements[0];
-    console.log('out', JSON.stringify(out, null, 4));
+    // console.log('out', JSON.stringify(out, null, 4));
     return createElement({
         type: 'element',
         name: out.name,
@@ -160,7 +160,6 @@ const createChildren = (atts: X2SChildren): Array<ChildNodeType> => {
                 break;
             case 'instruction':
                 const kPI = kid as X2SPI;
-                console.log(JSON.stringify(kPI, null, 4));
                 out.push(createPI({
                     type: 'instruction',
                     name: kPI.name,

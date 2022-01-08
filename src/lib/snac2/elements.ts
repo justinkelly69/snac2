@@ -3,8 +3,8 @@ import { cloneAttributes, AttributesNodeType } from './attributes';
 import { TextNodeType } from './texts';
 import { CDATANodeType } from './cdata';
 import { CommentNodeType } from './comments';
-import { PINodeType } from './processing-instructions';
-import { IPNodeType } from './insert-points';
+import { PINodeType } from './pis';
+import { IPNodeType } from './ips';
 import { cloneChildren } from './children';
 
 export interface Node {

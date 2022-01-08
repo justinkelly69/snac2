@@ -2,21 +2,12 @@ import React, { FunctionComponent } from 'react';
 import logo from './logo.svg';
 import { xml2snac } from './lib/snac2/xml2snac';
 import xml from './lib/data/xml/waffle';
-
-const NodeList: FunctionComponent = (props) => {
-
-  const out = JSON.stringify(xml2snac(xml()), null, 4);
-
-  return (
-    <pre>
-      {out}
-    </pre>
-  );
-}
+import XElement from './lib/jsx/element';
 
 function App() {
+  const snac = xml2snac(xml());
   return (
-    <NodeList />
+    <XElement snac={snac} cssPrefix='x88b' />
   );
 }
 
