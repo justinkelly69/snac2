@@ -2,12 +2,12 @@ import React from 'react';
 import { AttributesNodeType } from '../snac2/attributes';
 import { Attribute } from './attribute';
 
-export interface SNACAttributesTag {
+export interface AttributesArgs {
     atts: AttributesNodeType,
     cssPrefix: string,
 }
 
-export const Attributes = (props: SNACAttributesTag): JSX.Element => {
+export const Attributes = (props: AttributesArgs): JSX.Element => {
     return (
         <span className={`${props.cssPrefix}-att`}>
             {Object.keys(props.atts).map(ns => {

@@ -4,6 +4,7 @@ chef="&lt;ooohlala&amp;&gt;">
     the food starts here
     <fo:food co:nationality="BE" id="x999" class="noclass">
         <name>Belgian Waffles</name>
+        before
         <p>
         Chapter One - Down the Rabbit Hole: Alice, a seven-year-old girl, is feeling bored and drowsy 
         while sitting on the riverbank with her elder sister. She notices a talking, clothed white rabbit 
@@ -14,6 +15,7 @@ chef="&lt;ooohlala&amp;&gt;">
         key which she had left on the table. She subsequently eats a cake labelled "EAT ME" in currants 
         as the chapter closes.
         </p>
+        after
         <?php
         $name="James P. Sullivan XXXVIII";
         for($i = 0; $i < SIZE_OF_MEMORY; $i++){

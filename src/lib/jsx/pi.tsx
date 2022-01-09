@@ -1,18 +1,27 @@
 import React from 'react';
 import { PINodeType } from '../snac2/pis';
 
-export interface SNACPI {
+export interface PIArgs {
     snac: PINodeType,
     cssPrefix: string,
 };
 
-export const XPI = (props:SNACPI): JSX.Element => {
+export const PI = (props: PIArgs): JSX.Element => {
     return (
         <span className={`${props.cssPrefix}-pi-display`}>
-            &lt;?
-            {props.snac.L}
-            {props.snac.B}
-            ?&gt;
+            <span className={`${props.cssPrefix}-pi-bracket`}>
+                &lt;?
+            </span>
+            <span className={`${props.cssPrefix}-pi-lang`}>
+                {props.snac.L}
+            </span>
+            {' '}
+            <span className={`${props.cssPrefix}-pi-body`}>
+                {props.snac.B}
+            </span>
+            <span className={`${props.cssPrefix}-pi-bracket`}>
+                ?&gt;
+            </span>
         </span>
     )
 }

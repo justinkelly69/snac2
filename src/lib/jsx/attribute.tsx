@@ -1,13 +1,13 @@
 import React from 'react';
 
-export interface SNACAttributeTag {
+export interface AttributeArgs {
     ns: string,
     name: string,
     value: string,
     cssPrefix: string,
 }
 
-export const Attribute = (props: SNACAttributeTag): JSX.Element => {
+export const Attribute = (props: AttributeArgs): JSX.Element => {
     return (
         <span className={`${props.cssPrefix}-att-tag`}>
             {' '}
