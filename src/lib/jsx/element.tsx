@@ -20,6 +20,7 @@ interface ElementArgs {
         A: AttributesNodeType,
         C: Array<ChildNodeType>
     }
+    cssMode: string,
     cssPrefix: string,
 };
 
@@ -29,30 +30,65 @@ const Element = (props: ElementArgs): JSX.Element => {
 
     return (
         <div>
-            <Tag args={args} tagType={TagType.open} cssPrefix={props.cssPrefix} />
+            <Tag
+                args={args}
+                tagType={TagType.open}
+                cssPrefix={props.cssPrefix}
+                cssMode={props.cssMode}
+            />
             {args.C.map((kid, index) => {
-                console.log('C', JSON.stringify(kid, null, 4));
+                // console.log('C', JSON.stringify(kid, null, 4));
                 switch (getType(kid)) {
                     case 'N':
                         const element = kid as ElementNodeType;
-                        return <Element key={index} snac={element} cssPrefix={props.cssPrefix} />;
+                        return <Element
+                            key={index}
+                            snac={element}
+                            cssPrefix={props.cssPrefix}
+                            cssMode={props.cssMode}
+                        />;
                     case 'T':
                         const text = kid as TextNodeType;
-                        return <Text key={index} snac={text} cssPrefix={props.cssPrefix} />;
+                        return <Text
+                            key={index}
+                            snac={text}
+                            cssPrefix={props.cssPrefix}
+                            cssMode={props.cssMode}
+                        />;
                     case 'D':
                         const cdata = kid as CDATANodeType;
-                        return <CDATA key={index} snac={cdata} cssPrefix={props.cssPrefix} />;
+                        return <CDATA
+                            key={index}
+                            snac={cdata}
+                            cssPrefix={props.cssPrefix}
+                            cssMode={props.cssMode}
+                        />;
                     case 'M':
                         const comment = kid as CommentNodeType;
-                        return <Comment key={index} snac={comment} cssPrefix={props.cssPrefix} />;
+                        return <Comment
+                            key={index}
+                            snac={comment}
+                            cssPrefix={props.cssPrefix}
+                            cssMode={props.cssMode}
+                        />;
                     case 'P':
                         const pi = kid as PINodeType;
-                        return <PI key={index} snac={pi} cssPrefix={props.cssPrefix} />;
+                        return <PI
+                            key={index}
+                            snac={pi}
+                            cssPrefix={props.cssPrefix}
+                            cssMode={props.cssMode}
+                        />;
                     default:
                         return null;
                 }
             })}
-            <Tag args={args} tagType={TagType.close} cssPrefix={cssPrefix} />
+            <Tag
+                args={args}
+                tagType={TagType.close}
+                cssPrefix={cssPrefix}
+                cssMode={props.cssMode}
+            />
         </div>
     );
 }

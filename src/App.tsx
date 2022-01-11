@@ -8,7 +8,7 @@ function App() {
   const snac = xml2snac(xml());
   return (
     <pre>
-      <Element snac={snac} cssPrefix='x88b' />
+      <Element snac={snac} cssPrefix='x88b' cssMode='normal' />
     </pre>
   );
 }
