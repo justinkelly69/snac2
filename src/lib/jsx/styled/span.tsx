@@ -5,7 +5,7 @@ const BaseSpan = styled.span`
     font: Courier New, monospace;
     font-weight: normal;
     display: inline-block;
-    white-space: normal;
+    white-space: nowrap;
 `;
 
 export interface SpanArgs {

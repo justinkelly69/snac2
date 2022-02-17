@@ -3,38 +3,39 @@ import styled from 'styled-components';
 import C from '../../snac2/constants';
 
 const BaseButton = styled.button`
-    box-sizing: content-box;
+    box-sizing: border-box;
     display: inline-flex;
-    padding: 0;
+    padding: 0.1em;
     height: 1em;
     width: 1em;
     margin: 0;
-    & first-child: {
+   
         align-items: center;
-    }
+        vertical-align:middle;
+   
 `;
 
 interface ButtonProps {
     onClick: Function,
-    onOff: boolean,
+    show: boolean,
 }
 
-export const AttributesButton = (props:ButtonProps):JSX.Element => {
+export const AttributesButton = (props: ButtonProps): JSX.Element => {
     const BB = styled(BaseButton)``;
 
     return (
         <BB onClick={props.onClick}>
-            {props.onOff ? C.BUTTON_CLOSE : C.BUTTON_OPEN}
+            {props.show ? C.BUTTON_CLOSE : C.BUTTON_OPEN}
         </BB>
     )
 }
 
-export const ChildrenButton = (props:ButtonProps):JSX.Element => {
-    const BB = styled(BaseButton)``;
+export const ChildrenButton = (props: ButtonProps): JSX.Element => {
+    const CB = styled(BaseButton)``;
 
     return (
-        <BB onClick={props.onClick}>
-            {props.onOff ? C.BUTTON_CLOSE : C.BUTTON_OPEN}
-        </BB>
+        <CB onClick={props.onClick}>
+            {props.show ? C.BUTTON_CLOSE : C.BUTTON_OPEN}
+        </CB>
     )
 }

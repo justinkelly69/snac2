@@ -21,7 +21,10 @@ interface ElementArgs {
         S: string,
         N: string,
         A: AttributesNodeType,
-        C: Array<ChildNodeType>
+        C: Array<ChildNodeType>,
+        a: boolean,
+        o: boolean,
+        q: boolean
     },
     cssMode: string,
     show?: boolean,
@@ -30,20 +33,20 @@ interface ElementArgs {
 
 const Element = (props: ElementArgs): JSX.Element => {
 
-    const [kids, showKids] = useState(true);
+    const [kids, showKids] = useState(props.snac.o);
 
     const c = getColors(props.cssMode);
 
     return (
         <>
             <Tag
-                show={true}
+                show={kids}
                 showHide={showKids}
                 snac={props.snac}
                 tagType={TagType.open}
                 cssMode={props.cssMode}
             />
-            {props.snac.C.map((kid, index) => {
+            {kids && props.snac.C.map((kid, index) => {
                 switch (getType(kid)) {
                     case 'N':
                         const element = kid as ElementNodeType;
@@ -58,7 +61,7 @@ const Element = (props: ElementArgs): JSX.Element => {
                         return (
                             <Block
                                 key={index}
-                                Prop1={<Prefix _={kid._} color={c.Prefix} show={true} showHide={showKids} />}
+                                Prop1={<Prefix _={kid._} color={c.Prefix} show={kid.o} showHide={showKids} />}
                                 Prop2={<Text
                                     snac={text}
                                     cssMode={props.cssMode}
@@ -69,7 +72,7 @@ const Element = (props: ElementArgs): JSX.Element => {
                         return (
                             <Block
                                 key={index}
-                                Prop1={<Prefix _={kid._} color={c.Prefix} show={true} showHide={showKids} />}
+                                Prop1={<Prefix _={kid._} color={c.Prefix} show={kid.o} showHide={showKids} />}
                                 Prop2={<CDATA
                                     snac={cdata}
                                     cssMode={props.cssMode}
@@ -80,7 +83,7 @@ const Element = (props: ElementArgs): JSX.Element => {
                         return (
                             <Block
                                 key={index}
-                                Prop1={<Prefix _={kid._} color={c.Prefix} show={true} showHide={showKids} />}
+                                Prop1={<Prefix _={kid._} color={c.Prefix} show={kid.o} showHide={showKids} />}
                                 Prop2={<Comment
                                     snac={comment}
                                     cssMode={props.cssMode}
@@ -91,7 +94,7 @@ const Element = (props: ElementArgs): JSX.Element => {
                         return (
                             <Block
                                 key={index}
-                                Prop1={<Prefix _={kid._} color={c.Prefix} show={true} showHide={showKids} />}
+                                Prop1={<Prefix _={kid._} color={c.Prefix} show={kid.o} showHide={showKids} />}
                                 Prop2={<PI
                                     snac={pi}
                                     cssMode={props.cssMode}

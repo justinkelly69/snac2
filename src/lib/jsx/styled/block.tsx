@@ -10,6 +10,7 @@ const Row = styled.div`
 
 const Col1 = styled.div`
     flex-basis: content;
+    flex-shrink: 1;
 `;
 
 const Col2 = styled.div`
