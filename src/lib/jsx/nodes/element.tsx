@@ -27,31 +27,32 @@ interface ElementArgs {
         q: boolean
     },
     cssMode: string,
-    show?: boolean,
+    show: boolean,
     showHide?: Function,
 };
 
 const Element = (props: ElementArgs): JSX.Element => {
 
-    const [kids, showKids] = useState(props.snac.o);
+    const [showKids, showHideKids] = useState(props.snac.o);
 
     const c = getColors(props.cssMode);
 
     return (
         <>
             <Tag
-                show={kids}
-                showHide={showKids}
+                show={props.show}
+                showHide={showHideKids}
                 snac={props.snac}
                 tagType={TagType.open}
                 cssMode={props.cssMode}
             />
-            {kids && props.snac.C.map((kid, index) => {
+            {showKids && props.snac.C.map((kid, index) => {
                 switch (getType(kid)) {
                     case 'N':
                         const element = kid as ElementNodeType;
                         return (
                             <Element
+                                show={showKids}
                                 key={index}
                                 snac={element}
                                 cssMode={props.cssMode}
@@ -59,54 +60,54 @@ const Element = (props: ElementArgs): JSX.Element => {
                     case 'T':
                         const text = kid as TextNodeType;
                         return (
-                            <Block
+                            <Text
                                 key={index}
-                                Prop1={<Prefix _={kid._} color={c.Prefix} show={kid.o} showHide={showKids} />}
-                                Prop2={<Text
-                                    snac={text}
-                                    cssMode={props.cssMode}
-                                />}
-                            />);
+                                show={showKids}
+                                showHide={f => f}
+                                snac={text}
+                                cssMode={props.cssMode}
+                            />
+                        );
                     case 'D':
                         const cdata = kid as CDATANodeType;
                         return (
-                            <Block
+                            <CDATA
                                 key={index}
-                                Prop1={<Prefix _={kid._} color={c.Prefix} show={kid.o} showHide={showKids} />}
-                                Prop2={<CDATA
-                                    snac={cdata}
-                                    cssMode={props.cssMode}
-                                />}
-                            />);
+                                snac={cdata}
+                                cssMode={props.cssMode}
+                                show={showKids}
+                                showHide={f => f}
+                            />
+                        );
                     case 'M':
                         const comment = kid as CommentNodeType;
                         return (
-                            <Block
+                            <Comment
                                 key={index}
-                                Prop1={<Prefix _={kid._} color={c.Prefix} show={kid.o} showHide={showKids} />}
-                                Prop2={<Comment
-                                    snac={comment}
-                                    cssMode={props.cssMode}
-                                />}
-                            />);
+                                snac={comment}
+                                cssMode={props.cssMode}
+                                show={showKids}
+                                showHide={f => f}
+                            />
+                        );
                     case 'P':
                         const pi = kid as PINodeType;
                         return (
-                            <Block
+                            <PI
                                 key={index}
-                                Prop1={<Prefix _={kid._} color={c.Prefix} show={kid.o} showHide={showKids} />}
-                                Prop2={<PI
-                                    snac={pi}
-                                    cssMode={props.cssMode}
-                                />}
-                            />);
+                                snac={pi}
+                                cssMode={props.cssMode}
+                                show={showKids}
+                                showHide={f => f}
+                            />
+                        );
                     default:
                         return null;
                 }
             })}
             <Tag
-                show={true}
-                showHide={showKids}
+                show={showKids}
+                showHide={showHideKids}
                 snac={props.snac}
                 tagType={TagType.close}
                 cssMode={props.cssMode}

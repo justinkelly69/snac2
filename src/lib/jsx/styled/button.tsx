@@ -9,10 +9,8 @@ const BaseButton = styled.button`
     height: 1em;
     width: 1em;
     margin: 0;
-   
-        align-items: center;
-        vertical-align:middle;
-   
+    align-items: center;
+    vertical-align:middle;
 `;
 
 interface ButtonProps {

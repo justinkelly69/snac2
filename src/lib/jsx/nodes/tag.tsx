@@ -27,12 +27,12 @@ export interface TagArgs {
 
 export const Tag = (props: TagArgs): JSX.Element => {
 
-    const [apps, showApps] = useState(props.snac.a);
+    const [atts, showAtts] = useState(props.snac.a);
 
     const c = getColors(props.cssMode);
 
     return (
-        <Block
+        <Block visible={props.show}
             Prop1={
                 <Prefix _={props.snac._} color={c.Prefix} show={props.show} showHide={props.showHide} />
             }
@@ -49,8 +49,8 @@ export const Tag = (props: TagArgs): JSX.Element => {
                         </>
                     }
                     <Span color={c.Name} fontWeight='bold'>{props.snac.N}</Span>
-                    {props.tagType !== TagType.close && apps &&
-                        <Block
+                    {props.tagType !== TagType.close &&
+                        <Block visible={false}
                             Prop1={<></>}
                             Prop2={
                                 <Attributes _={props.snac._} atts={props.snac.A} cssMode={props.cssMode} />
@@ -62,7 +62,10 @@ export const Tag = (props: TagArgs): JSX.Element => {
                     }
                     &gt;
                     {props.tagType !== TagType.close &&
-                        <AttributesButton show={apps} onClick={e => showApps(!apps)} />
+                        <AttributesButton show={atts} onClick={e => {
+                            console.log('atts', atts)
+                            showAtts(!atts)
+                        }} />
                     }
                 </Span>
             }

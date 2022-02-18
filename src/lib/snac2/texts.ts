@@ -13,6 +13,10 @@ export interface TextNodeType extends Node {
     T: string,
 };
 
+export const showHideText = (props: TextNodeArgs) => {
+    
+}
+
 export const createTextNode = (node: TextNodeArgs): TextNodeType => {
     const newTextNode: TextNodeType = {
         _: setId('T', node.treeId, node.path),

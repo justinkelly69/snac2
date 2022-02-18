@@ -5,6 +5,7 @@ const C = {
     ATTRIBUTE_PREFIX: ' * ',
     BUTTON_CLOSE: '-',
     BUTTON_OPEN: '+',
+    TEXT_PREVIEW_LENGTH: 20,
 }
 
 export default C;

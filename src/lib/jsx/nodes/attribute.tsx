@@ -18,21 +18,25 @@ export const Attribute = (props: AttributeArgs): JSX.Element => {
     const c = getColors(props.cssMode);
 
     return (
-        <Block
-            Prop1={<Span color={c.Prefix} width={3}>{C.ATTRIBUTE_PREFIX}</Span>}
-            Prop2={<Span color={c.Attribute} display='block'>
-                {props.ns !== '@' &&
-                    <>
-                        <Span color={c.AttributeNS} fontWeight='bold'>{props.ns}</Span>
-                        <Span color={c.AttributeColon}>:</Span>
-                    </>
-                }
-                <Span color={c.AttributeName} fontWeight='bold'>{props.name}</Span>
-                <Span color={c.AttributeEquals}>=</Span>
-                <Span color={c.AttributeQuote}>&quot;</Span>
-                <Span color={c.AttributeValue} fontWeight='bold'>{props.value}</Span>
-                <Span color={c.AttributeQuote}>&quot;</Span>
-            </Span>}
+        <Block visible={true}
+            Prop1={
+                <Span color={c.Prefix} width={3}>{C.ATTRIBUTE_PREFIX}</Span>
+            }
+            Prop2={
+                <Span color={c.Attribute} display='block'>
+                    {props.ns !== '@' &&
+                        <>
+                            <Span color={c.AttributeNS} fontWeight='bold'>{props.ns}</Span>
+                            <Span color={c.AttributeColon}>:</Span>
+                        </>
+                    }
+                    <Span color={c.AttributeName} fontWeight='bold'>{props.name}</Span>
+                    <Span color={c.AttributeEquals}>=</Span>
+                    <Span color={c.AttributeQuote}>&quot;</Span>
+                    <Span color={c.AttributeValue} fontWeight='bold'>{props.value}</Span>
+                    <Span color={c.AttributeQuote}>&quot;</Span>
+                </Span>
+            }
         />
     );
 }

@@ -9,7 +9,7 @@ function App() {
   return (
     <>
     <pre>
-      <Element snac={snac} cssMode='normal' />
+      <Element show={true} snac={snac} cssMode='normal' />
     </pre>
     <pre>{JSON.stringify(snac, null, 4)}</pre>
     </>
