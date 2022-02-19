@@ -23,7 +23,7 @@ export const Attribute = (props: AttributeArgs): JSX.Element => {
                 <Span color={colors.Prefix} width={3}>{constants.ATTRIBUTE_PREFIX}</Span>
             }
             Prop2={
-                <Span color={colors.Attribute} display='block'>
+                <Span color={colors.Attribute}>
                     {props.ns !== '@' &&
                         <>
                             <Span color={colors.AttributeNS} fontWeight='bold'>{props.ns}</Span>

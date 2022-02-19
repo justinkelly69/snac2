@@ -7,16 +7,11 @@ import { Element } from './lib/jsx/nodes/element';
 function App() {
   const snac = xml2snac(xml());
   return (
-    <>
-      <pre>
-        <Element
-          showTag={true}
-          snac={snac}
-          cssMode='normal'
-        />
-      </pre>
-      <pre>{JSON.stringify(snac, null, 4)}</pre>
-    </>
+    <Element
+      showTag={true}
+      snac={snac}
+      cssMode='normal'
+    />
   );
 }
 

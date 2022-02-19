@@ -5,14 +5,12 @@ import constants from '../../snac2/constants';
 const BaseButton = styled.a`
     background-color:paleblue;
     box-sizing: border-box;
-    display: inline-flex;
     border: 0;
     padding: 0;
     height: 1em;
     width: 1em;
     margin: 0;
     align-items: center;
-    vertical-align:middle;
 `;
 
 interface ButtonProps {

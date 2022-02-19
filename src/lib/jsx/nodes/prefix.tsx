@@ -17,15 +17,14 @@ export const Prefix = (props: PrefixArgs): JSX.Element => {
     return (
         <>
             {'+'}
-            <Span
-                color={props.color}
-                width={prefix.length / 2}
-            >
+            <Span color={props.color}>
                 {prefix}
             </Span>
-            <ChildrenButton show={props.showKids} onClick={e => {
-                props.showHideKids(props.showKids);
-            }} />
+            <ChildrenButton show={props.showKids}
+                onClick={e => {
+                    props.showHideKids(props.showKids);
+                }}
+            />
         </>
     );
 }

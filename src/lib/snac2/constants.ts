@@ -1,7 +1,7 @@
 const constants = {
     JOIN1: ':',
     JOIN2: '_',
-    PREFIX1: '  |',
+    PREFIX1: '   | ',
     ATTRIBUTE_PREFIX: ' * ',
     BUTTON_CLOSE: '-',
     BUTTON_OPEN: '+',

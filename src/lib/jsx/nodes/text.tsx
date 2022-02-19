@@ -31,7 +31,7 @@ export const Text = (props: TextArgs): JSX.Element => {
                 <Span color={colors.Text}>
                     {showText ?
                         `[${props.snac.T}]` :
-                        `[${props.snac.T.substring(0, constants.TEXT_PREVIEW_LENGTH)}]`
+                        `[${props.snac.T.substring(0, constants.TEXT_PREVIEW_LENGTH).split(/\s+/).join(' ').trim()}]`
                     }
                 </Span>
             }
