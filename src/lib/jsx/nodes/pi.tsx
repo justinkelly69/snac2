@@ -1,19 +1,21 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { PINodeType } from '../../snac2/pis';
 import { escapePI } from '../../snac2/helpers';
 import { Block } from '../styled/block';
 import { Span } from '../styled/span';
 import { Prefix } from './prefix';
 import { getColors } from '../styled/colors';
+import C from '../../snac2/constants';
 
 export interface PIArgs {
     snac: PINodeType,
     cssMode: string,
     show: boolean,
-    showHide: Function,
 };
 
 export const PI = (props: PIArgs): JSX.Element => {
+
+    const [showPI, showHidePI] = useState(props.snac.o);
 
     const colors = getColors(props.cssMode);
 
@@ -23,7 +25,7 @@ export const PI = (props: PIArgs): JSX.Element => {
                 <Prefix _={props.snac._}
                     color={colors.Prefix}
                     show={props.show}
-                    showHide={props.showHide}
+                    showHide={e => showHidePI(!showPI)}
                 />
             }
             Prop2={
@@ -34,7 +36,10 @@ export const PI = (props: PIArgs): JSX.Element => {
                     <Span color={colors.PILang}>
                         {props.snac.L} {' '}
                     </Span>
-                    {escapePI(props.snac.B)}
+                    {showPI ?
+                        escapePI(props.snac.B) :
+                        escapePI(props.snac.B.substring(0, C.PI_PREVIEW_LENGTH))
+                    }
                     <Span color={colors.PIHeading}>
                         ?&gt;
                     </Span>

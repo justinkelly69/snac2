@@ -1,19 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CDATANodeType } from '../../snac2/cdata';
 import { escapeCDATA } from '../../snac2/helpers';
 import { Block } from '../styled/block';
 import { Span } from '../styled/span';
 import { Prefix } from './prefix';
 import { getColors } from '../styled/colors';
+import C from '../../snac2/constants';
 
 export interface CDATArgs {
     snac: CDATANodeType,
     cssMode: string,
     show: boolean,
-    showHide: Function,
 };
 
 export const CDATA = (props: CDATArgs): JSX.Element => {
+
+    const [showCDATA, showHideCDATA] = useState(props.snac.o);
 
     const colors = getColors(props.cssMode);
 
@@ -23,7 +25,7 @@ export const CDATA = (props: CDATArgs): JSX.Element => {
                 <Prefix _={props.snac._}
                     color={colors.Prefix}
                     show={props.show}
-                    showHide={props.showHide}
+                    showHide={e => showHideCDATA(!showCDATA)}
                 />
             }
             Prop2={
@@ -33,7 +35,10 @@ export const CDATA = (props: CDATArgs): JSX.Element => {
                         <Span color={colors.CDATALabel}>CDATA</Span>
                         [
                     </Span>
-                    {escapeCDATA(props.snac.D)}
+                    {showCDATA ?
+                        escapeCDATA(props.snac.D) :
+                        escapeCDATA(props.snac.D.substring(0, C.CDATA_PREVIEW_LENGTH))
+                    }
                     <Span color={colors.CDATAHeading}>
                         ]]&gt;
                     </Span>

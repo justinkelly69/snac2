@@ -50,7 +50,7 @@ export const Tag = (props: TagArgs): JSX.Element => {
                     }
                     <Span color={c.Name} fontWeight='bold'>{props.snac.N}</Span>
                     {props.tagType !== TagType.close &&
-                        <Block visible={false}
+                        <Block visible={atts}
                             Prop1={<></>}
                             Prop2={
                                 <Attributes _={props.snac._} atts={props.snac.A} cssMode={props.cssMode} />

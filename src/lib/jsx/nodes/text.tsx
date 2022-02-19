@@ -10,10 +10,11 @@ export interface TextArgs {
     snac: TextNodeType,
     cssMode: string,
     show: boolean,
-    showHide: Function,
 };
 
 export const Text = (props: TextArgs): JSX.Element => {
+
+    const [showText, showHideText] = useState(props.snac.o);
 
     const colors = getColors(props.cssMode);
 
@@ -23,14 +24,14 @@ export const Text = (props: TextArgs): JSX.Element => {
                 <Prefix _={props.snac._}
                     color={colors.Prefix}
                     show={props.show}
-                    showHide={props.showHide}
+                    showHide={e => showHideText(!showText)}
                 />
             }
             Prop2={
                 <Span color={colors.Text}>
-                    {props.snac.o ?
-                        props.snac.T :
-                        props.snac.T.substring(0, C.TEXT_PREVIEW_LENGTH)
+                    {showText ?
+                        `[${props.snac.T}]` :
+                        `[${props.snac.T.substring(0, C.TEXT_PREVIEW_LENGTH)}]`
                     }
                 </Span>
             }

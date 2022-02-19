@@ -85,7 +85,7 @@ const createElement = (args: X2SElement): ElementNodeType => {
             treeId: args.treeId,
             path: [...args.path],
         }),
-        aOpen: true,
+        aOpen: false,
         open: true,
         selected: false,
         treeId: args.treeId,

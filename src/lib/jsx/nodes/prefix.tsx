@@ -13,8 +13,6 @@ export interface PrefixArgs {
 
 export const Prefix = (props: PrefixArgs): JSX.Element => {
 
-    const [show, showHide] = useState(props.show)
-
     const prefix = getPrefix(props._);
 
     return (
@@ -26,9 +24,8 @@ export const Prefix = (props: PrefixArgs): JSX.Element => {
             >
                 {prefix}
             </Span>
-            <ChildrenButton show={show} onClick={e => {
-                showHide(!show);
-                props.showHide(show);
+            <ChildrenButton show={props.show} onClick={e => {
+                props.showHide(props.show);
             }} />
         </>
     );
