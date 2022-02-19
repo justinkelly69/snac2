@@ -25,7 +25,7 @@ export const getPath = (node: ChildNodeType): Array<number> => {
 
 export const getPrefix = (_: string): string => {
     const p1 = _.split(constants.JOIN1)[2];
-    let out = '  ';
+    let out = constants.PREFIX_START;
     if(p1.length > 0) {
         const p2 = p1.split(constants.JOIN2);
         let i = 0;
@@ -33,8 +33,7 @@ export const getPrefix = (_: string): string => {
             out = out + constants.PREFIX1;
         }
     }
-    // console.log(`"${p1}", "${out}"`);
-    return out + '  '
+    return out + constants.PREFIX_END;
 }
 
 

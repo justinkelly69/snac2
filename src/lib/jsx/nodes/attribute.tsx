@@ -3,6 +3,7 @@ import { Prefix } from './prefix';
 import { Span } from '../styled/span';
 import { getColors } from '../styled/colors';
 import { Block } from '../styled/block';
+import { AttributePrefix } from './attributeprefix';
 import constants from '../../snac2/constants';
 
 export interface AttributeArgs {
@@ -11,6 +12,7 @@ export interface AttributeArgs {
     name: string,
     value: string,
     cssMode: string,
+    prefix: string,
 }
 
 export const Attribute = (props: AttributeArgs): JSX.Element => {
@@ -20,7 +22,7 @@ export const Attribute = (props: AttributeArgs): JSX.Element => {
     return (
         <Block visible={true}
             Prop1={
-                <Span color={colors.Prefix} width={3}>{constants.ATTRIBUTE_PREFIX}</Span>
+                <AttributePrefix prefix={props.prefix} color={colors.AttributePrefix} />
             }
             Prop2={
                 <Span color={colors.Attribute}>

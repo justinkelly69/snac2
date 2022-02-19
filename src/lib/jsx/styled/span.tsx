@@ -2,8 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 const BaseSpan = styled.span`
-    font: Courier New, monospace;
-    font-weight: normal;
 `;
 
 export interface SpanArgs {
@@ -17,7 +15,7 @@ export interface SpanArgs {
 export const Span = (props: SpanArgs):JSX.Element => {
     const BS = styled(BaseSpan)`
         color: ${props.color};
-        font-weight: ${props.fontWeight || 'normal'};
+        font-weight: ${props.fontWeight || ''};
     `;
 
     return (
