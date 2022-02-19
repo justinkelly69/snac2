@@ -1,13 +1,13 @@
 import { NodeType, ChildNodeType } from './elements';
-import C from './constants';
+import constants from './constants';
 
 export const setId = (nodeType: NodeType, treeId: string, path: Array<number>): string => {
-    let fullPath = [...path].join(C.JOIN2);
-    return `${nodeType}${C.JOIN1}${treeId}${C.JOIN1}${fullPath}`;
+    let fullPath = [...path].join(constants.JOIN2);
+    return `${nodeType}${constants.JOIN1}${treeId}${constants.JOIN1}${fullPath}`;
 }
 
 export const getType = (node: ChildNodeType): NodeType => {
-    const firstChar = node._.split(C.JOIN1)[0];
+    const firstChar = node._.split(constants.JOIN1)[0];
     if (['N', 'T', 'D', 'M', 'P', 'I'].indexOf(firstChar) === -1) {
         return 'Z' as NodeType;
     } else {
@@ -17,20 +17,20 @@ export const getType = (node: ChildNodeType): NodeType => {
 
 export const getPath = (node: ChildNodeType): Array<number> => {
     const path: Array<number> = [];
-    for (let element of node._.split(C.JOIN1)[2].split(C.JOIN2)) {
+    for (let element of node._.split(constants.JOIN1)[2].split(constants.JOIN2)) {
         path.push(parseInt(element))
     }
     return path;
 }
 
 export const getPrefix = (_: string): string => {
-    const p1 = _.split(C.JOIN1)[2];
+    const p1 = _.split(constants.JOIN1)[2];
     let out = '';
     if(p1.length > 0) {
-        const p2 = p1.split(C.JOIN2);
+        const p2 = p1.split(constants.JOIN2);
         let i = 0;
         for (i = 0; i < p2.length; i = i + 1) {
-            out = out + C.PREFIX1;
+            out = out + constants.PREFIX1;
         }
     }
     // console.log(`"${p1}", "${out}"`);

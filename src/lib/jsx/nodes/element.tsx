@@ -16,8 +16,8 @@ export interface ElementArgs {
         q: boolean
     },
     cssMode: string,
-    show: boolean,
-    showHide?: Function,
+    showTag: boolean,
+    showHideKids?: Function,
 };
 
 export const Element = (props: ElementArgs): JSX.Element => {
@@ -27,8 +27,9 @@ export const Element = (props: ElementArgs): JSX.Element => {
     return (
         <>
             <Tag
-                show={props.show}
-                showHide={e => {
+                showTag={props.showTag}
+                showKids={showKids}
+                showHideKids={e => {
                     showHideKids(!showKids)
                 }}
                 snac={props.snac}
@@ -41,8 +42,11 @@ export const Element = (props: ElementArgs): JSX.Element => {
                 cssMode={props.cssMode}
             />
             <Tag
-                show={showKids}
-                showHide={showHideKids}
+                showTag={showKids}
+                showKids={true}
+                showHideKids={e => {
+                    showHideKids(!showKids)
+                }}
                 snac={props.snac}
                 tagType={TagType.close}
                 cssMode={props.cssMode}

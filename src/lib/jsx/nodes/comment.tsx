@@ -4,7 +4,7 @@ import { escapeComment } from '../../snac2/helpers';
 import { Block } from '../styled/block';
 import { Span } from '../styled/span';
 import { Prefix } from './prefix'; import { getColors } from '../styled/colors';
-import C from '../../snac2/constants';
+import constants from '../../snac2/constants';
 
 export interface CommentArgs {
     snac: CommentNodeType,
@@ -23,8 +23,8 @@ export const Comment = (props: CommentArgs): JSX.Element => {
             Prop1={
                 <Prefix _={props.snac._}
                     color={colors.Prefix}
-                    show={props.show}
-                    showHide={e => showHideComment(!showComment)}
+                    showKids={showComment}
+                    showHideKids={e => showHideComment(!showComment)}
                 />
             }
             Prop2={
@@ -34,7 +34,7 @@ export const Comment = (props: CommentArgs): JSX.Element => {
                     </Span>
                     {showComment ?
                         escapeComment(props.snac.M) :
-                        escapeComment(props.snac.M.substring(0, C.COMMENT_PREVIEW_LENGTH))
+                        escapeComment(props.snac.M.substring(0, constants.COMMENT_PREVIEW_LENGTH))
                     }
                     <Span color={colors.CommentHeading}>
                         --&gt;

@@ -1,5 +1,4 @@
 import React from 'react';
-import { useState } from 'react';
 import { Span } from '../styled/span';
 import { getPrefix } from '../../snac2/helpers';
 import { ChildrenButton } from '../styled/button';
@@ -7,8 +6,8 @@ import { ChildrenButton } from '../styled/button';
 export interface PrefixArgs {
     _: string,
     color: string,
-    show: boolean,
-    showHide: Function,
+    showKids: boolean,
+    showHideKids: Function,
 }
 
 export const Prefix = (props: PrefixArgs): JSX.Element => {
@@ -24,8 +23,8 @@ export const Prefix = (props: PrefixArgs): JSX.Element => {
             >
                 {prefix}
             </Span>
-            <ChildrenButton show={props.show} onClick={e => {
-                props.showHide(props.show);
+            <ChildrenButton show={props.showKids} onClick={e => {
+                props.showHideKids(props.showKids);
             }} />
         </>
     );

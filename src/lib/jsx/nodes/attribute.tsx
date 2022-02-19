@@ -3,7 +3,7 @@ import { Prefix } from './prefix';
 import { Span } from '../styled/span';
 import { getColors } from '../styled/colors';
 import { Block } from '../styled/block';
-import C from '../../snac2/constants';
+import constants from '../../snac2/constants';
 
 export interface AttributeArgs {
     _: string,
@@ -15,26 +15,26 @@ export interface AttributeArgs {
 
 export const Attribute = (props: AttributeArgs): JSX.Element => {
 
-    const c = getColors(props.cssMode);
+    const colors = getColors(props.cssMode);
 
     return (
         <Block visible={true}
             Prop1={
-                <Span color={c.Prefix} width={3}>{C.ATTRIBUTE_PREFIX}</Span>
+                <Span color={colors.Prefix} width={3}>{constants.ATTRIBUTE_PREFIX}</Span>
             }
             Prop2={
-                <Span color={c.Attribute} display='block'>
+                <Span color={colors.Attribute} display='block'>
                     {props.ns !== '@' &&
                         <>
-                            <Span color={c.AttributeNS} fontWeight='bold'>{props.ns}</Span>
-                            <Span color={c.AttributeColon}>:</Span>
+                            <Span color={colors.AttributeNS} fontWeight='bold'>{props.ns}</Span>
+                            <Span color={colors.AttributeColon}>:</Span>
                         </>
                     }
-                    <Span color={c.AttributeName} fontWeight='bold'>{props.name}</Span>
-                    <Span color={c.AttributeEquals}>=</Span>
-                    <Span color={c.AttributeQuote}>&quot;</Span>
-                    <Span color={c.AttributeValue} fontWeight='bold'>{props.value}</Span>
-                    <Span color={c.AttributeQuote}>&quot;</Span>
+                    <Span color={colors.AttributeName} fontWeight='bold'>{props.name}</Span>
+                    <Span color={colors.AttributeEquals}>=</Span>
+                    <Span color={colors.AttributeQuote}>&quot;</Span>
+                    <Span color={colors.AttributeValue} fontWeight='bold'>{props.value}</Span>
+                    <Span color={colors.AttributeQuote}>&quot;</Span>
                 </Span>
             }
         />

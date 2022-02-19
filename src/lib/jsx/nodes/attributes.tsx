@@ -2,7 +2,7 @@ import React from 'react';
 import { AttributesNodeType } from '../../snac2/attributes';
 import { Attribute } from './attribute';
 import { Span } from '../styled/span';
-import { colors } from '../styled/colors';
+import { getColors } from '../styled/colors';
 
 export interface AttributesArgs {
     _:string,
@@ -12,10 +12,10 @@ export interface AttributesArgs {
 
 export const Attributes = (props: AttributesArgs): JSX.Element => {
 
-    const c = colors['light'];
+    const colors = getColors(props.cssMode);
 
     return (
-        <Span color={c.Attribute}>
+        <Span color={colors.Attribute}>
             {Object.keys(props.atts).map(ns => {
                 return Object.keys(props.atts[ns]).map(n => {
                     return (

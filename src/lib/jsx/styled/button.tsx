@@ -1,11 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import C from '../../snac2/constants';
+import constants from '../../snac2/constants';
 
-const BaseButton = styled.button`
+const BaseButton = styled.a`
+    background-color:paleblue;
     box-sizing: border-box;
     display: inline-flex;
-    padding: 0.1em;
+    border: 0;
+    padding: 0;
     height: 1em;
     width: 1em;
     margin: 0;
@@ -23,7 +25,7 @@ export const AttributesButton = (props: ButtonProps): JSX.Element => {
 
     return (
         <BB onClick={props.onClick}>
-            {props.show ? C.BUTTON_CLOSE : C.BUTTON_OPEN}
+            {props.show ? constants.BUTTON_CLOSE : constants.BUTTON_OPEN}
         </BB>
     )
 }
@@ -33,7 +35,7 @@ export const ChildrenButton = (props: ButtonProps): JSX.Element => {
 
     return (
         <CB onClick={props.onClick}>
-            {props.show ? C.BUTTON_CLOSE : C.BUTTON_OPEN}
+            {props.show ? constants.BUTTON_CLOSE : constants.BUTTON_OPEN}
         </CB>
     )
 }

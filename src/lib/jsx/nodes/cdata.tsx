@@ -5,7 +5,7 @@ import { Block } from '../styled/block';
 import { Span } from '../styled/span';
 import { Prefix } from './prefix';
 import { getColors } from '../styled/colors';
-import C from '../../snac2/constants';
+import constants from '../../snac2/constants';
 
 export interface CDATArgs {
     snac: CDATANodeType,
@@ -24,8 +24,8 @@ export const CDATA = (props: CDATArgs): JSX.Element => {
             Prop1={
                 <Prefix _={props.snac._}
                     color={colors.Prefix}
-                    show={props.show}
-                    showHide={e => showHideCDATA(!showCDATA)}
+                    showKids={showCDATA}
+                    showHideKids={e => showHideCDATA(!showCDATA)}
                 />
             }
             Prop2={
@@ -37,7 +37,7 @@ export const CDATA = (props: CDATArgs): JSX.Element => {
                     </Span>
                     {showCDATA ?
                         escapeCDATA(props.snac.D) :
-                        escapeCDATA(props.snac.D.substring(0, C.CDATA_PREVIEW_LENGTH))
+                        escapeCDATA(props.snac.D.substring(0, constants.CDATA_PREVIEW_LENGTH))
                     }
                     <Span color={colors.CDATAHeading}>
                         ]]&gt;

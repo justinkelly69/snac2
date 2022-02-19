@@ -4,7 +4,7 @@ import { Block } from '../styled/block';
 import { Span } from '../styled/span';
 import { Prefix } from './prefix';
 import { getColors } from '../styled/colors';
-import C from '../../snac2/constants';
+import constants from '../../snac2/constants';
 
 export interface TextArgs {
     snac: TextNodeType,
@@ -23,15 +23,15 @@ export const Text = (props: TextArgs): JSX.Element => {
             Prop1={
                 <Prefix _={props.snac._}
                     color={colors.Prefix}
-                    show={props.show}
-                    showHide={e => showHideText(!showText)}
+                    showKids={showText}
+                    showHideKids={e => showHideText(!showText)}
                 />
             }
             Prop2={
                 <Span color={colors.Text}>
                     {showText ?
                         `[${props.snac.T}]` :
-                        `[${props.snac.T.substring(0, C.TEXT_PREVIEW_LENGTH)}]`
+                        `[${props.snac.T.substring(0, constants.TEXT_PREVIEW_LENGTH)}]`
                     }
                 </Span>
             }

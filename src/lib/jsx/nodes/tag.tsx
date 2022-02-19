@@ -19,8 +19,9 @@ export interface TagArgs {
         A: AttributesNodeType,
         a: boolean,
     },
-    show: boolean,
-    showHide: Function,
+    showTag: boolean,
+    showKids: boolean,
+    showHideKids: Function,
     cssMode: string,
     tagType: TagType,
 }
@@ -29,36 +30,43 @@ export const Tag = (props: TagArgs): JSX.Element => {
 
     const [atts, showAtts] = useState(props.snac.a);
 
-    const c = getColors(props.cssMode);
+    const colors = getColors(props.cssMode);
 
     return (
-        <Block visible={props.show}
+        <Block visible={props.showTag}
             Prop1={
-                <Prefix _={props.snac._} color={c.Prefix} show={props.show} showHide={props.showHide} />
+                <Prefix _={props.snac._}
+                    color={colors.Prefix}
+                    showKids={props.showKids}
+                    showHideKids={props.showHideKids}
+                />
             }
             Prop2={
-                <Span color={c.Node}>
+                <Span color={colors.Node}>
                     &lt;
                     {props.tagType === TagType.close &&
-                        <Span color={c.NodeSlash}>{'/'}</Span>
+                        <Span color={colors.NodeSlash}>{'/'}</Span>
                     }
                     {props.snac.S !== '@' &&
                         <>
-                            <Span color={c.NS} fontWeight='bold'>{props.snac.S}</Span>
-                            <Span color={c.NodeColon}>:</Span>
+                            <Span color={colors.NS} fontWeight='bold'>{props.snac.S}</Span>
+                            <Span color={colors.NodeColon}>:</Span>
                         </>
                     }
-                    <Span color={c.Name} fontWeight='bold'>{props.snac.N}</Span>
+                    <Span color={colors.Name} fontWeight='bold'>{props.snac.N}</Span>
                     {props.tagType !== TagType.close &&
                         <Block visible={atts}
                             Prop1={<></>}
                             Prop2={
-                                <Attributes _={props.snac._} atts={props.snac.A} cssMode={props.cssMode} />
+                                <Attributes _={props.snac._}
+                                    atts={props.snac.A}
+                                    cssMode={props.cssMode}
+                                />
                             }
                         />
                     }
                     {props.tagType === TagType.empty &&
-                        <Span color={c.NodeSlash}>{' /'}</Span>
+                        <Span color={colors.NodeSlash}>{' /'}</Span>
                     }
                     &gt;
                     {props.tagType !== TagType.close &&

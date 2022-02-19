@@ -1,4 +1,4 @@
-const C = {
+const constants = {
     JOIN1: ':',
     JOIN2: '_',
     PREFIX1: '  |',
@@ -11,4 +11,4 @@ const C = {
     PI_PREVIEW_LENGTH: 20,
 }
 
-export default C;
+export default constants;
