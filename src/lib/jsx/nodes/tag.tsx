@@ -6,7 +6,6 @@ import { Span } from '../styled/span';
 import { getColors } from '../styled/colors';
 import { Block } from '../styled/block';
 import { AttributesButton } from '../styled/button';
-import { getPrefix } from '../../snac2/helpers';
 import constants from '../../snac2/constants';
 
 export enum TagType {
@@ -21,6 +20,7 @@ export interface TagArgs {
         A: AttributesNodeType,
         a: boolean,
     },
+    prefix: string,
     showTag: boolean,
     showKids: boolean,
     showHideKids: Function,
@@ -31,14 +31,13 @@ export interface TagArgs {
 export const Tag = (props: TagArgs): JSX.Element => {
 
     const [atts, showAtts] = useState(props.snac.a);
-    const prefix = getPrefix(props.snac._);
     const colors = getColors(props.cssMode);
 
     return (
         <Block visible={props.showTag}
             Prop1={
                 <Prefix
-                    _={props.snac._}
+                    prefix={props.prefix}
                     color={colors.Prefix}
                     showKids={props.showKids}
                     showHideKids={props.showHideKids}
@@ -63,6 +62,7 @@ export const Tag = (props: TagArgs): JSX.Element => {
                             Prop2={
                                 <Attributes
                                     _={props.snac._}
+                                    prefix={props.prefix}
                                     atts={props.snac.A}
                                     cssMode={props.cssMode}
                                 />
@@ -72,7 +72,11 @@ export const Tag = (props: TagArgs): JSX.Element => {
                     {props.tagType === TagType.empty &&
                         <Span color={colors.NodeSlash}>{' /'}</Span>
                     }
-                    {atts ? `${constants.PREFIX_START}${prefix}` : null}&gt;
+                    {atts ?
+                        `${constants.PREFIX_START}${props.prefix}` :
+                        null
+                    }&gt;
+                    
                     {props.tagType !== TagType.close &&
                         <AttributesButton show={atts} onClick={e => {
                             console.log('atts', atts)

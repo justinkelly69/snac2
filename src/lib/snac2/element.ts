@@ -1,10 +1,10 @@
-import { setId } from './helpers';
+import { setId } from './prefix';
 import { cloneAttributes, AttributesNodeType } from './attributes';
-import { TextNodeType } from './texts';
+import { TextNodeType } from './text';
 import { CDATANodeType } from './cdata';
-import { CommentNodeType } from './comments';
-import { PINodeType } from './pis';
-import { IPNodeType } from './ips';
+import { CommentNodeType } from './comment';
+import { PINodeType } from './pi';
+import { IPNodeType } from './ip';
 import { cloneChildren } from './children';
 
 export interface Node {
@@ -70,4 +70,3 @@ export const cloneElementNode = (args: ElementNodeCloneArgs): ElementNodeType =>
         path: args.path,
     })
 }
-

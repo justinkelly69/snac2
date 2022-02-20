@@ -1,5 +1,19 @@
-import { Node } from './elements';
-import { setId } from './helpers';
+import { Node } from './element';
+import { setId } from './prefix';
+import { escapeText } from './textprocessor';
+
+/**
+* Escape '--' as '- - ' in a Comment string.
+* If the first character is '-', replace it with '- '.
+* If the last character is '-', replace it with ' -'/
+* @param {String} str 
+*/
+export const escapeComment = (str: string) =>
+    escapeText(str, [
+        ["--", "- - "],
+        [/^-/, " -"],
+        [/-$/, "- "]
+    ])
 
 export interface CommentNodeArgs {
     comment: string,

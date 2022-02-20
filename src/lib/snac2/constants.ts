@@ -11,7 +11,7 @@ const constants = {
     TEXT_PREVIEW_LENGTH: 20,
     CDATA_PREVIEW_LENGTH: 20,
     COMMENT_PREVIEW_LENGTH: 20,
-    PI_PREVIEW_LENGTH: 20,
+    PI_PREVIEW_LENGTH: 0,
 }
 
 export default constants;

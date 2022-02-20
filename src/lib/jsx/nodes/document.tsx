@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { FixedWidthText } from '../styled/fixedwidthtext';
+import React from 'react';
+import { FixedWidthText } from '../styled/fwt';
 import { Element } from './element';
-import { ChildNodeType } from '../../snac2/elements';
+import { ChildNodeType } from '../../snac2/element';
 import { AttributesNodeType } from '../../snac2/attributes';
 
 

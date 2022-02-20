@@ -3,11 +3,11 @@ import { AttributesNodeType } from '../../snac2/attributes';
 import { Attribute } from './attribute';
 import { Span } from '../styled/span';
 import { getColors } from '../styled/colors';
-import { getPrefix } from '../../snac2/helpers';
 import constants from '../../snac2/constants';
 
 export interface AttributesArgs {
     _: string,
+    prefix: string,
     atts: AttributesNodeType,
     cssMode: string,
 }
@@ -15,7 +15,6 @@ export interface AttributesArgs {
 export const Attributes = (props: AttributesArgs): JSX.Element => {
 
     const colors = getColors(props.cssMode);
-    const prefix = getPrefix(props._)
 
     return (
         <Span color={colors.Attribute}>
@@ -28,12 +27,12 @@ export const Attributes = (props: AttributesArgs): JSX.Element => {
                             name={n}
                             value={props.atts[ns][n]}
                             cssMode={props.cssMode}
-                            prefix={prefix}
+                            prefix={props.prefix}
                         />
                     );
                 })
             })}
-            {`${constants.PREFIX_START}${prefix}${constants.NEW_ATTRIBUTE_PREFIX}+`}
+            {`${constants.PREFIX_START}${props.prefix}${constants.NEW_ATTRIBUTE_PREFIX}+`}
         </Span>
     );
 }

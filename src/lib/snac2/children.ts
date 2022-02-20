@@ -1,10 +1,19 @@
-import { getType } from './helpers';
-import { ChildNodeType, cloneElementNode, NodeType, ElementNodeType } from './elements';
-import { cloneTextNode, createBlankText, TextNodeType } from './texts';
+import { ChildNodeType, cloneElementNode, NodeType, ElementNodeType } from './element';
+import { cloneTextNode, createBlankText, TextNodeType } from './text';
 import { cloneCDATANode, CDATANodeType } from './cdata';
-import { cloneCommentNode, CommentNodeType } from './comments';
-import { clonePINode, PINodeType } from './pis';
-import { cloneIPNode, IPNodeType } from './ips';
+import { cloneCommentNode, CommentNodeType } from './comment';
+import { clonePINode, PINodeType } from './pi';
+import { cloneIPNode, IPNodeType } from './ip';
+import constants from './constants';
+
+export const getType = (node: ChildNodeType): NodeType => {
+    const firstChar = node._.split(constants.JOIN1)[0];
+    if (['N', 'T', 'D', 'M', 'P', 'I'].indexOf(firstChar) === -1) {
+        return 'Z' as NodeType;
+    } else {
+        return firstChar as NodeType;
+    }
+}
 
 export interface ElementChildrenArgs {
     kids: Array<ChildNodeType>,

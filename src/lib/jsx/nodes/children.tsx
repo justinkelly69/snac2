@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
-import { getType } from '../../snac2/helpers';
-import { ChildNodeType, ElementNodeType } from '../../snac2/elements';
+import React from 'react';
+import { getType } from '../../snac2/children';
+import { ChildNodeType, ElementNodeType } from '../../snac2/element';
 import { ShowHide } from '../styled/showhide';
 import { Element } from './element';
 import { Text } from './text';
-import { TextNodeType } from '../../snac2/texts';
+import { TextNodeType } from '../../snac2/text';
 import { CDATA } from './cdata';
 import { CDATANodeType } from '../../snac2/cdata';
 import { Comment } from './comment';
-import { CommentNodeType } from '../../snac2/comments';
+import { CommentNodeType } from '../../snac2/comment';
 import { PI } from './pi';
-import { PINodeType } from '../../snac2/pis';
+import { PINodeType } from '../../snac2/pi';
 
 interface ChildrenArgs {
     C: Array<ChildNodeType>,
+    prefix: string,
     visible: boolean,
     cssMode: string,
 }
@@ -22,7 +23,7 @@ export const Children = (props: ChildrenArgs) => {
     return (
         <ShowHide visible={props.visible}>
             {props.C.map((kid, index) => {
-                // console.log('mapping', kid._, index);
+                console.log('mapping', kid._, index);
                 switch (getType(kid)) {
                     case 'N':
                         const element = kid as ElementNodeType;
@@ -39,7 +40,6 @@ export const Children = (props: ChildrenArgs) => {
                         return (
                             <Text
                                 key={index}
-                                show={true}
                                 snac={text}
                                 cssMode={props.cssMode}
                             />
@@ -51,7 +51,6 @@ export const Children = (props: ChildrenArgs) => {
                                 key={index}
                                 snac={cdata}
                                 cssMode={props.cssMode}
-                                show={true}
                             />
                         );
                     case 'M':
@@ -61,7 +60,6 @@ export const Children = (props: ChildrenArgs) => {
                                 key={index}
                                 snac={comment}
                                 cssMode={props.cssMode}
-                                show={true}
                             />
                         );
                     case 'P':
@@ -71,7 +69,6 @@ export const Children = (props: ChildrenArgs) => {
                                 key={index}
                                 snac={pi}
                                 cssMode={props.cssMode}
-                                show={true}
                             />
                         );
                     default:

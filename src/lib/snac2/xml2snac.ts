@@ -1,10 +1,10 @@
 import { xml2js } from 'xml-js';
-import { createElementNode, ElementNodeType, ChildNodeType } from './elements';
+import { createElementNode, ElementNodeType, ChildNodeType } from './element';
 import { AttributesNodeType } from './attributes';
-import { createTextNode, TextNodeType } from './texts';
+import { createTextNode, TextNodeType } from './text';
 import { createCDATANode, CDATANodeType } from './cdata';
-import { createCommentNode, CommentNodeType } from './comments';
-import { createPINode, PINodeType } from './pis';
+import { createCommentNode, CommentNodeType } from './comment';
+import { createPINode, PINodeType } from './pi';
 
 type XMLSnacChild = X2SElement | X2SText | X2SCDATA | X2SComment | X2SPI;
 
@@ -70,7 +70,6 @@ export const xml2snac = (xml: string) => {
 }
 
 const createElement = (args: X2SElement): ElementNodeType => {
-    
     let ns = '@';
     let name = args.name;
     if (args.name.indexOf(':') > -1) {

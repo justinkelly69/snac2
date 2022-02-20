@@ -1,5 +1,15 @@
-import { Node } from './elements';
-import { setId } from './helpers';
+import { Node } from './element';
+import { setId } from './prefix';
+import { escapeText } from './textprocessor';
+
+/**
+* Escape ]]> as ]]&lt; in a CDATA string.
+* @param {String} str 
+*/
+export const escapeCDATA = (str: string) =>
+    escapeText(str, [
+        ["]]>", "]]&gt;"]
+    ])
 
 export interface CDATANodeArgs {
     cdata: string,

@@ -1,5 +1,32 @@
-import { Node } from './elements';
-import { setId } from './helpers';
+import { Node } from './element';
+import { setId } from './prefix';
+import { escapeText } from './textprocessor';
+
+/**
+ * Escape < > & ' " characters in a string
+ * @param {String} str 
+ */
+ export const escapeXML = (str: string) =>
+ escapeText(str, [
+     ["&", "&amp;"],
+     ["<", "&lt;"],
+     [">", "&gt;"],
+     ["'", "&apos;"],
+     ['"', "&quot;"]
+ ])
+
+/**
+* Unescape &lt; &gt; &amp; &apos, &quot escape codes in a string.
+* @param {String} str 
+*/
+export const unEscapeXML = (str: string) =>
+ escapeText(str, [
+     ["&lt;", "<"],
+     ["&gt;", ">"],
+     ["&amp;", "&"],
+     ["&apos;", "'"],
+     ["&quot;", '"']
+ ])
 
 export interface TextNodeArgs {
     text: string,
@@ -12,10 +39,6 @@ export interface TextNodeArgs {
 export interface TextNodeType extends Node {
     T: string,
 };
-
-export const showHideText = (props: TextNodeArgs) => {
-    
-}
 
 export const createTextNode = (node: TextNodeArgs): TextNodeType => {
     const newTextNode: TextNodeType = {

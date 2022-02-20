@@ -1,10 +1,8 @@
 import React from 'react';
-import { Prefix } from './prefix';
 import { Span } from '../styled/span';
 import { getColors } from '../styled/colors';
 import { Block } from '../styled/block';
 import { AttributePrefix } from './attributeprefix';
-import constants from '../../snac2/constants';
 
 export interface AttributeArgs {
     _: string,

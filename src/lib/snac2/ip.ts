@@ -1,5 +1,5 @@
-import { Node } from './elements';
-import { setId } from './helpers';
+import { Node } from './element';
+import { setId } from './prefix';
 
 export interface IPNodeArgs {
     open?: boolean,

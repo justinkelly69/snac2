@@ -1,28 +1,29 @@
-import React, {useState} from 'react';
-import { PINodeType } from '../../snac2/pis';
-import { escapePI } from '../../snac2/helpers';
+import React, { useState } from 'react';
+import { PINodeType, escapePI } from '../../snac2/pi';
 import { Block } from '../styled/block';
 import { Span } from '../styled/span';
 import { Prefix } from './prefix';
 import { getColors } from '../styled/colors';
 import constants from '../../snac2/constants';
+import { normalize } from '../../snac2/textprocessor';
+import { getPrefix } from '../../snac2/prefix';
 
 export interface PIArgs {
     snac: PINodeType,
     cssMode: string,
-    show: boolean,
 };
 
 export const PI = (props: PIArgs): JSX.Element => {
 
     const [showPI, showHidePI] = useState(props.snac.o);
-
     const colors = getColors(props.cssMode);
+    const prefix = getPrefix(props.snac._);
 
     return (
-        <Block visible={props.show}
+        <Block visible={true}
             Prop1={
-                <Prefix _={props.snac._}
+                <Prefix 
+                    prefix={prefix}
                     color={colors.Prefix}
                     showKids={showPI}
                     showHideKids={e => showHidePI(!showPI)}
@@ -38,7 +39,7 @@ export const PI = (props: PIArgs): JSX.Element => {
                     </Span>
                     {showPI ?
                         escapePI(props.snac.B) :
-                        escapePI(props.snac.B.substring(0, constants.PI_PREVIEW_LENGTH))
+                        escapePI(normalize(props.snac.B, constants.PI_PREVIEW_LENGTH))
                     }
                     <Span color={colors.PIHeading}>
                         ?&gt;

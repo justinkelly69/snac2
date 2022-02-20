@@ -1,14 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Prefix } from '../nodes/prefix';
-import { ChildNodeType } from '../../snac2/elements';
 
 const BaseRow = styled.div`
     white-space: pre;
 `;
 
 export interface RowArgs {
-    visible: boolean,
+    visible?: boolean,
     children: any,
 }
 
@@ -26,7 +24,7 @@ const Col = styled.span``;
 export interface BlockArgs {
     Prop1: JSX.Element,
     Prop2: JSX.Element,
-    visible: boolean,
+    visible?: boolean,
 }
 
 export const Block = (props: BlockArgs) => {
