@@ -95,8 +95,8 @@ interface ColorType {
     [name: string]: string
 }
 
-export const getColors = (mode?:string): ColorType => {
-    if(!mode || !colors[mode]) {
+export const getColors = (mode?: string): ColorType => {
+    if (!mode || !colors[mode]) {
         return colors['light'];
     }
     return colors[mode];

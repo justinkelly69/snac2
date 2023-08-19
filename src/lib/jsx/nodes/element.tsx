@@ -18,13 +18,15 @@ export interface ElementArgs {
     },
     cssMode: string,
     showTag: boolean,
-    showHideKids?: Function,
+    //showHideKids?: Function,
+    //showKids: boolean,
 };
 
 export const Element = (props: ElementArgs): JSX.Element => {
 
-    const [showKids, showHideKids] = useState(props.snac.o);
     const prefix = getPrefix(props.snac._);
+    const [showKids, showHideKids] = useState(props.snac.o)
+
 
     return (
         <>
@@ -32,9 +34,7 @@ export const Element = (props: ElementArgs): JSX.Element => {
                 prefix={prefix}
                 showTag={props.showTag}
                 showKids={showKids}
-                showHideKids={e => {
-                    showHideKids(!showKids)
-                }}
+                showHideKids={e => showHideKids(!showKids)}
                 snac={props.snac}
                 tagType={TagType.open}
                 cssMode={props.cssMode}
@@ -47,11 +47,9 @@ export const Element = (props: ElementArgs): JSX.Element => {
             />
             <Tag
                 prefix={prefix}
-                showTag={showKids}
-                showKids={true}
-                showHideKids={e => {
-                    showHideKids(!showKids)
-                }}
+                showTag={props.showTag}
+                showKids={showKids}
+                showHideKids={e => showHideKids(!showKids)}
                 snac={props.snac}
                 tagType={TagType.close}
                 cssMode={props.cssMode}

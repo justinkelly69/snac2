@@ -17,15 +17,21 @@ export interface CDATArgs {
 export const CDATA = (props: CDATArgs): JSX.Element => {
 
     const [showCDATA, showHideCDATA] = useState(props.snac.o);
+    const [selected, setSelected] = useState(props.snac.q);
     const colors = getColors(props.cssMode);
     const prefix = getPrefix(props.snac._);
 
     return (
-        <Block visible={true}
+        <Block visible={true} selected={selected}
             Prop1={
-                <Prefix 
+                <Prefix
                     prefix={prefix}
                     color={colors.Prefix}
+                    selectedNode={selected}
+                    selectNode={e => {
+                        setSelected(!selected)
+                        console.log(`selected is now ${selected}`)
+                    }}
                     showKids={showCDATA}
                     showHideKids={e => showHideCDATA(!showCDATA)}
                 />
