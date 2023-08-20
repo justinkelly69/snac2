@@ -1,5 +1,5 @@
 import { setId } from './prefix';
-import { cloneAttributes, AttributesNodeType } from './attributes';
+import { cloneAttributes, AttributesNodeType} from './attributes';
 import { TextNodeType } from './text';
 import { CDATANodeType } from './cdata';
 import { CommentNodeType } from './comment';

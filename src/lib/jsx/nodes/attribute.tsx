@@ -1,8 +1,6 @@
-import React from 'react';
-import { Span } from '../styled/span';
-import { getColors } from '../styled/colors';
-import { Block } from '../styled/block';
+import { StyledBlock, StyledColors, StyledSpan } from '../styled'
 import { AttributePrefix } from './attributeprefix';
+
 
 export interface AttributeArgs {
     _: string,
@@ -14,31 +12,31 @@ export interface AttributeArgs {
 
 export const Attribute = (props: AttributeArgs): JSX.Element => {
 
-    const colors = getColors(props.cssMode);
+    const colors = StyledColors.getColors(props.cssMode);
     const colonIndex = props.name.indexOf(':')
 
     return (
-        <Block visible={true}
+        <StyledBlock.Block visible={true}
             Prop1={
                 <AttributePrefix prefix={props.prefix} color={colors.AttributePrefix} />
             }
             Prop2={
-                <Span color={colors.Attribute}>
+                <StyledSpan.Span color={colors.Attribute}>
                     {colonIndex > -1 ? (
                         <>
-                            <Span color={colors.AttributeNS} fontWeight='bold'>{props.name.substring(0, colonIndex)}</Span>
-                            <Span color={colors.AttributeColon}>:</Span>
-                            <Span color={colors.AttributeName} fontWeight='bold'>{props.name.substring(colonIndex + 1)}</Span>
+                            <StyledSpan.Span color={colors.AttributeNS} fontWeight='bold'>{props.name.substring(0, colonIndex)}</StyledSpan.Span>
+                            <StyledSpan.Span color={colors.AttributeColon}>:</StyledSpan.Span>
+                            <StyledSpan.Span color={colors.AttributeName} fontWeight='bold'>{props.name.substring(colonIndex + 1)}</StyledSpan.Span>
                         </>
                     ) : (
-                        <Span color={colors.AttributeName} fontWeight='bold'>{props.name}</Span>
+                        <StyledSpan.Span color={colors.AttributeName} fontWeight='bold'>{props.name}</StyledSpan.Span>
                     )}
 
-                    <Span color={colors.AttributeEquals}>=</Span>
-                    <Span color={colors.AttributeQuote}>&quot;</Span>
-                    <Span color={colors.AttributeValue} fontWeight='bold'>{props.value}</Span>
-                    <Span color={colors.AttributeQuote}>&quot;</Span>
-                </Span>
+                    <StyledSpan.Span color={colors.AttributeEquals}>=</StyledSpan.Span>
+                    <StyledSpan.Span color={colors.AttributeQuote}>&quot;</StyledSpan.Span>
+                    <StyledSpan.Span color={colors.AttributeValue} fontWeight='bold'>{props.value}</StyledSpan.Span>
+                    <StyledSpan.Span color={colors.AttributeQuote}>&quot;</StyledSpan.Span>
+                </StyledSpan.Span>
             }
         />
     );

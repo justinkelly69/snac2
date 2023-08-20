@@ -1,15 +1,13 @@
-import React from 'react'
-import { FixedWidthText } from '../styled/fwt'
+import { SNACAttributes, SNACElement } from '../../snac2'
+import { StyledFixedWidthText } from '../styled'
 import { Element } from './element'
-import { ChildNodeType } from '../../snac2/element'
-import { AttributesNodeType } from '../../snac2/attributes'
 
 export interface DocumentArgs {
     snac: {
         _: string
         N: string
-        A: AttributesNodeType
-        C: Array<ChildNodeType>
+        A: SNACAttributes.AttributesNodeType
+        C: Array<SNACElement.ChildNodeType>
         a: boolean
         o: boolean
         q: boolean
@@ -19,12 +17,12 @@ export interface DocumentArgs {
 
 export const Document = (props: DocumentArgs) => {
     return (
-        <FixedWidthText>
+        <StyledFixedWidthText.FixedWidthText>
             <Element
                 snac={props.snac}
                 cssMode={props.cssMode}
                 showTag={true}
             />
-        </FixedWidthText>
+        </StyledFixedWidthText.FixedWidthText>
     )
 }

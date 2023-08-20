@@ -1,19 +1,14 @@
-import React from 'react'
-import { getType } from '../../snac2/children'
-import { ChildNodeType, ElementNodeType } from '../../snac2/element'
-import { ShowHide } from '../styled/showhide'
+import { SNACCDATA, SNACChildren, SNACComment, SNACElement, SNACText, SNACPi } from '../../snac2'
+import { StyledShowHide } from '../styled'
 import { Element } from './element'
 import { Text } from './text'
-import { TextNodeType } from '../../snac2/text'
 import { CDATA } from './cdata'
-import { CDATANodeType } from '../../snac2/cdata'
 import { Comment } from './comment'
-import { CommentNodeType } from '../../snac2/comment'
 import { PI } from './pi'
-import { PINodeType } from '../../snac2/pi'
+
 
 interface ChildrenArgs {
-    C: Array<ChildNodeType>
+    C: Array<SNACElement.ChildNodeType>
     prefix: string
     visible: boolean
     cssMode: string
@@ -21,11 +16,11 @@ interface ChildrenArgs {
 
 export const Children = (props: ChildrenArgs) => {
     return (
-        <ShowHide visible={props.visible}>
+        <StyledShowHide.ShowHide visible={props.visible}>
             {props.C.map((kid, index) => {
-                switch (getType(kid)) {
+                switch (SNACChildren.getType(kid)) {
                     case 'N':
-                        const element = kid as ElementNodeType
+                        const element = kid as SNACElement.ElementNodeType
                         return (
                             <Element
                                 showTag={true}
@@ -35,7 +30,7 @@ export const Children = (props: ChildrenArgs) => {
                             />
                         )
                     case 'T':
-                        const text = kid as TextNodeType
+                        const text = kid as SNACText.TextNodeType
                         return (
                             <Text
                                 key={index}
@@ -44,7 +39,7 @@ export const Children = (props: ChildrenArgs) => {
                             />
                         )
                     case 'D':
-                        const cdata = kid as CDATANodeType
+                        const cdata = kid as SNACCDATA.CDATANodeType
                         return (
                             <CDATA
                                 key={index}
@@ -53,7 +48,7 @@ export const Children = (props: ChildrenArgs) => {
                             />
                         )
                     case 'M':
-                        const comment = kid as CommentNodeType
+                        const comment = kid as SNACComment.CommentNodeType
                         return (
                             <Comment
                                 key={index}
@@ -62,7 +57,7 @@ export const Children = (props: ChildrenArgs) => {
                             />
                         )
                     case 'P':
-                        const pi = kid as PINodeType
+                        const pi = kid as SNACPi.PINodeType
                         return (
                             <PI
                                 key={index}
@@ -74,6 +69,6 @@ export const Children = (props: ChildrenArgs) => {
                         return null
                 }
             })}
-        </ShowHide>
+        </StyledShowHide.ShowHide>
     )
 }

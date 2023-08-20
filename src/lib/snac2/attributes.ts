@@ -1,6 +1,3 @@
-export interface AttributeNodeType {
-    [r2: string]: string,
-}
 
 export interface AttributesNodeType {
     [r1: string]: string,

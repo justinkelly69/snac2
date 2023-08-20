@@ -1,26 +1,22 @@
-import React, { useState } from 'react'
-import { TextNodeType } from '../../snac2/text'
-import { Block } from '../styled/block'
-import { Span } from '../styled/span'
+import { useState } from 'react'
+import { SNACPrefix, SNACText, SNACTextProcessor } from '../../snac2'
+import { StyledBlock, StyledColors, StyledConstants, StyledSpan } from '../styled'
 import { Prefix } from './prefix'
-import { getColors } from '../styled/colors'
-import constants from '../../snac2/constants'
-import { normalize } from '../../snac2/textprocessor'
-import { getPrefix } from '../../snac2/prefix'
+
 
 export interface TextArgs {
-    snac: TextNodeType
+    snac: SNACText.TextNodeType
     cssMode: string
 }
 
 export const Text = (props: TextArgs): JSX.Element => {
     const [showText, showHideText] = useState(props.snac.o)
     const [selected, setSelected] = useState(props.snac.q)
-    const colors = getColors(props.cssMode)
-    const prefix = getPrefix(props.snac._)
+    const colors = StyledColors.getColors(props.cssMode)
+    const prefix = SNACPrefix.getPrefix(props.snac._, StyledConstants.constants.PREFIX_START, StyledConstants.constants.PREFIX_ON, StyledConstants.constants.PREFIX_END)
 
     return (
-        <Block
+        <StyledBlock.Block
             visible={true}
             selected={selected}
             Prop1={
@@ -34,11 +30,11 @@ export const Text = (props: TextArgs): JSX.Element => {
                 />
             }
             Prop2={
-                <Span color={colors.Text}>
+                <StyledSpan.Span color={colors.Text}>
                     {showText
                         ? `[${props.snac.T}]`
-                        : `[${normalize(props.snac.T, constants.TEXT_PREVIEW_LENGTH)}]`}
-                </Span>
+                        : `[${SNACTextProcessor.normalize(props.snac.T, StyledConstants.constants.TEXT_PREVIEW_LENGTH)}]`}
+                </StyledSpan.Span>
             }
         />
     )

@@ -1,12 +1,9 @@
-import React, { useState } from 'react'
-import { AttributesNodeType } from '../../snac2/attributes'
+import { useState } from 'react'
+import { SNACAttributes } from '../../snac2'
+import { StyledBlock, StyledButton, StyledColors, StyledConstants, StyledSpan } from '../styled'
 import { Attributes } from './attributes'
 import { Prefix } from './prefix'
-import { Span } from '../styled/span'
-import { getColors } from '../styled/colors'
-import { Block } from '../styled/block'
-import { AttributesButton } from '../styled/button'
-import constants from '../../snac2/constants'
+
 
 export enum TagType {
     open,
@@ -18,7 +15,7 @@ export interface TagArgs {
     snac: {
         _: string
         N: string
-        A: AttributesNodeType
+        A: SNACAttributes.AttributesNodeType
         a: boolean
         o: boolean
         q: boolean
@@ -35,11 +32,10 @@ export const Tag = (props: TagArgs): JSX.Element => {
     const [selected, setSelected] = useState(props.snac.q)
     const [atts, showAtts] = useState(props.snac.a)
     const colonIndex = props.snac.N.indexOf(':')
-
-    const colors = getColors(props.cssMode)
+    const colors = StyledColors.getColors(props.cssMode)
 
     return (
-        <Block
+        <StyledBlock.Block
             visible={props.showTag}
             selected={selected}
             Prop1={
@@ -55,29 +51,29 @@ export const Tag = (props: TagArgs): JSX.Element => {
                 />
             }
             Prop2={
-                <Span color={colors.Node}>
+                <StyledSpan.Span color={colors.Node}>
                     &lt;
                     {props.tagType === TagType.close && (
-                        <Span color={colors.NodeSlash}>{'/'}</Span>
+                        <StyledSpan.Span color={colors.NodeSlash}>{'/'}</StyledSpan.Span>
                     )}
                     {colonIndex > -1 ? (
                         <>
-                            <Span color={colors.NS} fontWeight='bold'>
+                            <StyledSpan.Span color={colors.NS} fontWeight='bold'>
                                 {props.snac.N.substring(0, colonIndex)}
-                            </Span>
-                            <Span color={colors.NodeColon}>:</Span>
-                            <Span color={colors.Name} fontWeight='bold'>
+                            </StyledSpan.Span>
+                            <StyledSpan.Span color={colors.NodeColon}>:</StyledSpan.Span>
+                            <StyledSpan.Span color={colors.Name} fontWeight='bold'>
                                 {props.snac.N.substring(colonIndex + 1)}
-                            </Span>
+                            </StyledSpan.Span>
                         </>
                     ) : (
-                        <Span color={colors.Name} fontWeight='bold'>
+                        <StyledSpan.Span color={colors.Name} fontWeight='bold'>
                             {props.snac.N}
-                        </Span>
+                        </StyledSpan.Span>
                     )}
 
                     {props.tagType !== TagType.close && (
-                        <Block
+                        <StyledBlock.Block
                             visible={atts}
                             Prop1={<></>}
                             Prop2={
@@ -91,16 +87,16 @@ export const Tag = (props: TagArgs): JSX.Element => {
                         />
                     )}
                     {props.tagType === TagType.empty && (
-                        <Span color={colors.NodeSlash}>{' /'}</Span>
+                        <StyledSpan.Span color={colors.NodeSlash}>{' /'}</StyledSpan.Span>
                     )}
-                    {atts ? `${constants.PREFIX_START}${props.prefix}` : null}&gt;
+                    {atts ? `${StyledConstants.constants.PREFIX_START}${props.prefix}` : null}&gt;
                     {props.tagType !== TagType.close && (
-                        <AttributesButton
+                        <StyledButton.AttributesButton
                             show={atts}
                             onClick={e => showAtts(!atts)}
                         />
                     )}
-                </Span>
+                </StyledSpan.Span>
             }
         />
     )

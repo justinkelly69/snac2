@@ -1,6 +1,5 @@
-import React from 'react';
-import { Span } from '../styled/span';
-import constants from '../../snac2/constants';
+import { StyledConstants, StyledSpan } from '../styled'
+
 
 export interface AttributePrefixArgs {
     color: string,
@@ -8,13 +7,12 @@ export interface AttributePrefixArgs {
 }
 
 export const AttributePrefix = (props: AttributePrefixArgs): JSX.Element => {
-
     return (
         <>
             {' '}
-            <Span color={props.color}>
-                {`${props.prefix}${constants.ATTRIBUTE_PREFIX}`}
-            </Span>
+            <StyledSpan.Span color={props.color}>
+                {`${props.prefix}${StyledConstants.constants.ATTRIBUTE_PREFIX}`}
+            </StyledSpan.Span>
         </>
     );
 }

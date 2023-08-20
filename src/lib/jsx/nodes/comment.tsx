@@ -1,27 +1,23 @@
-import React, { useState } from 'react';
-import { CommentNodeType } from '../../snac2/comment';
-import { escapeComment } from '../../snac2/comment';
-import { Block } from '../styled/block';
-import { Span } from '../styled/span';
-import { Prefix } from './prefix'; import { getColors } from '../styled/colors';
-import constants from '../../snac2/constants';
-import { normalize } from '../../snac2/textprocessor';
-import { getPrefix } from '../../snac2/prefix';
+import { useState } from 'react'
+import { SNACComment, SNACPrefix, SNACTextProcessor } from '../../snac2'
+import { StyledBlock, StyledColors, StyledConstants, StyledSpan } from '../styled'
+import { Prefix } from './prefix'
+
 
 export interface CommentArgs {
-    snac: CommentNodeType,
+    snac: SNACComment.CommentNodeType,
     cssMode: string,
 };
 
 export const Comment = (props: CommentArgs): JSX.Element => {
 
-    const [showComment, showHideComment] = useState(props.snac.o);
-    const [selected, setSelected] = useState(props.snac.q);
-    const colors = getColors(props.cssMode);
-    const prefix = getPrefix(props.snac._);
+    const [showComment, showHideComment] = useState(props.snac.o)
+    const [selected, setSelected] = useState(props.snac.q)
+    const colors = StyledColors.getColors(props.cssMode)
+    const prefix = SNACPrefix.getPrefix(props.snac._, StyledConstants.constants.PREFIX_START, StyledConstants.constants.PREFIX_ON, StyledConstants.constants.PREFIX_END)
 
     return (
-        <Block visible={true} selected={selected}
+        <StyledBlock.Block visible={true} selected={selected}
             Prop1={
                 <Prefix
                     prefix={prefix}
@@ -33,18 +29,18 @@ export const Comment = (props: CommentArgs): JSX.Element => {
                 />
             }
             Prop2={
-                <Span color={colors.CommentBody}>
-                    <Span color={colors.CommentHeading}>
+                <StyledSpan.Span color={colors.CommentBody}>
+                    <StyledSpan.Span color={colors.CommentHeading}>
                         &lt;!--
-                    </Span>
+                    </StyledSpan.Span>
                     {showComment ?
-                        escapeComment(props.snac.M) :
-                        escapeComment(normalize(props.snac.M, constants.COMMENT_PREVIEW_LENGTH))
+                        SNACComment.escapeComment(props.snac.M) :
+                        SNACComment.escapeComment(SNACTextProcessor.normalize(props.snac.M, StyledConstants.constants.COMMENT_PREVIEW_LENGTH))
                     }
-                    <Span color={colors.CommentHeading}>
+                    <StyledSpan.Span color={colors.CommentHeading}>
                         --&gt;
-                    </Span>
-                </Span>
+                    </StyledSpan.Span>
+                </StyledSpan.Span>
             }
         />
     );

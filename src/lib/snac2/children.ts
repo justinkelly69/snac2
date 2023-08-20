@@ -4,7 +4,7 @@ import { cloneCDATANode, CDATANodeType } from './cdata';
 import { cloneCommentNode, CommentNodeType } from './comment';
 import { clonePINode, PINodeType } from './pi';
 import { cloneIPNode, IPNodeType } from './ip';
-import constants from './constants';
+import { constants } from './constants';
 
 export const getType = (node: ChildNodeType): NodeType => {
     const firstChar = node._.split(constants.JOIN1)[0];

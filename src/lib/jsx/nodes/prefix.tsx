@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
-import { Span } from '../styled/span'
-import { ChildrenButton, SelectButton } from '../styled/button'
+import { StyledButton, StyledSpan } from '../styled'
+
 
 export interface PrefixArgs {
     prefix: string
@@ -14,12 +13,12 @@ export interface PrefixArgs {
 export const Prefix = (props: PrefixArgs): JSX.Element => {
     return (
         <>
-            <SelectButton
+            <StyledButton.SelectButton
                 show={props.selectedNode}
                 onClick={props.selectNode}
             />
-            <Span color={props.color}>{props.prefix}</Span>
-            <ChildrenButton
+            <StyledSpan.Span color={props.color}>{props.prefix}</StyledSpan.Span>
+            <StyledButton.ChildrenButton
                 show={props.showKids}
                 onClick={props.showHideKids}
             />

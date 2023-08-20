@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
-import { TagType, Tag } from './tag';
-import { Children } from './children';
-import { ChildNodeType } from '../../snac2/element';
-import { AttributesNodeType } from '../../snac2/attributes';
-import { getPrefix } from '../../snac2/prefix';
+import { useState } from 'react';
+import { SNACAttributes, SNACElement, SNACPrefix } from '../../snac2'
+import { StyledConstants } from '../styled'
+import { TagType, Tag } from './tag'
+import { Children } from './children'
 
 export interface ElementArgs {
     snac: {
         _: string,
         N: string,
-        A: AttributesNodeType,
-        C: Array<ChildNodeType>,
+        A: SNACAttributes.AttributesNodeType,
+        C: Array<SNACElement.ChildNodeType>,
         a: boolean,
         o: boolean,
         q: boolean
@@ -21,7 +20,7 @@ export interface ElementArgs {
 
 export const Element = (props: ElementArgs): JSX.Element => {
 
-    const prefix = getPrefix(props.snac._);
+    const prefix = SNACPrefix.getPrefix(props.snac._, StyledConstants.constants.PREFIX_START, StyledConstants.constants.PREFIX_ON, StyledConstants.constants.PREFIX_END)
     const [showKids, showHideKids] = useState(props.snac.o)
 
 

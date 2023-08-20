@@ -1,16 +1,11 @@
-import React, { useState } from 'react';
-import { CDATANodeType } from '../../snac2/cdata';
-import { escapeCDATA } from '../../snac2/cdata';
-import { Block } from '../styled/block';
-import { Span } from '../styled/span';
+import { useState } from 'react';
+import { SNACCDATA, SNACPrefix, SNACTextProcessor } from '../../snac2'
+import { StyledBlock, StyledColors, StyledConstants, StyledSpan } from '../styled'
 import { Prefix } from './prefix';
-import { getColors } from '../styled/colors';
-import constants from '../../snac2/constants';
-import { normalize } from '../../snac2/textprocessor';
-import { getPrefix } from '../../snac2/prefix';
+
 
 export interface CDATArgs {
-    snac: CDATANodeType,
+    snac: SNACCDATA.CDATANodeType,
     cssMode: string,
 };
 
@@ -18,11 +13,11 @@ export const CDATA = (props: CDATArgs): JSX.Element => {
 
     const [showCDATA, showHideCDATA] = useState(props.snac.o);
     const [selected, setSelected] = useState(props.snac.q);
-    const colors = getColors(props.cssMode);
-    const prefix = getPrefix(props.snac._);
+    const colors = StyledColors.getColors(props.cssMode);
+    const prefix = SNACPrefix.getPrefix(props.snac._, StyledConstants.constants.PREFIX_START, StyledConstants.constants.PREFIX_ON, StyledConstants.constants.PREFIX_END);
 
     return (
-        <Block visible={true} selected={selected}
+        <StyledBlock.Block visible={true} selected={selected}
             Prop1={
                 <Prefix
                     prefix={prefix}
@@ -34,20 +29,20 @@ export const CDATA = (props: CDATArgs): JSX.Element => {
                 />
             }
             Prop2={
-                <Span color={colors.CDATABody}>
-                    <Span color={colors.CDATAHeading}>
+                <StyledSpan.Span color={colors.CDATABody}>
+                    <StyledSpan.Span color={colors.CDATAHeading}>
                         &lt;![
-                        <Span color={colors.CDATALabel}>CDATA</Span>
+                        <StyledSpan.Span color={colors.CDATALabel}>CDATA</StyledSpan.Span>
                         [
-                    </Span>
+                    </StyledSpan.Span>
                     {showCDATA ?
-                        escapeCDATA(props.snac.D) :
-                        escapeCDATA(normalize(props.snac.D, constants.CDATA_PREVIEW_LENGTH))
+                        SNACCDATA.escapeCDATA(props.snac.D) :
+                        SNACCDATA.escapeCDATA(SNACTextProcessor.normalize(props.snac.D, StyledConstants.constants.CDATA_PREVIEW_LENGTH))
                     }
-                    <Span color={colors.CDATAHeading}>
+                    <StyledSpan.Span color={colors.CDATAHeading}>
                         ]]&gt;
-                    </Span>
-                </Span>
+                    </StyledSpan.Span>
+                </StyledSpan.Span>
             }
         />
 

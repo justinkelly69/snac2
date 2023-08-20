@@ -1,26 +1,22 @@
-import React, { useState } from 'react'
-import { PINodeType, escapePI } from '../../snac2/pi'
-import { Block } from '../styled/block'
-import { Span } from '../styled/span'
+import { useState } from 'react'
+import { SNACPi, SNACPrefix, SNACTextProcessor } from '../../snac2'
+import { StyledBlock, StyledColors, StyledConstants, StyledSpan } from '../styled'
 import { Prefix } from './prefix'
-import { getColors } from '../styled/colors'
-import constants from '../../snac2/constants'
-import { normalize } from '../../snac2/textprocessor'
-import { getPrefix } from '../../snac2/prefix'
+
 
 export interface PIArgs {
-    snac: PINodeType
+    snac: SNACPi.PINodeType
     cssMode: string
 }
 
 export const PI = (props: PIArgs): JSX.Element => {
     const [showPI, showHidePI] = useState(props.snac.o)
     const [selected, setSelected] = useState(props.snac.q)
-    const colors = getColors(props.cssMode)
-    const prefix = getPrefix(props.snac._)
+    const colors = StyledColors.getColors(props.cssMode)
+    const prefix = SNACPrefix.getPrefix(props.snac._, StyledConstants.constants.PREFIX_START, StyledConstants.constants.PREFIX_ON, StyledConstants.constants.PREFIX_END)
 
     return (
-        <Block
+        <StyledBlock.Block
             visible={true}
             selected={selected}
             Prop1={
@@ -34,14 +30,14 @@ export const PI = (props: PIArgs): JSX.Element => {
                 />
             }
             Prop2={
-                <Span color={colors.PIBody}>
-                    <Span color={colors.PIHeading}>&lt;?</Span>
-                    <Span color={colors.PILang}>{`${props.snac.L} `}</Span>
+                <StyledSpan.Span color={colors.PIBody}>
+                    <StyledSpan.Span color={colors.PIHeading}>&lt;?</StyledSpan.Span>
+                    <StyledSpan.Span color={colors.PILang}>{`${props.snac.L} `}</StyledSpan.Span>
                     {showPI
-                        ? escapePI(props.snac.B)
-                        : escapePI(normalize(props.snac.B, constants.PI_PREVIEW_LENGTH))}
-                    <Span color={colors.PIHeading}>?&gt;</Span>
-                </Span>
+                        ? SNACPi.escapePI(props.snac.B)
+                        : SNACPi.escapePI(SNACTextProcessor.normalize(props.snac.B, StyledConstants.constants.PI_PREVIEW_LENGTH))}
+                    <StyledSpan.Span color={colors.PIHeading}>?&gt;</StyledSpan.Span>
+                </StyledSpan.Span>
             }
         />
     )
