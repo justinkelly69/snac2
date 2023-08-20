@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { SNACComment, SNACPrefix, SNACTextProcessor } from '../../snac2'
+import { SNACComment, SNACPrefix, SNACText } from '../../snac2'
 import { StyledBlock, StyledColors, StyledConstants, StyledSpan } from '../styled'
 import { Prefix } from './prefix'
 
@@ -35,7 +35,7 @@ export const Comment = (props: CommentArgs): JSX.Element => {
                     </StyledSpan.Span>
                     {showComment ?
                         SNACComment.escapeComment(props.snac.M) :
-                        SNACComment.escapeComment(SNACTextProcessor.normalize(props.snac.M, StyledConstants.constants.COMMENT_PREVIEW_LENGTH))
+                        SNACComment.escapeComment(SNACText.normalize(props.snac.M, StyledConstants.constants.COMMENT_PREVIEW_LENGTH))
                     }
                     <StyledSpan.Span color={colors.CommentHeading}>
                         --&gt;

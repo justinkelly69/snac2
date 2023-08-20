@@ -1,6 +1,6 @@
-import { Node } from './element';
-import { setId } from './prefix';
-import { escapeText } from './textprocessor';
+import { Node } from './element'
+import { setId } from './prefix'
+import { escapeText } from './text'
 
 /**
 * Escape ]]> as ]]&lt; in a CDATA string.
@@ -17,11 +17,11 @@ export interface CDATANodeArgs {
     selected?: boolean,
     treeId: string,
     path: Array<number>,
-};
+}
 
 export interface CDATANodeType extends Node {
     D: string,
-};
+}
 
 export const createCDATANode = (node: CDATANodeArgs): CDATANodeType => {
     const newCDATANode: CDATANodeType = {
@@ -30,13 +30,13 @@ export const createCDATANode = (node: CDATANodeArgs): CDATANodeType => {
         o: node.open || false,
         q: node.selected || false,
     }
-    return newCDATANode;
+    return newCDATANode
 }
 
 export interface CDATANodeCloneArgs extends CDATANodeType {
     treeId: string,
     path: Array<number>,
-};
+}
 
 export const cloneCDATANode = (node: CDATANodeCloneArgs): CDATANodeType => {
     return createCDATANode({
@@ -45,5 +45,5 @@ export const cloneCDATANode = (node: CDATANodeCloneArgs): CDATANodeType => {
         selected: node.q,
         treeId: node.treeId,
         path: node.path,
-    });
+    })
 }

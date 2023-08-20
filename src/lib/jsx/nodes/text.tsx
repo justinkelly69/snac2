@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { SNACPrefix, SNACText, SNACTextProcessor } from '../../snac2'
+import { SNACPrefix, SNACText } from '../../snac2'
 import { StyledBlock, StyledColors, StyledConstants, StyledSpan } from '../styled'
 import { Prefix } from './prefix'
 
@@ -33,7 +33,7 @@ export const Text = (props: TextArgs): JSX.Element => {
                 <StyledSpan.Span color={colors.Text}>
                     {showText
                         ? `[${props.snac.T}]`
-                        : `[${SNACTextProcessor.normalize(props.snac.T, StyledConstants.constants.TEXT_PREVIEW_LENGTH)}]`}
+                        : `[${SNACText.normalize(props.snac.T, StyledConstants.constants.TEXT_PREVIEW_LENGTH)}]`}
                 </StyledSpan.Span>
             }
         />

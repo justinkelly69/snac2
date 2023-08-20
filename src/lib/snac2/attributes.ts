@@ -1,6 +1,6 @@
 
 export interface AttributesNodeType {
-    [r1: string]: string,
+    [k: string]: string,
 }
 
 export interface AttributeKeysType {
@@ -13,10 +13,9 @@ export const cloneAttributes = (A: AttributesNodeType, action?: {
 }): AttributesNodeType => {
 
     const atts: AttributesNodeType = {};
-
     for (let k of Object.keys(A)) {
         if (action && action.remove && action.remove[k] === null) {
-            continue;
+            continue
         }
         else {
             atts[k] = A[k]
@@ -29,5 +28,5 @@ export const cloneAttributes = (A: AttributesNodeType, action?: {
         }
     }
 
-    return atts;
+    return atts
 }

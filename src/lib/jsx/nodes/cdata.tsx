@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { SNACCDATA, SNACPrefix, SNACTextProcessor } from '../../snac2'
+import { SNACCDATA, SNACPrefix, SNACText } from '../../snac2'
 import { StyledBlock, StyledColors, StyledConstants, StyledSpan } from '../styled'
 import { Prefix } from './prefix';
 
@@ -37,7 +37,7 @@ export const CDATA = (props: CDATArgs): JSX.Element => {
                     </StyledSpan.Span>
                     {showCDATA ?
                         SNACCDATA.escapeCDATA(props.snac.D) :
-                        SNACCDATA.escapeCDATA(SNACTextProcessor.normalize(props.snac.D, StyledConstants.constants.CDATA_PREVIEW_LENGTH))
+                        SNACCDATA.escapeCDATA(SNACText.normalize(props.snac.D, StyledConstants.constants.CDATA_PREVIEW_LENGTH))
                     }
                     <StyledSpan.Span color={colors.CDATAHeading}>
                         ]]&gt;

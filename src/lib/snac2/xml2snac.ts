@@ -52,7 +52,7 @@ interface X2SChildren {
 };
 
 export const xml2snac = (xml: string) => {
-    const out = xml2js(xml, { compact: false }).elements[0];
+    const out = xml2js(xml, { compact: false }).elements[0]
     return createElement({
         type: 'element',
         name: out.name,
@@ -60,14 +60,14 @@ export const xml2snac = (xml: string) => {
         elements: out.elements,
         treeId: 'feckoff',
         path: [],
-    });
+    })
 }
 
 const createElement = (args: X2SElement): ElementNodeType => {
-    let ns = '';
-    let name = args.name;
+    let ns = ''
+    let name = args.name
     if (args.name.indexOf(':') > -1) {
-        [ns, name] = args.name.split(/:/);
+        [ns, name] = args.name.split(/:/)
     }
     const element = createElementNode({
         ns: ns,
@@ -83,17 +83,18 @@ const createElement = (args: X2SElement): ElementNodeType => {
         selected: false,
         treeId: args.treeId,
         path: [...args.path],
-    });
-    return element;
+    })
+    return element
 }
 
 const createChildren = (atts: X2SChildren): Array<ChildNodeType> => {
-    const out: Array<ChildNodeType> = [];
-    let index = 0;
+    const out: Array<ChildNodeType> = []
+    let index = 0
     for (const kid of atts.kids) {
         switch (kid.type) {
+
             case 'element':
-                const kElement = kid as X2SElement;
+                const kElement = kid as X2SElement
                 out.push(createElement({
                     type: 'element',
                     name: kElement.name,
@@ -101,51 +102,56 @@ const createChildren = (atts: X2SChildren): Array<ChildNodeType> => {
                     elements: kElement.elements,
                     treeId: atts.treeId,
                     path: [...atts.path, index],
-                }));
-                break;
+                }))
+                break
+
             case 'text':
-                const kText = kid as X2SText;
+                const kText = kid as X2SText
                 out.push(createText({
                     type: 'text',
                     text: kText.text,
                     treeId: atts.treeId,
                     path: [...atts.path, index],
-                }));
-                break;
+                }))
+                break
+
             case 'cdata':
-                const kCDATA = kid as X2SCDATA;
+                const kCDATA = kid as X2SCDATA
                 out.push(createCDATA({
                     type: 'cdata',
                     cdata: kCDATA.cdata,
                     treeId: atts.treeId,
                     path: [...atts.path, index],
-                }));
-                break;
+                }))
+                break
+
             case 'comment':
-                const kComment = kid as X2SComment;
+                const kComment = kid as X2SComment
                 out.push(createComment({
                     type: 'comment',
                     comment: kComment.comment,
                     treeId: atts.treeId,
                     path: [...atts.path, index],
-                }));
-                break;
+                }))
+                break
+
             case 'instruction':
-                const kPI = kid as X2SPI;
+                const kPI = kid as X2SPI
                 out.push(createPI({
                     type: 'instruction',
                     name: kPI.name,
                     instruction: kPI.instruction,
                     treeId: atts.treeId,
                     path: [...atts.path, index],
-                }));
-                break;
+                }))
+                break
+
             default:
                 console.log('something wroong')
         }
-        index = index + 1;
+        index = index + 1
     }
-    return out;
+    return out
 }
 
 const createText = (args: X2SText): TextNodeType => {
@@ -155,7 +161,7 @@ const createText = (args: X2SText): TextNodeType => {
         selected: false,
         treeId: args.treeId,
         path: [...args.path],
-    });
+    })
 }
 
 const createCDATA = (args: X2SCDATA): CDATANodeType => {
@@ -165,7 +171,7 @@ const createCDATA = (args: X2SCDATA): CDATANodeType => {
         selected: false,
         treeId: args.treeId,
         path: [...args.path],
-    });
+    })
 }
 
 const createComment = (args: X2SComment): CommentNodeType => {
@@ -175,7 +181,7 @@ const createComment = (args: X2SComment): CommentNodeType => {
         selected: false,
         treeId: args.treeId,
         path: [...args.path],
-    });
+    })
 }
 
 const createPI = (args: X2SPI): PINodeType => {
@@ -186,5 +192,5 @@ const createPI = (args: X2SPI): PINodeType => {
         selected: false,
         treeId: args.treeId,
         path: [...args.path],
-    });
+    })
 }

@@ -1,5 +1,5 @@
-import { StyledBlock, StyledColors, StyledSpan } from '../styled'
-import { AttributePrefix } from './attributeprefix';
+import { StyledBlock, StyledColors, StyledConstants, StyledSpan } from '../styled'
+//import { AttributePrefix } from './attributeprefix';
 
 
 export interface AttributeArgs {
@@ -18,10 +18,15 @@ export const Attribute = (props: AttributeArgs): JSX.Element => {
     return (
         <StyledBlock.Block visible={true}
             Prop1={
-                <AttributePrefix prefix={props.prefix} color={colors.AttributePrefix} />
+                <>
+                    {' '}
+                    <StyledSpan.Span color={colors.Attribute}>
+                        {`${props.prefix}${StyledConstants.constants.ATTRIBUTE_PREFIX}`}
+                    </StyledSpan.Span>
+                </>
             }
             Prop2={
-                <StyledSpan.Span color={colors.Attribute}>
+                < StyledSpan.Span color={colors.Attribute} >
                     {colonIndex > -1 ? (
                         <>
                             <StyledSpan.Span color={colors.AttributeNS} fontWeight='bold'>{props.name.substring(0, colonIndex)}</StyledSpan.Span>
@@ -36,7 +41,7 @@ export const Attribute = (props: AttributeArgs): JSX.Element => {
                     <StyledSpan.Span color={colors.AttributeQuote}>&quot;</StyledSpan.Span>
                     <StyledSpan.Span color={colors.AttributeValue} fontWeight='bold'>{props.value}</StyledSpan.Span>
                     <StyledSpan.Span color={colors.AttributeQuote}>&quot;</StyledSpan.Span>
-                </StyledSpan.Span>
+                </StyledSpan.Span >
             }
         />
     );

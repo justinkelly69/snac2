@@ -1,14 +1,14 @@
-import { Node } from './element';
-import { setId } from './prefix';
+import { Node } from './element'
+import { setId } from './prefix'
 
 export interface IPNodeArgs {
     open?: boolean,
     selected?: boolean,
     treeId: string,
     path: Array<number>,
-};
+}
 
-export interface IPNodeType extends Node { };
+export interface IPNodeType extends Node {};
 
 export const createIPNode = (node: IPNodeArgs): IPNodeType => {
     const newIPNode: IPNodeType = {
@@ -17,12 +17,12 @@ export const createIPNode = (node: IPNodeArgs): IPNodeType => {
         q: node.selected || false,
     }
     return newIPNode;
-};
+}
 
 export interface IPNodeCloneArgs extends IPNodeType {
     treeId: string,
     path: Array<number>,
-};
+}
 
 export const cloneIPNode = (node: IPNodeCloneArgs): IPNodeType => {
     return createIPNode({
@@ -30,5 +30,5 @@ export const cloneIPNode = (node: IPNodeCloneArgs): IPNodeType => {
         selected: node.q,
         treeId: node.treeId,
         path: node.path,
-    });
-};
+    })
+}

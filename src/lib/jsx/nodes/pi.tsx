@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { SNACPi, SNACPrefix, SNACTextProcessor } from '../../snac2'
+import { SNACPi, SNACPrefix, SNACText } from '../../snac2'
 import { StyledBlock, StyledColors, StyledConstants, StyledSpan } from '../styled'
 import { Prefix } from './prefix'
 
@@ -35,7 +35,7 @@ export const PI = (props: PIArgs): JSX.Element => {
                     <StyledSpan.Span color={colors.PILang}>{`${props.snac.L} `}</StyledSpan.Span>
                     {showPI
                         ? SNACPi.escapePI(props.snac.B)
-                        : SNACPi.escapePI(SNACTextProcessor.normalize(props.snac.B, StyledConstants.constants.PI_PREVIEW_LENGTH))}
+                        : SNACPi.escapePI(SNACText.normalize(props.snac.B, StyledConstants.constants.PI_PREVIEW_LENGTH))}
                     <StyledSpan.Span color={colors.PIHeading}>?&gt;</StyledSpan.Span>
                 </StyledSpan.Span>
             }

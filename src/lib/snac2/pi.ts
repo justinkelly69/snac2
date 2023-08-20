@@ -1,6 +1,6 @@
-import { Node } from './element';
-import { setId } from './prefix';
-import { escapeText } from './textprocessor';
+import { Node } from './element'
+import { setId } from './prefix'
+import { escapeText } from './text'
 
 /**
 * Escape ?> as ?&lt; in a Processing Instruction string.
@@ -16,12 +16,12 @@ export interface PINodeArgs {
     selected?: boolean,
     treeId: string,
     path: Array<number>,
-};
+}
 
 export interface PINodeType extends Node {
     L: string,
     B: string,
-};
+}
 
 export const createPINode = (node: PINodeArgs): PINodeType => {
     const newPINode: PINodeType = {
@@ -31,13 +31,13 @@ export const createPINode = (node: PINodeArgs): PINodeType => {
         o: node.open || false,
         q: node.selected || false,
     }
-    return newPINode;
-};
+    return newPINode
+}
 
 export interface PINodeCloneArgs extends PINodeType {
     treeId: string,
     path: Array<number>,
-};
+}
 
 export const clonePINode = (node: PINodeCloneArgs): PINodeType => {
     return createPINode({
@@ -47,5 +47,5 @@ export const clonePINode = (node: PINodeCloneArgs): PINodeType => {
         selected: node.q,
         treeId: node.treeId,
         path: node.path,
-    });
-};
+    })
+}

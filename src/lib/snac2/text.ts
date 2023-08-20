@@ -1,6 +1,5 @@
-import { Node } from './element';
-import { setId } from './prefix';
-import { escapeText } from './textprocessor';
+import { Node } from './element'
+import { setId } from './prefix'
 
 /**
  * Escape < > & ' " characters in a string
@@ -28,17 +27,43 @@ export const unEscapeXML = (str: string) =>
         ["&quot;", '"']
     ])
 
+    /**
+* Replace each <string> with <replacement> in str and return the result
+* @param {String} str 
+* @param {Arrray of [string, replacement] pairs} subs 
+*/
+export const escapeText = (str: string, subs: Array<[RegExp | string, string]>) => {
+    subs.forEach(s => {
+        str = str.split(s[0]).join(s[1])
+    })
+    return str
+}
+
+/**
+* Normalize a string. Convert all blocks of one or more space, tab 
+* and newline charcters with single spaces.
+* @param {String} txt 
+*/
+export const normalize = (txt: string, length: number = -1) => {
+    if(length > -1) {
+        return txt.substring(0, length).trim().split(/\s+/).join(' ')
+    }
+    else {
+        return txt.trim().split(/\s+/).join(' ')
+    }
+}
+
 export interface TextNodeArgs {
     text: string,
     open?: boolean,
     selected?: boolean,
     treeId: string,
     path: Array<number>,
-};
+}
 
 export interface TextNodeType extends Node {
     T: string,
-};
+}
 
 export const createTextNode = (node: TextNodeArgs): TextNodeType => {
     const newTextNode: TextNodeType = {
@@ -49,10 +74,12 @@ export const createTextNode = (node: TextNodeArgs): TextNodeType => {
     }
     return newTextNode;
 }
+
 export interface TextNodeBlankArgs {
     treeId: string,
     path: Array<number>,
-};
+}
+
 export const createBlankText = (args: TextNodeBlankArgs) => {
     return createTextNode({
         text: '',
@@ -64,7 +91,7 @@ export const createBlankText = (args: TextNodeBlankArgs) => {
 export interface TextNodeCloneArgs extends TextNodeType {
     treeId: string,
     path: Array<number>,
-};
+}
 
 export const cloneTextNode = (node: TextNodeCloneArgs): TextNodeType => {
     return createTextNode({
@@ -73,5 +100,5 @@ export const cloneTextNode = (node: TextNodeCloneArgs): TextNodeType => {
         selected: node.q,
         treeId: node.treeId,
         path: node.path,
-    });
+    })
 }

@@ -1,21 +1,21 @@
-import { setId } from './prefix';
-import { cloneAttributes, AttributesNodeType} from './attributes';
-import { TextNodeType } from './text';
-import { CDATANodeType } from './cdata';
-import { CommentNodeType } from './comment';
-import { PINodeType } from './pi';
-import { IPNodeType } from './ip';
-import { cloneChildren } from './children';
+import { setId } from './prefix'
+import { cloneAttributes, AttributesNodeType} from './attributes'
+import { TextNodeType } from './text'
+import { CDATANodeType } from './cdata'
+import { CommentNodeType } from './comment'
+import { PINodeType } from './pi'
+import { IPNodeType } from './ip'
+import { cloneChildren } from './children'
 
 export interface Node {
     _: string,
     q: boolean,
     o: boolean,
-};
+}
 
-export type NodeType = 'N' | 'T' | 'D' | 'M' | 'P' | 'I' | 'Z';
+export type NodeType = 'N' | 'T' | 'D' | 'M' | 'P' | 'I' | 'Z'
 
-export type ChildNodeType = ElementNodeType | TextNodeType | CDATANodeType | CommentNodeType | PINodeType | IPNodeType;
+export type ChildNodeType = ElementNodeType | TextNodeType | CDATANodeType | CommentNodeType | PINodeType | IPNodeType
 
 export interface ElementNodeArgs {
     ns?: string,
@@ -27,14 +27,14 @@ export interface ElementNodeArgs {
     selected?: boolean,
     treeId: string,
     path: Array<number>,
-};
+}
 
 export interface ElementNodeType extends Node {
     N: string,
     A: AttributesNodeType,
     C: Array<ChildNodeType>,
     a: boolean,
-};
+}
 
 export const createElementNode = (args: ElementNodeArgs): ElementNodeType => ({
     _: setId('N', args.treeId, args.path),

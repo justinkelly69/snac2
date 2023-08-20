@@ -1,6 +1,6 @@
 import { Node } from './element';
 import { setId } from './prefix';
-import { escapeText } from './textprocessor';
+import { escapeText } from './text';
 
 /**
 * Escape '--' as '- - ' in a Comment string.
@@ -21,11 +21,11 @@ export interface CommentNodeArgs {
     selected?: boolean,
     treeId: string,
     path: Array<number>,
-};
+}
 
 export interface CommentNodeType extends Node {
     M: string,
-};
+}
 
 export const createCommentNode = (node: CommentNodeArgs): CommentNodeType => {
     const newCommentNode: CommentNodeType = {
@@ -34,13 +34,13 @@ export const createCommentNode = (node: CommentNodeArgs): CommentNodeType => {
         o: node.open || false,
         q: node.selected || false,
     }
-    return newCommentNode;
-};
+    return newCommentNode
+}
 
 export interface CommentNodeCloneArgs extends CommentNodeType {
     treeId: string,
     path: Array<number>,
-};
+}
 
 export const cloneCommentNode = (node: CommentNodeCloneArgs): CommentNodeType => {
     return createCommentNode({
@@ -49,5 +49,5 @@ export const cloneCommentNode = (node: CommentNodeCloneArgs): CommentNodeType =>
         selected: node.q,
         treeId: node.treeId,
         path: node.path,
-    });
-};
+    })
+}
