@@ -27,10 +27,7 @@ export const Comment = (props: CommentArgs): JSX.Element => {
                     prefix={prefix}
                     color={colors.Prefix}
                     selectedNode={selected}
-                    selectNode={e => {
-                        setSelected(!selected)
-                        console.log(`selected is now ${selected}`)
-                    }}
+                    selectNode={e => setSelected(!selected)}
                     showKids={showComment}
                     showHideKids={e => showHideComment(!showComment)}
                 />

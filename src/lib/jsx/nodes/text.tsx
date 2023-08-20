@@ -28,15 +28,9 @@ export const Text = (props: TextArgs): JSX.Element => {
                     prefix={prefix}
                     color={colors.Prefix}
                     selectedNode={selected}
-                    selectNode={e => {
-                        setSelected(!selected)
-                        console.log(`selected is now ${selected}`)
-                    }}
+                    selectNode={e => setSelected(!selected)}
                     showKids={showText}
-                    showHideKids={e => {
-                        showHideText(!showText)
-                        console.log(`showText is now ${showText}`)
-                    }}
+                    showHideKids={e => showHideText(!showText)}
                 />
             }
             Prop2={

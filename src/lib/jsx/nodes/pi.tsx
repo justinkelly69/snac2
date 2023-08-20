@@ -28,10 +28,7 @@ export const PI = (props: PIArgs): JSX.Element => {
                     prefix={prefix}
                     color={colors.Prefix}
                     selectedNode={selected}
-                    selectNode={e => {
-                        setSelected(!selected)
-                        console.log(`selected is now ${selected}`)
-                    }}
+                    selectNode={e => setSelected(!selected)}
                     showKids={showPI}
                     showHideKids={e => showHidePI(!showPI)}
                 />

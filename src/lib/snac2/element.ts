@@ -30,7 +30,6 @@ export interface ElementNodeArgs {
 };
 
 export interface ElementNodeType extends Node {
-    S: string,
     N: string,
     A: AttributesNodeType,
     C: Array<ChildNodeType>,
@@ -39,8 +38,7 @@ export interface ElementNodeType extends Node {
 
 export const createElementNode = (args: ElementNodeArgs): ElementNodeType => ({
     _: setId('N', args.treeId, args.path),
-    S: args.ns || '@',
-    N: args.name,
+    N: args.ns ? `${args.ns}:${args.name}` : args.name,
     A: cloneAttributes(args.attributes || {}),
     C: cloneChildren({
         kids: args.children || [],
@@ -59,7 +57,6 @@ export interface ElementNodeCloneArgs extends ElementNodeType {
 
 export const cloneElementNode = (args: ElementNodeCloneArgs): ElementNodeType => {
     return createElementNode({
-        ns: args.S,
         name: args.N,
         attributes: args.A,
         children: args.C,

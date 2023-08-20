@@ -5,7 +5,7 @@ chef="&lt;ooohlala&amp;&gt;">
     <fo:food co:nationality="BE" id="x999" class="noclass">
         <name>Belgian Waffles</name>
         before
-        <p>
+        <html:p>
         Chapter One - Down the Rabbit Hole: Alice, a seven-year-old girl, is feeling bored and drowsy 
         while sitting on the riverbank with her elder sister. She notices a talking, clothed white rabbit 
         with a pocket <b>watch run past. She follows it down a rabbit hole where she suddenly falls a long way 
@@ -14,7 +14,7 @@ chef="&lt;ooohlala&amp;&gt;">
         on a table labelled "DRINK ME," the contents of which</b> cause her to shrink too small to reach the 
         key which she had left on the table. She subsequently eats a cake labelled "EAT ME" in currants 
         as the chapter closes.
-        </p>
+        </html:p>
         after
         <?php
         $name="James P. Sullivan XXXVIII";

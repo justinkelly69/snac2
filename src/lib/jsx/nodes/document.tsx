@@ -7,7 +7,6 @@ import { AttributesNodeType } from '../../snac2/attributes'
 export interface DocumentArgs {
     snac: {
         _: string
-        S: string
         N: string
         A: AttributesNodeType
         C: Array<ChildNodeType>

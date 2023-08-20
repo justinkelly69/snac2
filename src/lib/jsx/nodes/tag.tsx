@@ -17,7 +17,6 @@ export enum TagType {
 export interface TagArgs {
     snac: {
         _: string
-        S: string
         N: string
         A: AttributesNodeType
         a: boolean
@@ -35,7 +34,7 @@ export interface TagArgs {
 export const Tag = (props: TagArgs): JSX.Element => {
     const [selected, setSelected] = useState(props.snac.q)
     const [atts, showAtts] = useState(props.snac.a)
-    //const [showKids1, showHideKids1] = useState(props.showKids)
+    const colonIndex = props.snac.N.indexOf(':')
 
     const colors = getColors(props.cssMode)
 
@@ -61,17 +60,22 @@ export const Tag = (props: TagArgs): JSX.Element => {
                     {props.tagType === TagType.close && (
                         <Span color={colors.NodeSlash}>{'/'}</Span>
                     )}
-                    {props.snac.S !== '@' && (
+                    {colonIndex > -1 ? (
                         <>
                             <Span color={colors.NS} fontWeight='bold'>
-                                {props.snac.S}
+                                {props.snac.N.substring(0, colonIndex)}
                             </Span>
                             <Span color={colors.NodeColon}>:</Span>
+                            <Span color={colors.Name} fontWeight='bold'>
+                                {props.snac.N.substring(colonIndex + 1)}
+                            </Span>
                         </>
+                    ) : (
+                        <Span color={colors.Name} fontWeight='bold'>
+                            {props.snac.N}
+                        </Span>
                     )}
-                    <Span color={colors.Name} fontWeight='bold'>
-                        {props.snac.N}
-                    </Span>
+
                     {props.tagType !== TagType.close && (
                         <Block
                             visible={atts}
@@ -93,10 +97,7 @@ export const Tag = (props: TagArgs): JSX.Element => {
                     {props.tagType !== TagType.close && (
                         <AttributesButton
                             show={atts}
-                            onClick={e => {
-                                console.log('atts', atts)
-                                showAtts(!atts)
-                            }}
+                            onClick={e => showAtts(!atts)}
                         />
                     )}
                 </Span>

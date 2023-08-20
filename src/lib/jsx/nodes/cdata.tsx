@@ -28,10 +28,7 @@ export const CDATA = (props: CDATArgs): JSX.Element => {
                     prefix={prefix}
                     color={colors.Prefix}
                     selectedNode={selected}
-                    selectNode={e => {
-                        setSelected(!selected)
-                        console.log(`selected is now ${selected}`)
-                    }}
+                    selectNode={e => setSelected(!selected)}
                     showKids={showCDATA}
                     showHideKids={e => showHideCDATA(!showCDATA)}
                 />

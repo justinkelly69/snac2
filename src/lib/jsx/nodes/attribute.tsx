@@ -6,7 +6,6 @@ import { AttributePrefix } from './attributeprefix';
 
 export interface AttributeArgs {
     _: string,
-    ns: string,
     name: string,
     value: string,
     cssMode: string,
@@ -16,6 +15,7 @@ export interface AttributeArgs {
 export const Attribute = (props: AttributeArgs): JSX.Element => {
 
     const colors = getColors(props.cssMode);
+    const colonIndex = props.name.indexOf(':')
 
     return (
         <Block visible={true}
@@ -24,13 +24,16 @@ export const Attribute = (props: AttributeArgs): JSX.Element => {
             }
             Prop2={
                 <Span color={colors.Attribute}>
-                    {props.ns !== '@' &&
+                    {colonIndex > -1 ? (
                         <>
-                            <Span color={colors.AttributeNS} fontWeight='bold'>{props.ns}</Span>
+                            <Span color={colors.AttributeNS} fontWeight='bold'>{props.name.substring(0, colonIndex)}</Span>
                             <Span color={colors.AttributeColon}>:</Span>
+                            <Span color={colors.AttributeName} fontWeight='bold'>{props.name.substring(colonIndex + 1)}</Span>
                         </>
-                    }
-                    <Span color={colors.AttributeName} fontWeight='bold'>{props.name}</Span>
+                    ) : (
+                        <Span color={colors.AttributeName} fontWeight='bold'>{props.name}</Span>
+                    )}
+
                     <Span color={colors.AttributeEquals}>=</Span>
                     <Span color={colors.AttributeQuote}>&quot;</Span>
                     <Span color={colors.AttributeValue} fontWeight='bold'>{props.value}</Span>

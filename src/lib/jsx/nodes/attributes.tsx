@@ -18,19 +18,16 @@ export const Attributes = (props: AttributesArgs): JSX.Element => {
 
     return (
         <Span color={colors.Attribute}>
-            {Object.keys(props.atts).map(ns => {
-                return Object.keys(props.atts[ns]).map(n => {
+            {Object.keys(props.atts).map(n => {
                     return (
-                        <Attribute key={`${ns}-${n}`}
+                        <Attribute key={`${n}`}
                             _={props._}
-                            ns={ns}
                             name={n}
-                            value={props.atts[ns][n]}
+                            value={props.atts[n]}
                             cssMode={props.cssMode}
                             prefix={props.prefix}
                         />
                     );
-                })
             })}
             {`${constants.PREFIX_START}${props.prefix}${constants.NEW_ATTRIBUTE_PREFIX}+`}
         </Span>

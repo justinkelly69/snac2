@@ -8,7 +8,6 @@ import { getPrefix } from '../../snac2/prefix';
 export interface ElementArgs {
     snac: {
         _: string,
-        S: string,
         N: string,
         A: AttributesNodeType,
         C: Array<ChildNodeType>,
@@ -18,8 +17,6 @@ export interface ElementArgs {
     },
     cssMode: string,
     showTag: boolean,
-    //showHideKids?: Function,
-    //showKids: boolean,
 };
 
 export const Element = (props: ElementArgs): JSX.Element => {

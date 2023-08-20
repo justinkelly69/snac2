@@ -6,27 +6,27 @@ import { escapeText } from './textprocessor';
  * Escape < > & ' " characters in a string
  * @param {String} str 
  */
- export const escapeXML = (str: string) =>
- escapeText(str, [
-     ["&", "&amp;"],
-     ["<", "&lt;"],
-     [">", "&gt;"],
-     ["'", "&apos;"],
-     ['"', "&quot;"]
- ])
+export const escapeXML = (str: string) =>
+    escapeText(str, [
+        ["&", "&amp;"],
+        ["<", "&lt;"],
+        [">", "&gt;"],
+        ["'", "&apos;"],
+        ['"', "&quot;"]
+    ])
 
 /**
 * Unescape &lt; &gt; &amp; &apos, &quot escape codes in a string.
 * @param {String} str 
 */
 export const unEscapeXML = (str: string) =>
- escapeText(str, [
-     ["&lt;", "<"],
-     ["&gt;", ">"],
-     ["&amp;", "&"],
-     ["&apos;", "'"],
-     ["&quot;", '"']
- ])
+    escapeText(str, [
+        ["&lt;", "<"],
+        ["&gt;", ">"],
+        ["&amp;", "&"],
+        ["&apos;", "'"],
+        ["&quot;", '"']
+    ])
 
 export interface TextNodeArgs {
     text: string,

@@ -1,6 +1,5 @@
 import { xml2js } from 'xml-js';
 import { createElementNode, ElementNodeType, ChildNodeType } from './element';
-import { AttributesNodeType } from './attributes';
 import { createTextNode, TextNodeType } from './text';
 import { createCDATANode, CDATANodeType } from './cdata';
 import { createCommentNode, CommentNodeType } from './comment';
@@ -15,10 +14,6 @@ interface X2SElement {
     elements?: Array<XMLSnacChild>,
     treeId: string,
     path: Array<number>,
-}
-
-interface X2SAttributes {
-    [key: string]: string,
 }
 
 interface X2SText {
@@ -58,7 +53,6 @@ interface X2SChildren {
 
 export const xml2snac = (xml: string) => {
     const out = xml2js(xml, { compact: false }).elements[0];
-    // console.log('out', JSON.stringify(out, null, 4));
     return createElement({
         type: 'element',
         name: out.name,
@@ -70,7 +64,7 @@ export const xml2snac = (xml: string) => {
 }
 
 const createElement = (args: X2SElement): ElementNodeType => {
-    let ns = '@';
+    let ns = '';
     let name = args.name;
     if (args.name.indexOf(':') > -1) {
         [ns, name] = args.name.split(/:/);
@@ -78,7 +72,7 @@ const createElement = (args: X2SElement): ElementNodeType => {
     const element = createElementNode({
         ns: ns,
         name: name,
-        attributes: createAttributes(args.attributes),
+        attributes: args.attributes,
         children: createChildren({
             kids: args.elements || [],
             treeId: args.treeId,
@@ -91,27 +85,6 @@ const createElement = (args: X2SElement): ElementNodeType => {
         path: [...args.path],
     });
     return element;
-}
-
-const createAttributes = (atts?: X2SAttributes): AttributesNodeType => {
-    const out: AttributesNodeType = {};
-    for (const att in atts) {
-        let ns = '@';
-        let name = att;
-
-        if (att.indexOf(':') > -1) {
-            [ns, name] = att.split(/:/);
-        }
-
-        if (!out.hasOwnProperty(ns)) {
-            out[ns] = {};
-        }
-
-        if (!out[ns].hasOwnProperty(name)) {
-            out[ns][name] = atts[att];
-        }
-    }
-    return out;
 }
 
 const createChildren = (atts: X2SChildren): Array<ChildNodeType> => {

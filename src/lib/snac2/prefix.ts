@@ -14,10 +14,10 @@ export const getPath = (node: ChildNodeType): Array<number> => {
     return path;
 }
 
-export const getPrefix = (_: string): string => {
-    const p1 = _.split(constants.JOIN1)[2];
+export const getPrefix = (prefixStr: string): string => {
+    const p1 = prefixStr.split(constants.JOIN1)[2];
     let out = constants.PREFIX_START;
-    if(p1.length > 0) {
+    if (p1.length > 0) {
         const p2 = p1.split(constants.JOIN2);
         let i = 0;
         for (i = 0; i < p2.length; i = i + 1) {
