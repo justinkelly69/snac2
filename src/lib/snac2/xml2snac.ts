@@ -1,4 +1,6 @@
 import { xml2js } from 'xml-js';
+import { processXML } from '../snac/xml2snac'
+import { processSNAC } from '../snac/snac2xml';
 import { createElementNode, ElementNodeType, ChildNodeType } from './element';
 import { createTextNode, TextNodeType } from './text';
 import { createCDATANode, CDATANodeType } from './cdata';
@@ -51,16 +53,30 @@ interface X2SChildren {
     path: Array<number>,
 };
 
-export const xml2snac = (xml: string) => {
-    const out = xml2js(xml, { compact: false }).elements[0]
-    return createElement({
-        type: 'element',
-        name: out.name,
-        attributes: out.attributes,
-        elements: out.elements,
-        treeId: 'feckoff',
-        path: [],
+export const xml2snac = (xml: string):any => {
+    //const out = xml2js(xml, { compact: false }).elements[0]
+    const snac = processXML(xml)
+    console.log('out', JSON.stringify(snac,null,4))
+
+    const xml2 = processSNAC(snac, {
+        prefixStart: "",
+        prefixCharacter: "\t",
+        attributePrefix: "  ",
+        minify: false,
+        usePrefix: true,
+        selfCloseTags: true,
+        trimText: true,
     })
+
+    console.log(xml2)
+    // return createElement({
+    //     type: 'element',
+    //     name: out.name,
+    //     attributes: out.attributes,
+    //     elements: out.elements,
+    //     treeId: 'feckoff',
+    //     path: [],
+    // })
 }
 
 const createElement = (args: X2SElement): ElementNodeType => {
