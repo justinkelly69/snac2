@@ -2,6 +2,7 @@
 	xmlns="http://br.com"
 	xmlns:fo="http://fo.com"
 	xmlns:co="http://co.com"
+	xmlns:html="http://co.com"
 	chef="&lt;ooohlala&amp;&gt;"> the food starts here <fo:food
 		co:nationality="BE"
 		id="x999"
@@ -9,7 +10,7 @@
 
 		<name>
 			Belgian Waffles
-		</name> before <co:p> Chapter One - Down the Rabbit Hole: Alice, a
+		</name> before <html:p> Chapter One - Down the Rabbit Hole: Alice, a
 	seven-year-old girl, is feeling bored and drowsy while sitting on the riverbank with her elder
 	sister. She notices a talking, clothed white rabbit with a pocket <b> watch run past. She
 	follows it down a rabbit hole where she suddenly falls a long way to a curious hall with many <i>
@@ -20,7 +21,8 @@
 					</r> She then discovers </u> a bottle on a
 	table labelled &quot;DRINK ME,&quot; the contents of which </b> cause her to shrink too small to
 	reach the key which she had left on the table. She subsequently eats a cake labelled &quot;EAT
-	ME&quot; in currants as the chapter closes. </co:p> after <?php $name="James P. Sullivan XXXVIII";
+	ME&quot; in currants as the chapter closes. </html:p> after
+		<?php $name="James P. Sullivan XXXVIII";
         for($i = 0; $i < SIZE_OF_MEMORY; $i++){
             deleteMemory($i);
         } ?>

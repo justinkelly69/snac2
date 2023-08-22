@@ -1,6 +1,6 @@
 import { xml2js } from 'xml-js';
 import { processXML } from '../snac/xml2snac'
-import { processSNAC } from '../snac/snac2xml';
+import { processSNAC } from '../snac/snac2';
 import { createElementNode, ElementNodeType, ChildNodeType } from './element';
 import { createTextNode, TextNodeType } from './text';
 import { createCDATANode, CDATANodeType } from './cdata';
@@ -53,18 +53,30 @@ interface X2SChildren {
     path: Array<number>,
 };
 
-export const xml2snac = (xml: string):any => {
+export const xml2snac = (xml: string): any => {
     //const out = xml2js(xml, { compact: false }).elements[0]
     const snac = processXML(xml)
-    console.log('out', JSON.stringify(snac,null,4))
+    console.log('out', JSON.stringify(snac, null, 4))
 
     const xml2 = processSNAC(snac, {
+        openTag: (out: string, prefix: string, elementName: string, attrs: string) => `${out}${prefix}<${elementName}${attrs}>`,
+        children: (out: string, children: string) => `${out}${children}`,
+        closeTag: (out: string, prefix: string, elementName: string) => `${out}${prefix}</${elementName}>`,
+        emptyTag: (out: string, prefix: string, elementName: string, attrs: string) => `${out}${prefix}<${elementName}${attrs} />`,
+        text: (out: string, prefix: string, text: string) => `${out}${prefix}${text}`,
+        cdata: (out: string, prefix: string, cdata: string) => `${out}${prefix}<![CDATA[${cdata}]]>`,
+        comment: (out: string, prefix: string, comment: string) => `${out}${prefix}<!--${comment}-->`,
+        pi: (out: string, prefix: string, lang: string, body: string) => `${out}${prefix}<?${lang} ${body}?>`,
+        attribute: (out: string, prefix: string, name: string, value: string) => `${out}${prefix}${name}="${value}"`
+    }, {
+        showPrefix: false,
+        newline: "\n",
+        usePrefix: true,
         prefixStart: "",
         prefixCharacter: "\t",
-        attributePrefix: "  ",
-        minify: false,
-        usePrefix: true,
-        selfCloseTags: true,
+        attributePrefix: "  "
+    }, {
+        selfCloseTags: false,
         trimText: true,
     })
 

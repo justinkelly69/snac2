@@ -1,13 +1,17 @@
 export type QuoteChar = '"' | "'"
 
 export type XMLOptions = {
+    selfCloseTags: boolean,
+    trimText: boolean,
+}
+
+export type PrefixOptions = {
+    showPrefix: boolean,
+    newline: string,
+    usePrefix: boolean,
     prefixStart: string,
     prefixCharacter: string,
     attributePrefix: string,
-    minify: boolean,
-    usePrefix: boolean,
-    selfCloseTags: boolean,
-    trimText: boolean,
 }
 
 export type AttributesType = {
@@ -29,12 +33,11 @@ export type AttributeValueType = {
     value: string,
     xml: string
 }
-export type SNACNSNode = {
+export type SNACNNode = {
     N: string,
 }
 
 export interface SNACNode {
-    _: number[],
     o: boolean,
     q: boolean
 }

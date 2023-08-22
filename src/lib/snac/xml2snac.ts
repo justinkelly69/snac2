@@ -1,13 +1,8 @@
 import { unEscapeHtml } from "./text";
 import {
     QuoteChar,
-    SNACNSNode,
-    SNACNode,
+    SNACNNode,
     SNACElement,
-    SNACText,
-    SNACCDATA,
-    SNACComment,
-    SNACPINode,
     SNACItem,
     AttributesType,
     AttributesXMLhasChildrenType,
@@ -16,11 +11,11 @@ import {
 } from "./types";
 
 export const processXML = (xml: string): SNACItem[] => {
-    const stack: SNACNSNode[] = []
-    return _xml2snac(xml, stack, [])['out']
+    const stack: SNACNNode[] = []
+    return _xml2snac(xml, stack)['out']
 }
 
-export const _xml2snac = (xml: string, stack: SNACNSNode[], path: number[]) => {
+export const _xml2snac = (xml: string, stack: SNACNNode[]) => {
     const out: SNACItem[] = []
     let i: number = 0
 
@@ -39,7 +34,6 @@ export const _xml2snac = (xml: string, stack: SNACNSNode[], path: number[]) => {
             xml = attributeData['xml']
 
             const snac: SNACElement = {
-                _: [...path, i],
                 N: tagName,
                 A: attributeData['attributes'],
                 C: [],
@@ -53,7 +47,7 @@ export const _xml2snac = (xml: string, stack: SNACNSNode[], path: number[]) => {
             })
 
             if (attributeData['hasChildren']) {
-                const kids = _xml2snac(xml, stack, [...path, i])
+                const kids = _xml2snac(xml, stack)
                 snac['C'] = kids['out']
                 xml = kids['xml']
                 out.push(snac)
@@ -67,7 +61,7 @@ export const _xml2snac = (xml: string, stack: SNACNSNode[], path: number[]) => {
 
         else if (closeTagData !== null) {
             const tagName = closeTagData[1]
-            const snac: SNACNSNode = {
+            const snac: SNACNNode = {
                 N: tagName
             }
 
@@ -84,82 +78,63 @@ export const _xml2snac = (xml: string, stack: SNACNSNode[], path: number[]) => {
 
         else if (CDATATagData !== null) {
             if (stack.length > 0) {
-                const data: SNACCDATA = {
-                    _: [...path, i],
+                out.push({
                     D: CDATATagData[1],
                     o: true,
                     q: false
-                }
-                out.push(data)
-                i = i + 1
+                })
             }
             xml = CDATATagData[2]
         }
 
         else if (commentTagData !== null) {
             if (stack.length > 0) {
-                const data: SNACComment = {
-                    _: [...path, i],
+                out.push({
                     M: commentTagData[1],
                     o: true,
                     q: false
-                }
-                out.push(data)
-                i = i + 1
+                })
             }
             xml = commentTagData[2]
         }
 
         else if (PITagData !== null) {
             if (stack.length > 0) {
-                const data: SNACPINode = {
-                    _: [...path, i],
+                out.push({
                     L: PITagData[1],
                     B: PITagData[2],
                     o: true,
                     q: false
-                }
-                out.push(data)
-                i = i + 1
+                })
             }
             xml = PITagData[3]
         }
 
         else if (textTagData !== null) {
             if (stack.length > 0) {
-                const data: SNACText = {
-                    _: [...path, i],
+                out.push({
                     T: textTagData[1],
                     o: true,
                     q: false
-                }
-                out.push(data)
-                i = i + 1
+                })
             }
             xml = textTagData[2]
-
         }
 
         else if (blankTagData !== null) {
             if (stack.length > 0) {
-                const data: SNACText = {
-                    _: [...path, i],
+                out.push({
                     T: "",
                     o: true,
                     q: false
-                }
-                out.push(data)
-                i = i + 1
+                })
             }
             xml = ""
-
         }
 
         else {
             throw Error(`Invalid tag ${xml}\n`)
         }
-
-
     }
 
     return {

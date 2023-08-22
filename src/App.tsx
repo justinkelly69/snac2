@@ -1,9 +1,8 @@
-import { xml2snac } from './lib/snac2/xml2snac';
-import xml from './lib/data/xml/waffle';
-import { Document } from './lib/jsx/nodes/document';
+import  processSNAC  from './lib/snac/snac2xml';
+
 
 function App() {
-    const snac = xml2snac(xml());
+    const snac = processSNAC();
     return (
         <Document
             snac={snac}
