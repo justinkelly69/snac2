@@ -1,39 +1,4 @@
-export type QuoteChar = '"' | "'"
-
-export type XMLOptions = {
-    selfCloseTags: boolean,
-    trimText: boolean,
-}
-
-export type PrefixOptions = {
-    showPrefix: boolean,
-    newline: string,
-    usePrefix: boolean,
-    prefixStart: string,
-    prefixCharacter: string,
-    attributePrefix: string,
-}
-
-export type AttributesType = {
-    [name: string]:  string
-}
-
-export type AttributesXMLhasChildrenType = {
-    attributes: AttributesType,
-    hasChildren: boolean,
-    xml: string
-}
-
-export type AttributeXMLType = {
-    attributes: AttributesType,
-    xml: string
-}
-
-export type AttributeValueType = {
-    value: string,
-    xml: string
-}
-export type SNACNNode = {
+export type SNACNamesNode = {
     N: string,
 }
 
@@ -67,4 +32,26 @@ export interface SNACPINode extends SNACNode {
 }
 
 export type SNACItem = SNACElement | SNACText | SNACCDATA | SNACComment | SNACPINode
+
+export interface AttributesType {
+    [name: string]: string
+}
+
+export interface AttributesXMLhasChildrenType {
+    attributes: AttributesType,
+    hasChildren: boolean,
+    xml: string
+}
+
+export interface AttributeXMLType {
+    attributes: AttributesType,
+    xml: string
+}
+
+export interface AttributeValueType {
+    value: string,
+    xml: string
+}
+
+export type QuoteChar = '"' | "'"
 

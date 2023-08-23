@@ -1,6 +1,6 @@
 import { xml2js } from 'xml-js';
-import { processXML } from '../snac/xml2snac'
-import { processSNAC } from '../snac/snac2';
+import { processXML } from '../snac3/xml2snac'
+import { processSNAC } from '../snac3/snac2';
 import { createElementNode, ElementNodeType, ChildNodeType } from './element';
 import { createTextNode, TextNodeType } from './text';
 import { createCDATANode, CDATANodeType } from './cdata';

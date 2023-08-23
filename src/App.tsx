@@ -1,4 +1,4 @@
-import  processSNAC  from './lib/snac/snac2xml';
+import  processSNAC  from './lib/snac3/snac2xml';
 
 
 function App() {
