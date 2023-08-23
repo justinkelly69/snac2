@@ -1,4 +1,4 @@
-const xml =  () => `
+const xml = `
 <breakfast_menu>
     <food>
         <name>Belgian Waffles</name>
@@ -41,7 +41,7 @@ const xml =  () => `
         <calories>950</calories>
     </food>
 </breakfast_menu>
-`;
+`
 
-export default xml;
+export default xml
 

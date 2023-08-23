@@ -1,4 +1,4 @@
-const xml = () => `
+const xml = `
 <fo:breakfast_menu xmlns="http://br.com" xmlns:fo="http://fo.com" xmlns:co="http://co.com" 
 chef="&lt;ooohlala&amp;&gt;">
     the food starts here
@@ -31,6 +31,6 @@ chef="&lt;ooohlala&amp;&gt;">
     </fo:food>
     that was all the food
 </fo:breakfast_menu>
-`;
+`
 
-export default xml;
+export default xml

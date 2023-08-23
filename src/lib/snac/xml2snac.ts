@@ -1,19 +1,18 @@
 import {SNACNamesNode, SNACItem, SNACElement, AttributesXMLhasChildrenType, AttributesType, 
     QuoteChar, AttributeXMLType, AttributeValueType} from './types'
 
-
 import {escapeHtml, unEscapeHtml, escapeCDATA, unEscapeCDATA,escapeComment,unEscapeComment, 
     testPILang , escapePIBody, unEscapePIBody} from './utils'
     
 
-export class XML2SNAC {
+class XML2SNAC {
 
-    private allowPIs: string
-    private allowComments: string
+    private allowPIs: boolean
+    private allowComments: boolean
 
     constructor(
-        allowPIs: string,
-        allowComments: string,
+        allowPIs: boolean,
+        allowComments: boolean,
     ) {
         this.allowPIs = allowPIs
         this.allowComments = allowComments
@@ -229,3 +228,5 @@ export class XML2SNAC {
         return null
     }
 }
+
+export default XML2SNAC

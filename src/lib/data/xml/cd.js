@@ -1,4 +1,4 @@
-const xml =  () => `
+const xml =  `
 <CATALOG>
     <CD>
         <TITLE>Empire Burlesque</TITLE>
@@ -209,7 +209,7 @@ const xml =  () => `
         <YEAR>1987</YEAR>
     </CD>
 </CATALOG>
-`;
+`
 
-export default xml;
+export default xml
 
