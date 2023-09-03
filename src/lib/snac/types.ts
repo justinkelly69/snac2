@@ -1,3 +1,33 @@
+export type PrefixOpts = {
+    showPrefix: boolean
+    newLine: string
+    usePrefix: boolean
+    startChar: string
+    charOn: string
+    charOff: string
+    attributePrefix: string
+}
+
+export type SNAC2XMLOpts = {
+    selfCloseTags: boolean
+    trimText: boolean
+    allowComments: boolean
+    allowPIs: boolean
+}
+
+export interface SNAX2XMLFuncs {
+    openTag: (path: number[], elementName: string, attrs: string) => string,
+    children: (children: string) => string,
+    closeTag: (path: number[], elementName: string) => string,
+    emptyTag: (path: number[], elementName: string, attrs: string) => string,
+    text: (path: number[], text: string) => string,
+    cdata: (path: number[], cdata: string) => string,
+    comment: (path: number[], comment: string) => string,
+    pi: (path: number[], lang: string, body: string) => string,
+    attribute: (path: number[], name: string, value: string) => string,
+    getPrefix: (path: number[], isAttribute: boolean, opts: PrefixOpts) => string,
+}
+
 export type SNACNamesNode = {
     N: string,
 }
