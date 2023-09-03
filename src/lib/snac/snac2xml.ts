@@ -49,40 +49,40 @@ class SNAC2XML {
         this.XML_ALLOW_PI = a.XML_ALLOW_PI
     }
 
-    openTag(out: string, path: number[], elementName: string, attrs: string) {
-        return `${out}${this.getPrefix(path, false)}<${elementName}${attrs}>`
+    openTag(path: number[], elementName: string, attrs: string) {
+        return `${this.getPrefix(path, false)}<${elementName}${attrs}>`
     }
 
-    children(out: string, children: string) {
-        return `${out}${children}`
+    children(children: string) {
+        return `${children}`
     }
 
-    closeTag(out: string, path: number[], elementName: string) {
-        return `${out}${this.getPrefix(path, false)}</${elementName}>`
+    closeTag(path: number[], elementName: string) {
+        return `${this.getPrefix(path, false)}</${elementName}>`
     }
 
-    emptyTag(out: string, path: number[], elementName: string, attrs: string) {
-        return `${out}${this.getPrefix(path, false)}<${elementName}${attrs} />`
+    emptyTag(path: number[], elementName: string, attrs: string) {
+        return `${this.getPrefix(path, false)}<${elementName}${attrs} />`
     }
 
-    text(out: string, path: number[], text: string) {
-        return `${out}${this.getPrefix(path, false)}${text}`
+    text(path: number[], text: string) {
+        return `${this.getPrefix(path, false)}${text}`
     }
 
-    cdata(out: string, path: number[], cdata: string) {
-        return `${out}${this.getPrefix(path, false)}<![CDATA[${cdata}]]>`
+    cdata(path: number[], cdata: string) {
+        return `${this.getPrefix(path, false)}<![CDATA[${cdata}]]>`
     }
 
-    comment(out: string, path: number[], comment: string) {
-        return `${out}${this.getPrefix(path, false)}<!--${comment}-->`
+    comment(path: number[], comment: string) {
+        return `${this.getPrefix(path, false)}<!--${comment}-->`
     }
 
-    pi(out: string, path: number[], lang: string, body: string) {
-        return `${out}${this.getPrefix(path, false)}<?${lang} ${body}?>`
+    pi(path: number[], lang: string, body: string) {
+        return `${this.getPrefix(path, false)}<?${lang} ${body}?>`
     }
 
-    attribute(out: string, path: number[], name: string, value: string) {
-        return `${out}${this.getPrefix(path, true)}${name}="${value}"`
+    attribute(path: number[], name: string, value: string) {
+        return `${this.getPrefix(path, true)}${name}="${value}"`
     }
 
     getPrefix(path: number[], isAttribute: boolean) {
@@ -90,18 +90,18 @@ class SNAC2XML {
         const depth = path.length
 
         if (!this.PREFIX_SHOW_PREFIX) {
-            out = `${out}${this.PREFIX_NEWLINE}`
+            out += `${this.PREFIX_NEWLINE}`
 
             if (this.PREFIX_USE_PREFIX) {
-                out = `${out}${this.PREFIX_START_CHAR}`
+                out += `${this.PREFIX_START_CHAR}`
 
                 for (let _ of Array.from({ length: depth }, (value, index) => index)) {
-                    out = `${out}${this.PREFIX_CHAR_ON}`
+                    out += `${this.PREFIX_CHAR_ON}`
                 }
             }
 
             if (isAttribute) {
-                out = `${out}${this.PREFIX_ATTRIBUTE_PREFIX}`
+                out += `${this.PREFIX_ATTRIBUTE_PREFIX}`
             }
         }
 
@@ -126,12 +126,12 @@ class SNAC2XML {
                 const children = this._render(snacElementNode["C"], newPath)
 
                 if (children.length === 0 && this.XML_SELF_CLOSE_TAGS) {
-                    out = this.emptyTag(out, path, elementName, attrs)
+                    out += this.emptyTag(path, elementName, attrs)
                 }
                 else {
-                    out = this.openTag(out, path, elementName, attrs)
-                    out = this.children(out, children)
-                    out = this.closeTag(out, path, elementName)
+                    out += this.openTag(path, elementName, attrs)
+                    out += this.children(children)
+                    out += this.closeTag(path, elementName)
                 }
             }
 
@@ -141,25 +141,25 @@ class SNAC2XML {
                 if (this.XML_TRIM_TEXT) {
                     text = text.trim()
                 }
-                out = this.text(out, path, text)
+                out += this.text(path, text)
             }
 
             else if (snac[i].hasOwnProperty("D")) {
                 const snacCDATANode: SNACCDATA = snac[i] as SNACCDATA
-                out = this.cdata(out, path, escapeCDATA(snacCDATANode["D"]))
+                out += this.cdata(path, escapeCDATA(snacCDATANode["D"]))
             }
 
             else if (snac[i].hasOwnProperty("M")) {
                 if (this.XML_ALLOW_COMMENTS) {
                     const snacCommentNode: SNACComment = snac[i] as SNACComment
-                    out = this.comment(out, path, escapeComment(snacCommentNode["M"]))
+                    out += this.comment(path, escapeComment(snacCommentNode["M"]))
                 }
             }
 
             else if (snac[i].hasOwnProperty("L")) {
                 if (this.XML_ALLOW_PI) {
                     const snacPINode: SNACPINode = snac[i] as SNACPINode
-                    out = this.pi(out, path, snacPINode["L"], escapePIBody(snacPINode["B"]))
+                    out += this.pi(path, snacPINode["L"], escapePIBody(snacPINode["B"]))
                 }
             }
         }
@@ -170,13 +170,10 @@ class SNAC2XML {
     private attributesToXML = (atts: AttributesType, path: number[]) => {
         let out: string = "";
         for (const name of Object.keys(atts)) {
-            out = this.attribute(out, path, name, ` ${escapeHtml(atts[name])}`)
+            out = this.attribute(path, name, ` ${escapeHtml(atts[name])}`)
         }
         return out;
     }
-
-
-
 }
 
 export default SNAC2XML

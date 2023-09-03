@@ -1,10 +1,9 @@
-import XML2SNAC from './lib/snac/xml2snac'
+import xml2snac from './lib/snac/xml2snac'
 import SNAC2XML from './lib/snac/snac2xml';
 import xml1 from './lib/data/xml/waffle'
 
 function App() {
-    const xml2snac = new XML2SNAC(true, true)
-    const snac = xml2snac.render(xml1);
+    const snac = xml2snac(xml1);
     const snac2xml = new SNAC2XML({
         PREFIX_SHOW_PREFIX: false,
         PREFIX_NEWLINE: "\n",
