@@ -88,7 +88,7 @@ function App() {
     return (
         <>
             <h1>Hello World</h1>
-            <pre>{JSON.stringify(snac, null, 4)}</pre>
+            {/* <pre>{JSON.stringify(snac, null, 4)}</pre> */}
             <hr />
             <pre>{xml2}</pre>
         </>
