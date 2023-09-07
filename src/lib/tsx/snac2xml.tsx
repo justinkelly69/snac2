@@ -1,14 +1,12 @@
 import React from 'react';
 
 import {
-    SNAC2XMLOutFuncs, SNACItem, SNACElement,
-    SNACText, SNACCDATA, SNACComment, SNACPINode,
-    SNAC2XMLOpts,
+    SNAC2XMLOutFuncs, SNACItem, SNACElement, SNACText,
+    SNACCDATA, SNACComment, SNACPINode, SNAC2XMLOpts,
 } from '../snac/types'
 
 import {
-    escapeHtml, escapeCDATA, escapeComment,
-    escapePIBody,
+    escapeHtml, escapeCDATA, escapeComment, escapePIBody,
 } from '../snac/utils'
 
 const snac2xml = (snac: SNACItem[], funcs: SNAC2XMLOutFuncs, opts: SNAC2XMLOpts) => {
@@ -24,33 +22,30 @@ const _snac2xml = (snac: SNACItem[], path: number[], funcs: SNAC2XMLOutFuncs, op
 
         if (snac[i].hasOwnProperty("N")) {
             const snacElementNode: SNACElement = snac[i] as SNACElement;
-
-            const children = _snac2xml(snacElementNode["C"], newPath, funcs, opts)
-            console.log(JSON.stringify(snacElementNode["C"], null, 4))
-            
-            if (children.length === 0 && opts.selfCloseTags) {
-                out = [...out,(
+            if (snacElementNode["C"].length === 0 && opts.selfCloseTags) {
+                out = [...out, (
                     <EmptyTag
+                        key={i}
                         path={path}
                         name={snacElementNode["N"]}
                         attributes={snacElementNode["A"]}
                     />
-                )] 
+                )]
             }
             else {
                 out = [...out, (
-                    <>
+                    <span key={i}>
                         <OpenTag
                             path={path}
                             name={snacElementNode["N"]}
                             attributes={snacElementNode["A"]}
                         />
-                        {children}
+                        {_snac2xml(snacElementNode["C"], newPath, funcs, opts)}
                         <CloseTag
                             path={path}
                             name={snacElementNode["N"]}
                         />
-                    </>
+                    </span>
                 )]
             }
         }
@@ -61,13 +56,23 @@ const _snac2xml = (snac: SNACItem[], path: number[], funcs: SNAC2XMLOutFuncs, op
             if (opts.trimText) {
                 text = text.trim()
             }
-            out = [...out, (<Text path={path} text={text} />)]
+            out = [...out, (
+                <Text
+                    key={i}
+                    path={path}
+                    text={text}
+                />
+            )]
         }
 
         else if (snac[i].hasOwnProperty("D")) {
             const snacCDATANode: SNACCDATA = snac[i] as SNACCDATA
             out = [...out, (
-                <CDATA path={path} cdata={escapeCDATA(snacCDATANode["D"])} />
+                <CDATA
+                    key={i}
+                    path={path}
+                    cdata={escapeCDATA(snacCDATANode["D"])}
+                />
             )]
         }
 
@@ -75,7 +80,11 @@ const _snac2xml = (snac: SNACItem[], path: number[], funcs: SNAC2XMLOutFuncs, op
             if (opts.allowComments) {
                 const snacCommentNode: SNACComment = snac[i] as SNACComment
                 out = [...out, (
-                    <Comment path={path} comment={escapeComment(snacCommentNode["M"])} />
+                    <Comment
+                        key={i}
+                        path={path}
+                        comment={escapeComment(snacCommentNode["M"])}
+                    />
                 )]
             }
         }
@@ -84,7 +93,12 @@ const _snac2xml = (snac: SNACItem[], path: number[], funcs: SNAC2XMLOutFuncs, op
             if (opts.allowPIs) {
                 const snacPINode: SNACPINode = snac[i] as SNACPINode
                 out = [...out, (
-                    <Pi path={path} lang={snacPINode["L"]} body={escapePIBody(snacPINode["B"])} />
+                    <Pi
+                        key={i}
+                        path={path}
+                        lang={snacPINode["L"]}
+                        body={escapePIBody(snacPINode["B"])}
+                    />
                 )]
             }
         }
