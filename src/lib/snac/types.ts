@@ -1,3 +1,5 @@
+import { ReactElement } from "react"
+
 export type PrefixOpts = {
     showPrefix: boolean
     newLine: string
@@ -15,7 +17,7 @@ export type SNAC2XMLOpts = {
     allowPIs: boolean
 }
 
-export interface SNAX2XMLFuncs {
+export interface SNAC2XMLFuncs {
     openTag: (path: number[], elementName: string, attrs: string) => string,
     children: (children: string) => string,
     closeTag: (path: number[], elementName: string) => string,
@@ -26,6 +28,63 @@ export interface SNAX2XMLFuncs {
     pi: (path: number[], lang: string, body: string) => string,
     attribute: (path: number[], name: string, value: string) => string,
     getPrefix: (path: number[], isAttribute: boolean, opts: PrefixOpts) => string,
+}
+
+export interface SNAC2XMLOutFuncs {
+    OpenTag: OpenTagType,
+    CloseTag: CloseTagType,
+    EmptyTag: EmptyTagType,
+    Text: TextType,
+    CDATA: CDATAType,
+    Comment: CommentType,
+    Pi: PiType,
+    Attributes: AttributesType1,
+    Attribute: AttributeType,
+    Prefix: PrefixType,
+}
+
+export interface OpenTagType {
+    (props: { path: number[], name: string, attributes: AttributesType }): JSX.Element
+}
+
+export interface CloseTagType {
+    (props: { path: number[], name: string }): JSX.Element
+}
+
+export interface EmptyTagType {
+    (props: { path: number[], name: string, attributes: AttributesType }): JSX.Element
+}
+
+export interface TextType {
+    (props: { path: number[], text: string }): JSX.Element
+}
+
+export interface CDATAType {
+    (props: { path: number[], cdata: string }): JSX.Element
+}
+
+export interface CommentType {
+    (props: { path: number[], comment: string }): JSX.Element
+}
+
+export interface PiType {
+    (props: { path: number[], lang: string, body: string }): JSX.Element
+}
+
+export interface AttributesType1 {
+    (props: { path: number[], attributes: AttributesType }): JSX.Element
+}
+
+export interface AttributeType {
+    (props: { path: number[], name: string, value: string }): JSX.Element
+}
+
+export interface PrefixType {
+    (props: { path: number[], opts: PrefixOpts }): JSX.Element
+}
+
+export interface AttributesType {
+    [name: string]: string
 }
 
 export type SNACNamesNode = {
@@ -63,9 +122,7 @@ export interface SNACPINode extends SNACNode {
 
 export type SNACItem = SNACElement | SNACText | SNACCDATA | SNACComment | SNACPINode
 
-export interface AttributesType {
-    [name: string]: string
-}
+
 
 export interface AttributesXMLhasChildrenType {
     attributes: AttributesType,

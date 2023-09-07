@@ -1,5 +1,5 @@
 import {
-    SNAX2XMLFuncs, SNACItem, SNACElement, AttributesType,
+    SNAC2XMLFuncs, SNACItem, SNACElement, AttributesType,
     SNACText, SNACCDATA, SNACComment, SNACPINode,
     SNAC2XMLOpts
 } from './types'
@@ -9,11 +9,11 @@ import {
     escapePIBody,
 } from './utils'
 
-const snac2xml = (snac: SNACItem[], funcs: SNAX2XMLFuncs, opts: SNAC2XMLOpts) => {
+const snac2xml = (snac: SNACItem[], funcs: SNAC2XMLFuncs, opts: SNAC2XMLOpts) => {
     return _snac2xml(snac, [], funcs, opts)
 }
 
-const _snac2xml = (snac: SNACItem[], path: number[], funcs: SNAX2XMLFuncs, opts: SNAC2XMLOpts) => {
+const _snac2xml = (snac: SNACItem[], path: number[], funcs: SNAC2XMLFuncs, opts: SNAC2XMLOpts) => {
     let out: string = "";
 
     for (let i in Object.keys(snac)) {
@@ -68,7 +68,7 @@ const _snac2xml = (snac: SNACItem[], path: number[], funcs: SNAX2XMLFuncs, opts:
     return out
 }
 
-const attributesToXML = (atts: AttributesType, path: number[], funcs: SNAX2XMLFuncs) => {
+const attributesToXML = (atts: AttributesType, path: number[], funcs: SNAC2XMLFuncs) => {
     let out: string = "";
     for (const name of Object.keys(atts)) {
         out += funcs.attribute(path, name, ` ${escapeHtml(atts[name])}`)
