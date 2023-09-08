@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-    SNAC2XMLOutFuncs, SNACItem, SNACElement, SNACText,
+    SNAC2XMLJSXFuncs, SNACItem, SNACElement, SNACText,
     SNACCDATA, SNACComment, SNACPINode, SNAC2XMLOpts,
 } from '../snac/types'
 
@@ -9,12 +9,12 @@ import {
     escapeHtml, escapeCDATA, escapeComment, escapePIBody,
 } from '../snac/utils'
 
-const snac2xml = (snac: SNACItem[], funcs: SNAC2XMLOutFuncs, opts: SNAC2XMLOpts) => {
+const snac2xml = (snac: SNACItem[], funcs: SNAC2XMLJSXFuncs, opts: SNAC2XMLOpts) => {
     return _snac2xml(snac, [], funcs, opts)
 }
 
-const _snac2xml = (snac: SNACItem[], path: number[], funcs: SNAC2XMLOutFuncs, opts: SNAC2XMLOpts) => {
-    const { OpenTag, CloseTag, EmptyTag, Text, CDATA, Comment, Pi, Attribute, Prefix } = funcs
+const _snac2xml = (snac: SNACItem[], path: number[], funcs: SNAC2XMLJSXFuncs, opts: SNAC2XMLOpts) => {
+    const { OpenTag, CloseTag, EmptyTag, Text, CDATA, Comment, PI: Pi, Attribute, Prefix } = funcs
     let out: JSX.Element[] = []
 
     for (let i in Object.keys(snac)) {

@@ -1,15 +1,13 @@
 import {
-    SNACNamesNode, SNACItem, SNACElement, AttributesXMLhasChildrenType, AttributesType,
-    QuoteChar, AttributeXMLType, AttributeValueType
+    SNACNamesNode, SNACItem, SNACElement, AttributesXMLhasChildrenType,
+    AttributesType, QuoteChar, AttributeXMLType, AttributeValueType
 } from './types'
 
-import {
-    escapeHtml, unEscapeHtml, escapeCDATA, unEscapeCDATA, escapeComment, unEscapeComment,
-    testPILang, escapePIBody, unEscapePIBody
-} from './utils'
+import { unEscapeHtml } from './utils'
 
 const xml2snac = (xml: string) => {
     const stack: SNACNamesNode[] = []
+    
     return _xml2snac(xml, stack)['out']
 }
 
@@ -179,7 +177,6 @@ const getAttributes = (xml: string): AttributesXMLhasChildrenType => {
         hasChildren: false,
         attributes: {}
     }
-
 }
 
 const addAttribute = (attributes: AttributesType, nameStr: string, quoteChar: QuoteChar, xml: string): AttributeXMLType => {
@@ -197,8 +194,8 @@ const getAttributeValue = (text: string, quoteChar: QuoteChar): AttributeValueTy
     if (values === null) {
         throw Error(`Bad xml ${text}`)
     }
-
     const re = new RegExp(`\\${quoteChar}`, 'g')
+
     return {
         value: unEscapeHtml(values['value'].replace(re, quoteChar)),
         xml: values['xml']

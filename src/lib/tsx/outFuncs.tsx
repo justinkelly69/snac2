@@ -125,7 +125,7 @@ export const Comment = (props: {
         &lt;!--{props.comment}--&gt;
     </div>
 
-export const Pi = (props: {
+export const PI = (props: {
     path: number[],
     lang: string,
     body: string
@@ -141,7 +141,7 @@ export const Pi = (props: {
 export const Attributes = (props: {
     path: number[],
     attributes: AttributesType
-}): JSX.Element => {
+}): JSX.Element | null => {
     return Object.keys(props.attributes).length > 0 ?
         <div>
             {Object.keys(props.attributes).map((a, i) => {
@@ -157,7 +157,7 @@ export const Attributes = (props: {
                 )
             })}
         </div> :
-        <></>
+        null
 }
 
 export const Attribute = (props: {
@@ -178,15 +178,15 @@ export const Attribute = (props: {
 export const Prefix = (props: {
     path: number[],
     opts: PrefixOpts
-}): JSX.Element => {
+}): JSX.Element | null => {
     if (props.opts.showPrefix) {
         let out = ""
-        for (let i in props.path) {
-            out += props.opts.charOn;
-        }
+        const init = ""
+        const charOn = props.opts.charOn
+        out = props.path.reduce((out, p) => out + charOn, init)
         return (<span>{out}</span>)
     }
     else {
-        return <></>
+        return null
     }
 }
