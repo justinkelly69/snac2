@@ -5,33 +5,32 @@ import {
 
 import { unEscapeHtml } from './utils'
 
-const xml2snac = (xml: string) => {
+const render = (xml: string) => {
     const stack: SNACNamesNode[] = []
     
-    return _xml2snac(xml, stack)['out']
+    return _render(xml, stack)['out']
 }
 
-const _xml2snac = (xml: string, stack: SNACNamesNode[]) => {
+const _render = (xml: string, stack: SNACNamesNode[]) => {
     const out: SNACItem[] = []
-    let i: number = 0
 
     while (xml.length > 0) {
-        const openTagData = xml.match(/^<([\w]*:?[\w]+)(.*)$/s)
-        const closeTagData = xml.match(/^<\/([\w]*:?[\w]+)>(.*)$/s)
-        const CDATATagData = xml.match(/^<!\[CDATA\[(.*?)\]\]>(.*)$/s)
-        const commentTagData = xml.match(/^<!--(.*?)-->(.*)$/s)
-        const PITagData = xml.match(/^<\?(\w+=?)\s+(.*?)\?>(.*)$/s)
-        const textTagData = xml.match(/^([^<>]+)(.*)$/s)
-        const blankTagData = xml.match(/^$/s)
+        const openTag = xml.match(/^<([\w]*:?[\w]+)(.*)$/s)
+        const closeTag = xml.match(/^<\/([\w]*:?[\w]+)>(.*)$/s)
+        const dataTag = xml.match(/^<!\[CDATA\[(.*?)\]\]>(.*)$/s)
+        const commentTag = xml.match(/^<!--(.*?)-->(.*)$/s)
+        const piTag = xml.match(/^<\?(\w+=?)\s+(.*?)\?>(.*)$/s)
+        const textTag = xml.match(/^([^<>]+)(.*)$/s)
+        const blankTag = xml.match(/^$/s)
 
-        if (openTagData !== null) {
-            const tagName = openTagData[1]
-            const attributeData = getAttributes(openTagData[2])
-            xml = attributeData['xml']
+        if (openTag !== null) {
+            const tagName = openTag[1]
+            const attributes = getAttributes(openTag[2])
+            xml = attributes['xml']
 
             const snac: SNACElement = {
                 N: tagName,
-                A: attributeData['attributes'],
+                A: attributes['attributes'],
                 C: [],
                 a: true,
                 o: true,
@@ -42,8 +41,8 @@ const _xml2snac = (xml: string, stack: SNACNamesNode[]) => {
                 N: snac['N']
             })
 
-            if (attributeData['hasChildren']) {
-                const kids = _xml2snac(xml, stack)
+            if (attributes['hasChildren']) {
+                const kids = _render(xml, stack)
                 snac['C'] = kids['out']
                 xml = kids['xml']
                 out.push(snac)
@@ -52,11 +51,10 @@ const _xml2snac = (xml: string, stack: SNACNamesNode[]) => {
                 out.push(snac)
                 const prev = stack.pop()
             }
-            i = i + 1
         }
 
-        else if (closeTagData !== null) {
-            const tagName = closeTagData[1]
+        else if (closeTag !== null) {
+            const tagName = closeTag[1]
             const snac: SNACNamesNode = {
                 N: tagName
             }
@@ -67,57 +65,57 @@ const _xml2snac = (xml: string, stack: SNACNamesNode[]) => {
             }
 
             return {
-                xml: closeTagData[2],
+                xml: closeTag[2],
                 out: out
             }
         }
 
-        else if (CDATATagData !== null) {
+        else if (dataTag !== null) {
             if (stack.length > 0) {
                 out.push({
-                    D: CDATATagData[1],
+                    D: dataTag[1],
                     o: true,
                     q: false
                 })
             }
-            xml = CDATATagData[2]
+            xml = dataTag[2]
         }
 
-        else if (commentTagData !== null) {
+        else if (commentTag !== null) {
             if (stack.length > 0) {
                 out.push({
-                    M: commentTagData[1],
+                    M: commentTag[1],
                     o: true,
                     q: false
                 })
             }
-            xml = commentTagData[2]
+            xml = commentTag[2]
         }
 
-        else if (PITagData !== null) {
+        else if (piTag !== null) {
             if (stack.length > 0) {
                 out.push({
-                    L: PITagData[1],
-                    B: PITagData[2],
+                    L: piTag[1],
+                    B: piTag[2],
                     o: true,
                     q: false
                 })
             }
-            xml = PITagData[3]
+            xml = piTag[3]
         }
 
-        else if (textTagData !== null) {
+        else if (textTag !== null) {
             if (stack.length > 0) {
                 out.push({
-                    T: unEscapeHtml(textTagData[1]),
+                    T: unEscapeHtml(textTag[1]),
                     o: true,
                     q: false
                 })
             }
-            xml = textTagData[2]
+            xml = textTag[2]
         }
 
-        else if (blankTagData !== null) {
+        else if (blankTag !== null) {
             if (stack.length > 0) {
                 out.push({
                     T: "",
@@ -129,7 +127,7 @@ const _xml2snac = (xml: string, stack: SNACNamesNode[]) => {
         }
 
         else {
-            throw Error(`Invalid tag ${xml}\n`)
+            throw Error(`invalid tag ${xml}\n`)
         }
     }
 
@@ -168,7 +166,7 @@ const getAttributes = (xml: string): AttributesXMLhasChildrenType => {
         }
 
         else {
-            throw Error(`INVALID ATTRIBUTE ${xml}\n`)
+            throw Error(`iNVALiD ATTRiBUTE ${xml}\n`)
         }
     }
 
@@ -214,4 +212,4 @@ const getValueString = (text: string, quoteChar: QuoteChar): AttributeValueType 
     return null
 }
 
-export default xml2snac
+export default render

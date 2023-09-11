@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { AttributesType, PrefixOpts } from '../snac/types'
+import { AttributesType, PrefixOpts } from './lib/snac/types'
 
 export const prefixOpts = {
     showPrefix: true,
@@ -26,7 +26,7 @@ export const OpenCloseEmptyTag = (props: {
     isEmpty: boolean,
     isClose: boolean
 }): JSX.Element =>
-    <div>
+    <>
         <Prefix path={props.path} opts={prefixOpts} />
         &lt;
         {props.isClose ? '/' : null}
@@ -49,7 +49,7 @@ export const OpenCloseEmptyTag = (props: {
             : null
         }
         &gt;
-    </div>
+    </>
 
 export const OpenTag = (props: {
     path: number[],

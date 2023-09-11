@@ -1,4 +1,15 @@
-import { ReactElement } from "react"
+//import React from 'react'
+
+export type XMLOpts = {
+    prefiNewLine: boolean
+    prefixShow: boolean
+    prefixChar: string
+    attributePrefix: string
+    selfCloseTags: boolean
+    trimText: boolean
+    allowComments: boolean
+    allowPIs: boolean
+}
 
 export type PrefixOpts = {
     showPrefix: boolean

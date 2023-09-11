@@ -1,33 +1,48 @@
-import xml2snac from './lib/snac/xml2snac'
-import snac2xml from './lib/tsx/snac2xml';
-import xml1 from './lib/data/xml/waffle'
-
-import { OpenTag, CloseTag, EmptyTag, Text, CDATA, Comment, PI, Attributes, Attribute, Prefix, xmlOpts} from '../src/lib/tsx/outFuncs'
 import React from 'react';
 
-const fetchXml = async () => {
-    const response = await fetch('http://localhost/xml/waffle.xml', {
-        mode: "no-cors"
-    })
-    const xml = response.json()
-    console.log(JSON.stringify(response, null, 4))
-}
+import xml1 from './lib/data/xml/waffle'
+import xml2snac from './lib/snac/xml2snac'
+import snac2xml from './lib/snac/snac2xml';
+import xmlOut from './lib/tsx/snac2xml';
+import { XMLOpts, SNAC2XMLOpts } from './lib/snac/types';
+
+import { OpenTag, CloseTag, EmptyTag, Text, CDATA, Comment, PI, Attributes, Attribute, Prefix, xmlOpts} from './outFuncs'
 
 function App() {
 
+    const xmlOpts : XMLOpts = {
+        prefiNewLine: true,
+        prefixShow: true,
+        prefixChar: "    ",
+        attributePrefix: "  ",
+        selfCloseTags: true,
+        trimText: true,
+        allowComments: true,
+        allowPIs: true,
+    }
+
+    const snac2xmlOpts : SNAC2XMLOpts = {
+        selfCloseTags: true,
+        trimText: true,
+        allowComments: true,
+        allowPIs: true,
+    }
+
     const funcs = { OpenTag, CloseTag, EmptyTag, Text, CDATA, Comment, PI, Attributes, Attribute, Prefix }
-    //fetchXml()
     const snac = xml2snac(xml1)
-    const xml2 = snac2xml(snac, funcs, xmlOpts)
+    const xml2 = snac2xml(snac, xmlOpts)
+    const xml3 = xmlOut(snac, funcs, snac2xmlOpts)
 
     return (
         <>
-            <h1>Hello World</h1>
-            {/* <pre>{JSON.stringify(snac, null, 4)}</pre> */}
+            <pre>{xml1}</pre>
+            <hr />
+            <pre>{JSON.stringify(snac, null, 4)}</pre>
             <hr />
             <pre>{xml2}</pre>
+            <hr />
+            <pre>{xml3}</pre>
         </>
-
     )
 }
 

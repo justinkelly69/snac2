@@ -1,7 +1,7 @@
 import {
     SNAC2XMLFuncs, SNACItem, SNACElement, AttributesType,
     SNACText, SNACCDATA, SNACComment, SNACPINode,
-    SNAC2XMLOpts
+    XMLOpts
 } from './types'
 
 import {
@@ -9,71 +9,84 @@ import {
     escapePIBody,
 } from './utils'
 
-const snac2xml = (snac: SNACItem[], funcs: SNAC2XMLFuncs, opts: SNAC2XMLOpts) => {
-    return _snac2xml(snac, [], funcs, opts)
+const render = (snac: SNACItem[], opts: XMLOpts) => {
+    return _render(snac, [], opts)
 }
 
-const _snac2xml = (snac: SNACItem[], path: number[], funcs: SNAC2XMLFuncs, opts: SNAC2XMLOpts) => {
+const _render = (snac: SNACItem[], path: number[], opts: XMLOpts) => {
     let out: string = "";
+    let prefix = getPrefix(path, true, opts)
 
     for (let i in Object.keys(snac)) {
         const newPath = [...path, parseInt(i)]
 
         if (snac[i].hasOwnProperty("N")) {
-            const snacElementNode: SNACElement = snac[i] as SNACElement;
+            const elementNode: SNACElement = snac[i] as SNACElement;
 
-            const elementName = snacElementNode["N"]
-            const attrs = attributesToXML(snacElementNode["A"], newPath, funcs)
-            const children = _snac2xml(snacElementNode["C"], newPath, funcs, opts)
-
-            if (children.length === 0 && opts.selfCloseTags) {
-                out += funcs.emptyTag(path, elementName, attrs)
+            if (elementNode["C"].length === 0 && opts.selfCloseTags) {
+                out += `${prefix}<${elementNode["N"]} ${attributes(prefix, elementNode["A"], opts)} />`
             }
             else {
-                out += funcs.openTag(path, elementName, attrs)
-                out += funcs.children(children)
-                out += funcs.closeTag(path, elementName)
+                out += `${prefix}<${elementNode["N"]} ${attributes(prefix, elementNode["A"], opts)}>`
+                out += _render(elementNode["C"], newPath, opts)
+                out += `${prefix}</${elementNode["N"]}>`
             }
         }
 
         else if (snac[i].hasOwnProperty("T")) {
-            const snacTextNode: SNACText = snac[i] as SNACText
-            let text = escapeHtml(snacTextNode["T"])
+            const textNode: SNACText = snac[i] as SNACText
+            let text = escapeHtml(textNode["T"])
             if (opts.trimText) {
                 text = text.trim()
+                if(text.length > 0) {
+                    out += `${prefix}[${text}]`
+                }
             }
-            out += funcs.text(path, text)
+            else {
+                out += `${prefix}[${text}]`
+            }
         }
 
         else if (snac[i].hasOwnProperty("D")) {
-            const snacCDATANode: SNACCDATA = snac[i] as SNACCDATA
-            out += funcs.cdata(path, escapeCDATA(snacCDATANode["D"]))
+            const dataNode: SNACCDATA = snac[i] as SNACCDATA
+            out += `${prefix}<![CDATA[${escapeCDATA(dataNode["D"])}]]>`
         }
 
         else if (snac[i].hasOwnProperty("M")) {
             if (opts.allowComments) {
-                const snacCommentNode: SNACComment = snac[i] as SNACComment
-                out += funcs.comment(path, escapeComment(snacCommentNode["M"]))
+                const commentNode: SNACComment = snac[i] as SNACComment
+                out += `${prefix}<!--${escapeComment(commentNode["M"])}-->`
             }
         }
 
         else if (snac[i].hasOwnProperty("L")) {
             if (opts.allowPIs) {
-                const snacPINode: SNACPINode = snac[i] as SNACPINode
-                out += funcs.pi(path, snacPINode["L"], escapePIBody(snacPINode["B"]))
+                const piNode: SNACPINode = snac[i] as SNACPINode
+                out += `${prefix}<?${piNode["L"]} ${escapePIBody(piNode["B"])} ?>`
             }
         }
     }
-
     return out
 }
 
-const attributesToXML = (atts: AttributesType, path: number[], funcs: SNAC2XMLFuncs) => {
-    let out: string = "";
+const attributes = (prefix: string, atts: AttributesType, opts: XMLOpts) => {
+    let out: string = ""
+    const attPrefix = prefix + opts.attributePrefix
     for (const name of Object.keys(atts)) {
-        out += funcs.attribute(path, name, ` ${escapeHtml(atts[name])}`)
+        out += `${attPrefix}${name}="${escapeHtml(atts[name])}"`
     }
     return out;
 }
 
-export default snac2xml
+const getPrefix = (path: number[], newline: boolean, opts: XMLOpts): string => {
+    let out = ""
+    if (opts.prefixShow) {
+        out = newline ? "\n" : ""
+        for (let i in path) {
+            out += opts.prefixChar
+        }
+    }
+    return out
+}
+
+export default render
