@@ -14,7 +14,7 @@ const snac2xml = (snac: SNACItem[], funcs: SNAC2XMLJSXFuncs, opts: SNAC2XMLOpts)
 }
 
 const _snac2xml = (snac: SNACItem[], path: number[], funcs: SNAC2XMLJSXFuncs, opts: SNAC2XMLOpts) => {
-    const { OpenTag, CloseTag, EmptyTag, Text, CDATA, Comment, PI: Pi, Attribute, Prefix } = funcs
+    const { OpenTag, CloseTag, EmptyTag, Text, CDATA, Comment, PI } = funcs
     let out: JSX.Element[] = []
 
     for (let i in Object.keys(snac)) {
@@ -93,7 +93,7 @@ const _snac2xml = (snac: SNACItem[], path: number[], funcs: SNAC2XMLJSXFuncs, op
             if (opts.allowPIs) {
                 const snacPINode: SNACPINode = snac[i] as SNACPINode
                 out = [...out, (
-                    <Pi
+                    <PI
                         key={i}
                         path={path}
                         lang={snacPINode["L"]}
