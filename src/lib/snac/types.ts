@@ -79,6 +79,13 @@ export interface SNAC2XMLJSXFuncs1<T> {
     Prefix: PrefixJSXType1<T>,
 }
 
+//export type SNACChild<E, T, D, M, P> = E | D | M | P | T
+export type SNACOut<E, N, A, T, D, M, P> = {
+    constructor: (path: number[], name: string) => void,
+    addAttributes: (path: number[], attributes: AttributesType) => void,
+    addChild: (path:number[], child:SNACItem) => void
+ }
+
 export interface TagTypeJSX1<T> { (props: { key: number, path: number[], element: SNACElement, childFunction: ChildFunction1<T> }): T }
 
 export interface ChildFunction1<T> { (snac: SNACItem[], path: number[], funcs: SNAC2XMLJSXFuncs1<T>, opts: SNAC2XMLOpts): T[] }

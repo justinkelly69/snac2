@@ -1,6 +1,7 @@
 import React from 'react'
 
-import { AttributesType, PrefixOpts } from './lib/snac/types'
+import { AttributesType, PrefixOpts, SNACElement, SNACItem } from './lib/snac/types'
+import { ITag } from './lib/snac/snac2xml'
 
 export const prefixOpts = {
     showPrefix: true,
@@ -19,174 +20,74 @@ export const xmlOpts = {
     allowPIs: true,
 }
 
-export const OpenCloseEmptyTag = (props: {
-    path: number[],
-    name: string,
-    attributes: AttributesType,
-    isEmpty: boolean,
-    isClose: boolean
-}): JSX.Element =>
-    <>
-        <Prefix path={props.path} opts={prefixOpts} />
-        &lt;
-        {props.isClose ? '/' : null}
-        {props.name}
-        {!props.isClose ?
-            <>
-                <Attributes
-                    path={props.path}
-                    attributes={props.attributes}
-                />
-                {Object.keys(props.attributes).length > 0 ?
-                    <Prefix
-                        path={props.path}
-                        opts={prefixOpts}
-                    />
-                    : null
-                }
-                {props.isEmpty ? '/' : null}
-            </>
-            : null
+export const getPrefix = (path: number[]):string => {
+    let out:string = ""
+    for(const p of path){
+        out += "    "
+    }
+    return out
+}
+
+const iTag: ITag<string, string, string, string, string> = {
+
+    newTag: function(
+        key: number,
+        path: number[],
+        element: SNACElement,
+        children: Array<SNACItem>,
+    ) {
+        const prefix = getPrefix(path)
+        const name = element.N
+        const attributes = element.A
+
+        let tag = `\n${prefix}<${name} `
+        for(const a in attributes) {
+            tag += `\n${prefix}  ${a}="${attributes[a]}"`
         }
-        &gt;
-    </>
+        
+        for(const c in children) {
+            if(children[c].hasOwnProperty("N")){
+                tag += this.newTag(key, path, children[c], child.C)
+            }
+        }
 
-export const OpenTag = (props: {
-    path: number[],
-    name: string,
-    attributes: AttributesType
-}): JSX.Element =>
-    <OpenCloseEmptyTag
-        path={props.path}
-        name={props.name}
-        attributes={props.attributes}
-        isEmpty={false}
-        isClose={false}
-    />
+    },
 
-export const CloseTag = (props: {
-    path: number[],
-    name: string
-}): JSX.Element =>
-    <OpenCloseEmptyTag
-        path={props.path}
-        name={props.name}
-        attributes={{}}
-        isEmpty={false}
-        isClose={true}
-    />
+    newText: (
+        key: number,
+        path: number[],
+        text: string,
+    ) => {
+        const prefix = getPrefix(path)
+        return `\n${prefix}${text}`
+    },
 
-export const EmptyTag = (props: {
-    path: number[],
-    name: string,
-    attributes: AttributesType
-}): JSX.Element =>
-    <OpenCloseEmptyTag
-        path={props.path}
-        name={props.name}
-        attributes={props.attributes}
-        isEmpty={true}
-        isClose={false}
-    />
+    newCDATA: (
+        key: number,
+        path: number[],
+        cdata: string,
+    ) => {
+        const prefix = getPrefix(path)
+        return `\n${prefix}<![CDATA[${cdata}]]>`
+    },
 
-export const Text = (props: {
-    path: number[],
-    text: string
-}): JSX.Element =>
-    <div>
-        <Prefix
-            path={props.path}
-            opts={prefixOpts}
-        />
-        [{props.text}]
-    </div>
+    newComment: (
+        key: number,
+        path: number[],
+        comment: string,
+    ) => {
+        const prefix = getPrefix(path)
+        return `\n${prefix}<!--${comment}-->`
+    },
 
-export const CDATA = (props: {
-    path: number[],
-    cdata: string
-}): JSX.Element =>
-    <div>
-        <Prefix
-            path={props.path}
-            opts={prefixOpts}
-        />
-        &lt;![CDATA[{props.cdata}]]&gt;
-    </div>
-
-export const Comment = (props: {
-    path: number[],
-    comment: string
-}): JSX.Element =>
-    <div>
-        <Prefix
-            path={props.path}
-            opts={prefixOpts}
-        />
-        &lt;!--{props.comment}--&gt;
-    </div>
-
-export const PI = (props: {
-    path: number[],
-    lang: string,
-    body: string
-}): JSX.Element =>
-    <div>
-        <Prefix
-            path={props.path}
-            opts={prefixOpts}
-        />
-        &lt;?{props.lang} {props.body} ?&gt;
-    </div>
-
-export const Attributes = (props: {
-    path: number[],
-    attributes: AttributesType
-}): JSX.Element | null => {
-    return Object.keys(props.attributes).length > 0 ?
-        <div>
-            {Object.keys(props.attributes).map((a, i) => {
-                return (
-                    <span key={i}>
-                        {i > 0 ? <br /> : null}
-                        <Attribute
-                            path={props.path}
-                            name={a}
-                            value={props.attributes[a]}
-                        />
-                    </span>
-                )
-            })}
-        </div> :
-        null
-}
-
-export const Attribute = (props: {
-    path: number[],
-    name: string,
-    value: string
-}): JSX.Element =>
-    <span>
-        <Prefix
-            path={props.path}
-            opts={prefixOpts}
-        />
-        {prefixOpts.attributePrefix}
-        {props.name}=&quot;{props.value}&quot;
-    </span>
-
-
-export const Prefix = (props: {
-    path: number[],
-    opts: PrefixOpts
-}): JSX.Element | null => {
-    if (props.opts.showPrefix) {
-        let out = ""
-        const init = ""
-        const charOn = props.opts.charOn
-        out = props.path.reduce((out, p) => out + charOn, init)
-        return (<span>{out}</span>)
-    }
-    else {
-        return null
+    newPI: (
+        key: number,
+        path: number[],
+        lang: string,
+        body: string,
+    ) => {
+        const prefix = getPrefix(path)
+        return `\n${prefix}<?${lang} ${body}?>`
     }
 }
+
