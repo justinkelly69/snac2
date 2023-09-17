@@ -15,7 +15,7 @@ export interface ITag<E, T, D, M, P> {
         key: number,
         path: number[],
         element: SNACElement,
-        children: Array<E | T | D | M | P>,
+        children: SNACItem[],
     ) => E,
 
     newText: (
@@ -45,11 +45,11 @@ export interface ITag<E, T, D, M, P> {
 }
 
 
-const render = <E, T, D, M, P>(snac: SNACItem[], funcs: ITag<E, T, D, M, P>, opts: SNAC2XMLOpts): Array<E | T | D | M | P> => {
-    return _render(snac, [], funcs, opts)
+const render = <E, T, D, M, P>(snac: SNACItem[], funcs: ITag<E, T, D, M, P>): Array<E | T | D | M | P> => {
+    return _render(snac, [], funcs)[0]
 }
 
-const _render = <E, T, D, M, P>(snac: SNACItem[], path: number[], funcs: ITag<E, T, D, M, P>, opts: SNAC2XMLOpts): Array<E | T | D | M | P> => {
+const _render = <E, T, D, M, P>(snac: SNACItem[], path: number[], funcs: ITag<E, T, D, M, P>): [Array<E | T | D | M | P>, SNACItem[]]  => {
     const out: Array<E | T | D | M | P> = []
 
     for (let i in Object.keys(snac)) {
@@ -57,16 +57,13 @@ const _render = <E, T, D, M, P>(snac: SNACItem[], path: number[], funcs: ITag<E,
 
         if (snac[i].hasOwnProperty("N")) {
             const snacElementNode: SNACElement = snac[i] as SNACElement
-            out.push(funcs.newTag(index, [...path, index], snacElementNode, _render(snacElementNode["C"], path, funcs, opts)))
+            const children:[Array<E | T | D | M | P>, SNACItem[]] = _render(snacElementNode["C"], path, funcs)
+            out.push(funcs.newTag(index, [...path, index], snacElementNode, children[1]))
         }
 
         else if (snac[i].hasOwnProperty("T")) {
             const snacTextNode: SNACText = snac[i] as SNACText
-            let text = escapeHtml(snacTextNode["T"])
-            if (opts.trimText) {
-                text = text.trim()
-            }
-            out.push(funcs.newText(index, path, text))
+            out.push(funcs.newText(index, path, escapeHtml(snacTextNode["T"])))
         }
 
         else if (snac[i].hasOwnProperty("D")) {
@@ -75,21 +72,17 @@ const _render = <E, T, D, M, P>(snac: SNACItem[], path: number[], funcs: ITag<E,
         }
 
         else if (snac[i].hasOwnProperty("M")) {
-            if (opts.allowComments) {
-                const snacCommentNode: SNACComment = snac[i] as SNACComment
-                out.push(funcs.newComment(index, path, escapeComment(snacCommentNode["M"])))
-            }
+            const snacCommentNode: SNACComment = snac[i] as SNACComment
+            out.push(funcs.newComment(index, path, escapeComment(snacCommentNode["M"])))
         }
 
         else if (snac[i].hasOwnProperty("L")) {
-            if (opts.allowPIs) {
-                const snacPINode: SNACPINode = snac[i] as SNACPINode
-                out.push(funcs.newPI(index, path, snacPINode["L"], escapePIBody(snacPINode["B"])))
-            }
+            const snacPINode: SNACPINode = snac[i] as SNACPINode
+            out.push(funcs.newPI(index, path, snacPINode["L"], escapePIBody(snacPINode["B"])))
         }
     }
 
-    return out
+    return [out]
 }
 
 export default render
