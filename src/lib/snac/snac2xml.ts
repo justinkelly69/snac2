@@ -1,88 +1,92 @@
-import React from 'react';
-
 import {
-    SNACItem, SNACElement, SNACText,
-    SNACCDATA, SNACComment, SNACPINode, SNAC2XMLOpts
+    SNAC2XMLFuncs, SNACItem, SNACElement, AttributesType,
+    SNACText, SNACCDATA, SNACComment, SNACPINode,
+    XMLOpts
 } from './types'
 
 import {
-    escapeHtml, escapeCDATA, escapeComment, escapePIBody,
+    escapeHtml, escapeCDATA, escapeComment,
+    escapePIBody,
 } from './utils'
 
-export interface ITag<E, T, D, M, P> {
-
-    newTag: (
-        key: number,
-        path: number[],
-        element: SNACElement,
-        children: SNACItem[],
-    ) => E,
-
-    newText: (
-        key: number,
-        path: number[],
-        text: string,
-    ) => T,
-
-    newCDATA: (
-        key: number,
-        path: number[],
-        cdata: string,
-    ) => D,
-
-    newComment: (
-        key: number,
-        path: number[],
-        comment: string,
-    ) => M,
-
-    newPI: (
-        key: number,
-        path: number[],
-        lang: string,
-        body: string,
-    ) => P,
+const render = (snac: SNACItem[], opts: XMLOpts) => {
+    return _render(snac, [], opts)
 }
 
-
-const render = <E, T, D, M, P>(snac: SNACItem[], funcs: ITag<E, T, D, M, P>): Array<E | T | D | M | P> => {
-    return _render(snac, [], funcs)[0]
-}
-
-const _render = <E, T, D, M, P>(snac: SNACItem[], path: number[], funcs: ITag<E, T, D, M, P>): [Array<E | T | D | M | P>, SNACItem[]]  => {
-    const out: Array<E | T | D | M | P> = []
+const _render = (snac: SNACItem[], path: number[], opts: XMLOpts) => {
+    let out: string = "";
+    let prefix = getPrefix(path, true, opts)
 
     for (let i in Object.keys(snac)) {
-        const index = parseInt(i)
+        const newPath = [...path, parseInt(i)]
 
         if (snac[i].hasOwnProperty("N")) {
-            const snacElementNode: SNACElement = snac[i] as SNACElement
-            const children:[Array<E | T | D | M | P>, SNACItem[]] = _render(snacElementNode["C"], path, funcs)
-            out.push(funcs.newTag(index, [...path, index], snacElementNode, children[1]))
+            const elementNode: SNACElement = snac[i] as SNACElement;
+
+            if (elementNode["C"].length === 0 && opts.selfCloseTags) {
+                out += `${prefix}<${elementNode["N"]} ${attributes(prefix, elementNode["A"], opts)} />`
+            }
+            else {
+                out += `${prefix}<${elementNode["N"]} ${attributes(prefix, elementNode["A"], opts)}>`
+                out += _render(elementNode["C"], newPath, opts)
+                out += `${prefix}</${elementNode["N"]}>`
+            }
         }
 
         else if (snac[i].hasOwnProperty("T")) {
-            const snacTextNode: SNACText = snac[i] as SNACText
-            out.push(funcs.newText(index, path, escapeHtml(snacTextNode["T"])))
+            const textNode: SNACText = snac[i] as SNACText
+            let text = escapeHtml(textNode["T"])
+            if (opts.trimText) {
+                text = text.trim()
+                if(text.length > 0) {
+                    out += `${prefix}[${text}]`
+                }
+            }
+            else {
+                out += `${prefix}[${text}]`
+            }
         }
 
         else if (snac[i].hasOwnProperty("D")) {
-            const snacCDATANode: SNACCDATA = snac[i] as SNACCDATA
-            out.push(funcs.newCDATA(index, path, escapeCDATA(snacCDATANode["D"])))
+            const dataNode: SNACCDATA = snac[i] as SNACCDATA
+            out += `${prefix}<![CDATA[${escapeCDATA(dataNode["D"])}]]>`
         }
 
         else if (snac[i].hasOwnProperty("M")) {
-            const snacCommentNode: SNACComment = snac[i] as SNACComment
-            out.push(funcs.newComment(index, path, escapeComment(snacCommentNode["M"])))
+            if (opts.allowComments) {
+                const commentNode: SNACComment = snac[i] as SNACComment
+                out += `${prefix}<!--${escapeComment(commentNode["M"])}-->`
+            }
         }
 
         else if (snac[i].hasOwnProperty("L")) {
-            const snacPINode: SNACPINode = snac[i] as SNACPINode
-            out.push(funcs.newPI(index, path, snacPINode["L"], escapePIBody(snacPINode["B"])))
+            if (opts.allowPIs) {
+                const piNode: SNACPINode = snac[i] as SNACPINode
+                out += `${prefix}<?${piNode["L"]} ${escapePIBody(piNode["B"])} ?>`
+            }
         }
     }
+    return out
+}
 
-    return [out]
+const attributes = (prefix: string, atts: AttributesType, opts: XMLOpts) => {
+    let out: string = ""
+    const attPrefix = prefix + opts.attributePrefix
+    for (const name of Object.keys(atts)) {
+        out += `${attPrefix}${name}="${escapeHtml(atts[name])}"`
+    }
+    return out;
+}
+
+const getPrefix = (path: number[], newline: boolean, opts: XMLOpts): string => {
+    let out = ""
+    if (opts.prefixShow) {
+        out = newline ? "\n" : ""
+        for (let i in path) {
+            out += opts.prefixChar
+        }
+    }
+    return out
 }
 
 export default render
