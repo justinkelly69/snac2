@@ -77,6 +77,42 @@ export interface AttributesJSXType { (props: { path: number[], attributes: Attri
 export interface AttributeJSXType { (props: { path: number[], name: string, value: string }): JSX.Element }
 export interface PrefixJSXType { (props: { path: number[], opts: PrefixOpts }): JSX.Element | null }
 
+export interface SNAC2XMLJSXFuncs1<T> {
+    Tag: TagTypeJSX1<T>,
+    //OpenTag: OpenTagJSXType1<T>,
+    //CloseTag: CloseTagJSXType1<T>,
+    //EmptyTag: EmptyTagJSXType1<T>,
+    Text: TextJSXType1<T>,
+    CDATA: CDATAJSXType1<T>,
+    Comment: CommentJSXType1<T>,
+    PI: PIJSXType1<T>,
+    Attributes: AttributesJSXType1<T>,
+    Attribute: AttributeJSXType1<T>,
+    Prefix: PrefixJSXType1<T>,
+}
+
+//export type SNACChild<E, T, D, M, P> = E | D | M | P | T
+export type SNACOut<E, N, A, T, D, M, P> = {
+    constructor: (path: number[], name: string) => void,
+    addAttributes: (path: number[], attributes: AttributesType) => void,
+    addChild: (path:number[], child:SNACItem) => void
+ }
+
+export interface TagTypeJSX1<T> { (props: { key: number, path: number[], element: SNACElement, childFunction: ChildFunction1<T> }): T }
+
+export interface ChildFunction1<T> { (snac: SNACItem[], path: number[], funcs: SNAC2XMLJSXFuncs1<T>, opts: SNAC2XMLOpts): T[] }
+
+export interface OpenTagJSXType1<T> { (props: { path: number[], name: string, attributes: AttributesType }): T }
+export interface CloseTagJSXType1<T> { (props: { path: number[], name: string }): T }
+export interface EmptyTagJSXType1<T> { (props: { key: number, path: number[], name: string, attributes: AttributesType }): T }
+export interface TextJSXType1<T> { (props: { key: number, path: number[], text: string }): T }
+export interface CDATAJSXType1<T> { (props: { key: number, path: number[], cdata: string }): T }
+export interface CommentJSXType1<T> { (props: { key: number, path: number[], comment: string }): T }
+export interface PIJSXType1<T> { (props: { key: number, path: number[], lang: string, body: string }): T }
+export interface AttributesJSXType1<T> { (props: { path: number[], attributes: AttributesType }): T | null }
+export interface AttributeJSXType1<T> { (props: { path: number[], name: string, value: string }): T }
+export interface PrefixJSXType1<T> { (props: { path: number[], opts: PrefixOpts }): T | null }
+
 export interface AttributesType {
     [name: string]: string
 }

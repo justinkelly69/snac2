@@ -31,6 +31,7 @@ function App() {
 
     const funcs = { OpenTag, CloseTag, EmptyTag, Text, CDATA, Comment, PI, Attributes, Attribute, Prefix }
     const snac = xml2snac(xmlInput)
+
     const xml2 = snac2xml(snac, xmlOpts)
     const xml3 = xmlOut(snac, funcs, snac2xmlOpts)
 
