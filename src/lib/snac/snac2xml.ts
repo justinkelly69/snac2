@@ -1,5 +1,5 @@
 import {
-    SNAC2XMLFuncs, SNACItem, SNACElement, AttributesType,
+    SNACItem, SNACElement, AttributesType,
     SNACText, SNACCDATA, SNACComment, SNACPINode,
     XMLOpts
 } from './types'
@@ -38,7 +38,7 @@ const _render = (snac: SNACItem[], path: number[], opts: XMLOpts) => {
             let text = escapeHtml(textNode["T"])
             if (opts.trimText) {
                 text = text.trim()
-                if(text.length > 0) {
+                if (text.length > 0) {
                     out += `${prefix}[${text}]`
                 }
             }

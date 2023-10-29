@@ -2,3 +2,68 @@
   text-align: center;
 }
 
+
+
+.element {
+  color: brown
+}
+
+.element-ns {
+  color: red
+}
+
+.element-name {
+  color: blue
+}
+
+.attribute {}
+
+.attribute-ns {
+  color: darkred
+}
+
+.attribute-name {
+  color: darkorchid
+}
+
+.attribute-value {
+  color: darkgreen
+}
+
+.text {
+  color: blueviolet
+}
+
+.text-body {
+  color: black
+}
+
+.cdata {
+  color: orangered
+}
+
+.cdata-body {
+  color: darkorange
+}
+
+.comment {
+  color: green;
+}
+
+.comment-body {
+  color: darkgreen
+}
+
+.pi {
+  color: olive
+}
+
+.pi-lang {
+  color: darkcyan
+}
+
+.pi-body {
+  color: green
+}
+
+.prefix {}

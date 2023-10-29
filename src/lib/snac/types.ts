@@ -1,5 +1,7 @@
 //import React from 'react'
 
+export enum SwitchStates { 'ON', 'OFF', 'HIDDEN' }
+
 export type XMLOpts = {
     prefiNewLine: boolean
     prefixShow: boolean
@@ -54,9 +56,19 @@ export interface SNAC2XMLJSXFuncs {
     Prefix: PrefixJSXType,
 }
 
-export interface OpenTagJSXType { (props: { path: number[], name: string, attributes: AttributesType }): JSX.Element }
+export interface OpenTagJSXType {
+    (props: {
+        path: number[], name: string, attributes: AttributesType,
+        isSelected: boolean, attributesOpen: boolean, childrenOpen: boolean
+    }): JSX.Element
+}
 export interface CloseTagJSXType { (props: { path: number[], name: string }): JSX.Element }
-export interface EmptyTagJSXType { (props: { path: number[], name: string, attributes: AttributesType }): JSX.Element }
+export interface EmptyTagJSXType {
+    (props: {
+        path: number[], name: string, attributes: AttributesType,
+        isSelected: boolean, attributesOpen: boolean,
+    }): JSX.Element
+}
 export interface TextJSXType { (props: { path: number[], text: string }): JSX.Element }
 export interface CDATAJSXType { (props: { path: number[], cdata: string }): JSX.Element }
 export interface CommentJSXType { (props: { path: number[], comment: string }): JSX.Element }

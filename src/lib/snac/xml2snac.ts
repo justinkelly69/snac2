@@ -127,7 +127,7 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
         }
 
         else {
-            throw Error(`invalid tag ${xml}\n`)
+            throw Error(`INVALID TAG ${xml}\n`)
         }
     }
 
@@ -166,7 +166,7 @@ const getAttributes = (xml: string): AttributesXMLhasChildrenType => {
         }
 
         else {
-            throw Error(`iNVALiD ATTRiBUTE ${xml}\n`)
+            throw Error(`INVALID ATTRIBUTE ${xml}\n`)
         }
     }
 
@@ -190,7 +190,7 @@ const addAttribute = (attributes: AttributesType, nameStr: string, quoteChar: Qu
 const getAttributeValue = (text: string, quoteChar: QuoteChar): AttributeValueType => {
     const values = getValueString(text, quoteChar)
     if (values === null) {
-        throw Error(`Bad xml ${text}`)
+        throw Error(`BAD XML ${text}`)
     }
     const re = new RegExp(`\\${quoteChar}`, 'g')
 

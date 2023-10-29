@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import {
     SNAC2XMLJSXFuncs, SNACItem, SNACElement, SNACText,
@@ -29,23 +29,28 @@ const _snac2xml = (snac: SNACItem[], path: number[], funcs: SNAC2XMLJSXFuncs, op
                         path={path}
                         name={snacElementNode["N"]}
                         attributes={snacElementNode["A"]}
+                        isSelected={snacElementNode["q"]}
+                        attributesOpen={snacElementNode["a"]}
                     />
                 )]
             }
             else {
                 out = [...out, (
-                    <span key={i}>
+                    <Fragment key={i}>
                         <OpenTag
                             path={path}
                             name={snacElementNode["N"]}
                             attributes={snacElementNode["A"]}
+                            isSelected={snacElementNode["q"]}
+                            attributesOpen={snacElementNode["a"]}
+                            childrenOpen={snacElementNode["o"]}
                         />
                         {_snac2xml(snacElementNode["C"], newPath, funcs, opts)}
                         <CloseTag
                             path={path}
                             name={snacElementNode["N"]}
                         />
-                    </span>
+                    </Fragment>
                 )]
             }
         }
