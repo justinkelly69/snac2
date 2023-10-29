@@ -14,7 +14,7 @@ const snac2xml = (snac: SNACItem[], funcs: SNAC2XMLJSXFuncs, opts: SNAC2XMLOpts)
 }
 
 const _snac2xml = (snac: SNACItem[], path: number[], funcs: SNAC2XMLJSXFuncs, opts: SNAC2XMLOpts) => {
-    const { OpenTag, CloseTag, EmptyTag, Text, CDATA, Comment, PI } = funcs
+    const { OpenTag, CloseTag, Text, CDATA, Comment, PI } = funcs
     let out: JSX.Element[] = []
 
     for (let i in Object.keys(snac)) {
@@ -24,13 +24,17 @@ const _snac2xml = (snac: SNACItem[], path: number[], funcs: SNAC2XMLJSXFuncs, op
             const snacElementNode: SNACElement = snac[i] as SNACElement;
             if (snacElementNode["C"].length === 0 && opts.selfCloseTags) {
                 out = [...out, (
-                    <EmptyTag
-                        key={i}
+                    <OpenTag
                         path={path}
                         name={snacElementNode["N"]}
                         attributes={snacElementNode["A"]}
+                        isNotEmpty={false}
                         isSelected={snacElementNode["q"]}
                         attributesOpen={snacElementNode["a"]}
+                        childrenOpen={snacElementNode["o"]}
+                        showSelected={true}
+                        showAttributesOpen={true}
+                        showChildrenOpen={true}
                     />
                 )]
             }
@@ -41,14 +45,20 @@ const _snac2xml = (snac: SNACItem[], path: number[], funcs: SNAC2XMLJSXFuncs, op
                             path={path}
                             name={snacElementNode["N"]}
                             attributes={snacElementNode["A"]}
+                            isNotEmpty={true}
                             isSelected={snacElementNode["q"]}
                             attributesOpen={snacElementNode["a"]}
                             childrenOpen={snacElementNode["o"]}
+                            showSelected={true}
+                            showAttributesOpen={true}
+                            showChildrenOpen={true}
                         />
                         {_snac2xml(snacElementNode["C"], newPath, funcs, opts)}
                         <CloseTag
                             path={path}
                             name={snacElementNode["N"]}
+                            showSelected={true}
+                            isSelected={snacElementNode["q"]}
                         />
                     </Fragment>
                 )]
@@ -66,6 +76,10 @@ const _snac2xml = (snac: SNACItem[], path: number[], funcs: SNAC2XMLJSXFuncs, op
                     key={i}
                     path={path}
                     text={text}
+                    isSelected={snacTextNode["q"]}
+                    showSelected={true}
+                    isOpen={snacTextNode["o"]}
+                    showOpen={true}
                 />
             )]
         }
@@ -77,6 +91,10 @@ const _snac2xml = (snac: SNACItem[], path: number[], funcs: SNAC2XMLJSXFuncs, op
                     key={i}
                     path={path}
                     cdata={escapeCDATA(snacCDATANode["D"])}
+                    isSelected={snacCDATANode["q"]}
+                    showSelected={true}
+                    isOpen={snacCDATANode["o"]}
+                    showOpen={true}
                 />
             )]
         }
@@ -89,6 +107,10 @@ const _snac2xml = (snac: SNACItem[], path: number[], funcs: SNAC2XMLJSXFuncs, op
                         key={i}
                         path={path}
                         comment={escapeComment(snacCommentNode["M"])}
+                        isSelected={snacCommentNode["q"]}
+                        showSelected={true}
+                        isOpen={snacCommentNode["o"]}
+                        showOpen={true}
                     />
                 )]
             }
@@ -103,6 +125,10 @@ const _snac2xml = (snac: SNACItem[], path: number[], funcs: SNAC2XMLJSXFuncs, op
                         path={path}
                         lang={snacPINode["L"]}
                         body={escapePIBody(snacPINode["B"])}
+                        isSelected={snacPINode["q"]}
+                        showSelected={true}
+                        isOpen={snacPINode["o"]}
+                        showOpen={true}
                     />
                 )]
             }

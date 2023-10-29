@@ -35,7 +35,8 @@
 }
 
 .text-body {
-  color: black
+  color: black;
+  background-color: #eee;
 }
 
 .cdata {
