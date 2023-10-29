@@ -4,7 +4,9 @@ import "./App.css";
 import xmlInput from './lib/data/xml/waffle'
 import xml2snac from './lib/snac/xml2snac'
 import snac2xml from './lib/snac/snac2xml';
-import { XMLOpts } from './lib/snac/types'
+import { SNAC2XMLOpts, XMLOpts } from './lib/snac/types'
+import xmlOut from './lib/tsx/snac2xml';
+import { Attribute, Attributes, CDATA, CloseTag, EmptyTag, Text, Comment, OpenTag, PI, Prefix } from './outFuncs';
 
 
 function App() {
@@ -31,6 +33,7 @@ function App() {
     const snac = xml2snac(xmlInput)
 
     const xml2 = snac2xml(snac, xmlOpts)
+    const xml3 = xmlOut(snac, funcs, snac2xmlOpts)
 
     return (
         <>
