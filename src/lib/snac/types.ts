@@ -56,100 +56,110 @@ export interface SNAC2XMLJSXFuncs {
 }
 
 export interface OpenTagJSXType {
+    // (props: {
+    //     path: number[], 
+    //     name: string, 
+    //     attributes: AttributesType,
+    //     isNotEmpty: boolean,
+    //     isSelected: boolean, 
+    //     attributesOpen: boolean, 
+    //     childrenOpen: boolean,
+    //     showSelected: boolean,
+    //     showAttributesOpen: boolean,
+    //     showChildrenOpen: boolean,
+    // }): JSX.Element
+
     (props: {
-        path: number[], name: string, attributes: AttributesType,
+        root: SNACItem[],
+        node: SNACElement
+        path: number[], 
         isNotEmpty: boolean,
-        isSelected: boolean, attributesOpen: boolean, childrenOpen: boolean,
         showSelected: boolean,
         showAttributesOpen: boolean,
         showChildrenOpen: boolean,
     }): JSX.Element
 }
+/* 
+SNACElement
+<OpenTag
+path={path}
+
+name={snacElementNode["N"]}
+attributes={snacElementNode["A"]}
+attributesOpen={snacElementNode["a"]}
+childrenOpen={snacElementNode["o"]}
+isSelected={snacElementNode["q"]}
+
+
+isNotEmpty={false}
+showSelected={true}
+showAttributesOpen={true}
+showChildrenOpen={true}
+/> */
+
 export interface CloseTagJSXType {
     (props: {
+        root: SNACItem[],
+        node: SNACElement,
         path: number[], 
-        name: string,
+        //name: string,
         showSelected: boolean,
-        isSelected: boolean
+        //isSelected: boolean
     }): JSX.Element
 }
+
 export interface TextJSXType {
     (props: {
+        root: SNACItem[],
+        node: SNACText,
         path: number[],
-        text: string,
-        isSelected: boolean,
+        //text: string,
+        //isSelected: boolean,
         showSelected: boolean,
-        isOpen: boolean,
+        //isOpen: boolean,
         showOpen: boolean,
     }): JSX.Element
 }
 export interface CDATAJSXType {
     (props: {
+        root: SNACItem[],
+        node: SNACCDATA,
         path: number[],
-        cdata: string,
-        isSelected: boolean,
+        //cdata: string,
+        //isSelected: boolean,
         showSelected: boolean,
-        isOpen: boolean,
+        //isOpen: boolean,
         showOpen: boolean,
     }): JSX.Element
 }
 export interface CommentJSXType {
     (props: {
+        root: SNACItem[],
+        node: SNACComment,
         path: number[],
-        comment: string,
-        isSelected: boolean,
+        //comment: string,
+        //isSelected: boolean,
         showSelected: boolean,
-        isOpen: boolean,
+        //isOpen: boolean,
         showOpen: boolean,
     }): JSX.Element
 }
 export interface PIJSXType {
     (props: {
+        root: SNACItem[],
+        node: SNACPINode,
         path: number[],
-        lang: string,
-        body: string,
-        isSelected: boolean,
+        //lang: string,
+        //body: string,
+        //isSelected: boolean,
         showSelected: boolean,
-        isOpen: boolean,
+        //isOpen: boolean,
         showOpen: boolean,
     }): JSX.Element
 }
 export interface AttributesJSXType { (props: { path: number[], attributes: AttributesType }): JSX.Element | null }
 export interface AttributeJSXType { (props: { path: number[], name: string, value: string }): JSX.Element }
 export interface PrefixJSXType { (props: { path: number[], opts: PrefixOpts }): JSX.Element | null }
-
-// export interface SNAC2XMLJSXFuncs1<T> {
-//     Tag: TagTypeJSX1<T>,
-//     Text: TextJSXType1<T>,
-//     CDATA: CDATAJSXType1<T>,
-//     Comment: CommentJSXType1<T>,
-//     PI: PIJSXType1<T>,
-//     Attributes: AttributesJSXType1<T>,
-//     Attribute: AttributeJSXType1<T>,
-//     Prefix: PrefixJSXType1<T>,
-// }
-
-// //export type SNACChild<E, T, D, M, P> = E | D | M | P | T
-// export type SNACOut<E, N, A, T, D, M, P> = {
-//     constructor: (path: number[], name: string) => void,
-//     addAttributes: (path: number[], attributes: AttributesType) => void,
-//     addChild: (path: number[], child: SNACItem) => void
-// }
-
-// export interface TagTypeJSX1<T> { (props: { key: number, path: number[], element: SNACElement, childFunction: ChildFunction1<T> }): T }
-
-// export interface ChildFunction1<T> { (snac: SNACItem[], path: number[], funcs: SNAC2XMLJSXFuncs1<T>, opts: SNAC2XMLOpts): T[] }
-
-// export interface OpenTagJSXType1<T> { (props: { path: number[], name: string, attributes: AttributesType }): T }
-// export interface CloseTagJSXType1<T> { (props: { path: number[], name: string }): T }
-// export interface EmptyTagJSXType1<T> { (props: { key: number, path: number[], name: string, attributes: AttributesType }): T }
-// export interface TextJSXType1<T> { (props: { key: number, path: number[], text: string }): T }
-// export interface CDATAJSXType1<T> { (props: { key: number, path: number[], cdata: string }): T }
-// export interface CommentJSXType1<T> { (props: { key: number, path: number[], comment: string }): T }
-// export interface PIJSXType1<T> { (props: { key: number, path: number[], lang: string, body: string }): T }
-// export interface AttributesJSXType1<T> { (props: { path: number[], attributes: AttributesType }): T | null }
-// export interface AttributeJSXType1<T> { (props: { path: number[], name: string, value: string }): T }
-// export interface PrefixJSXType1<T> { (props: { path: number[], opts: PrefixOpts }): T | null }
 
 export interface AttributesType {
     [name: string]: string

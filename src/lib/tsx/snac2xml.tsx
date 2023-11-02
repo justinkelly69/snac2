@@ -9,11 +9,11 @@ import {
     escapeHtml, escapeCDATA, escapeComment, escapePIBody,
 } from '../snac/utils'
 
-const snac2xml = (snac: SNACItem[], funcs: SNAC2XMLJSXFuncs, opts: SNAC2XMLOpts) => {
-    return _snac2xml(snac, [], funcs, opts)
+const snac2xml = (root: SNACItem[], snac: SNACItem[], funcs: SNAC2XMLJSXFuncs, opts: SNAC2XMLOpts) => {
+    return _snac2xml(root, snac, [], funcs, opts)
 }
 
-const _snac2xml = (snac: SNACItem[], path: number[], funcs: SNAC2XMLJSXFuncs, opts: SNAC2XMLOpts) => {
+const _snac2xml = (root: SNACItem[], snac: SNACItem[], path: number[], funcs: SNAC2XMLJSXFuncs, opts: SNAC2XMLOpts) => {
     const { OpenTag, CloseTag, Text, CDATA, Comment, PI } = funcs
     let out: JSX.Element[] = []
 
@@ -25,13 +25,10 @@ const _snac2xml = (snac: SNACItem[], path: number[], funcs: SNAC2XMLJSXFuncs, op
             if (snacElementNode["C"].length === 0 && opts.selfCloseTags) {
                 out = [...out, (
                     <OpenTag
+                        root={root}
+                        node={snacElementNode}
                         path={path}
-                        name={snacElementNode["N"]}
-                        attributes={snacElementNode["A"]}
                         isNotEmpty={false}
-                        isSelected={snacElementNode["q"]}
-                        attributesOpen={snacElementNode["a"]}
-                        childrenOpen={snacElementNode["o"]}
                         showSelected={true}
                         showAttributesOpen={true}
                         showChildrenOpen={true}
@@ -42,23 +39,20 @@ const _snac2xml = (snac: SNACItem[], path: number[], funcs: SNAC2XMLJSXFuncs, op
                 out = [...out, (
                     <Fragment key={i}>
                         <OpenTag
+                            root={root}
+                            node={snacElementNode}
                             path={path}
-                            name={snacElementNode["N"]}
-                            attributes={snacElementNode["A"]}
                             isNotEmpty={true}
-                            isSelected={snacElementNode["q"]}
-                            attributesOpen={snacElementNode["a"]}
-                            childrenOpen={snacElementNode["o"]}
                             showSelected={true}
                             showAttributesOpen={true}
                             showChildrenOpen={true}
                         />
-                        {_snac2xml(snacElementNode["C"], newPath, funcs, opts)}
+                        {_snac2xml(root, snacElementNode["C"], newPath, funcs, opts)}
                         <CloseTag
+                            root={root}
+                            node={snacElementNode}
                             path={path}
-                            name={snacElementNode["N"]}
                             showSelected={true}
-                            isSelected={snacElementNode["q"]}
                         />
                     </Fragment>
                 )]
@@ -74,11 +68,10 @@ const _snac2xml = (snac: SNACItem[], path: number[], funcs: SNAC2XMLJSXFuncs, op
             out = [...out, (
                 <Text
                     key={i}
+                    root={root}
+                    node={snacTextNode}
                     path={path}
-                    text={text}
-                    isSelected={snacTextNode["q"]}
                     showSelected={true}
-                    isOpen={snacTextNode["o"]}
                     showOpen={true}
                 />
             )]
@@ -89,11 +82,10 @@ const _snac2xml = (snac: SNACItem[], path: number[], funcs: SNAC2XMLJSXFuncs, op
             out = [...out, (
                 <CDATA
                     key={i}
+                    root={root}
+                    node={snacCDATANode}
                     path={path}
-                    cdata={escapeCDATA(snacCDATANode["D"])}
-                    isSelected={snacCDATANode["q"]}
                     showSelected={true}
-                    isOpen={snacCDATANode["o"]}
                     showOpen={true}
                 />
             )]
@@ -105,11 +97,10 @@ const _snac2xml = (snac: SNACItem[], path: number[], funcs: SNAC2XMLJSXFuncs, op
                 out = [...out, (
                     <Comment
                         key={i}
+                        root={root}
+                        node={snacCommentNode}
                         path={path}
-                        comment={escapeComment(snacCommentNode["M"])}
-                        isSelected={snacCommentNode["q"]}
                         showSelected={true}
-                        isOpen={snacCommentNode["o"]}
                         showOpen={true}
                     />
                 )]
@@ -122,12 +113,10 @@ const _snac2xml = (snac: SNACItem[], path: number[], funcs: SNAC2XMLJSXFuncs, op
                 out = [...out, (
                     <PI
                         key={i}
+                        root={root}
+                        node={snacPINode}
                         path={path}
-                        lang={snacPINode["L"]}
-                        body={escapePIBody(snacPINode["B"])}
-                        isSelected={snacPINode["q"]}
                         showSelected={true}
-                        isOpen={snacPINode["o"]}
                         showOpen={true}
                     />
                 )]

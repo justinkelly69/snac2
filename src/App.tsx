@@ -33,7 +33,7 @@ function App() {
     const snac = xml2snac(xmlInput)
 
     const xml2 = snac2xml(snac, xmlOpts)
-    const xml3 = xmlOut(snac, funcs, snac2xmlOpts)
+    const xml3 = xmlOut(snac, snac, funcs, snac2xmlOpts)
 
     return (
         <>
