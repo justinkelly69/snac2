@@ -2,18 +2,18 @@ import React, { Fragment } from 'react';
 
 import {
     SNAC2XMLJSXFuncs, SNACItem, SNACElement, SNACText,
-    SNACCDATA, SNACComment, SNACPINode, SNAC2XMLOpts,
+    SNACCDATA, SNACComment, SNACPINode, SNACOpts,
 } from '../snac/types'
 
 import {
-    escapeHtml, escapeCDATA, escapeComment, escapePIBody,
+    escapeHtml
 } from '../snac/utils'
 
-const snac2xml = (root: SNACItem[], snac: SNACItem[], funcs: SNAC2XMLJSXFuncs, opts: SNAC2XMLOpts) => {
+const snac2xml = (root: SNACItem[], snac: SNACItem[], funcs: SNAC2XMLJSXFuncs, opts: SNACOpts) => {
     return _snac2xml(root, snac, [], funcs, opts)
 }
 
-const _snac2xml = (root: SNACItem[], snac: SNACItem[], path: number[], funcs: SNAC2XMLJSXFuncs, opts: SNAC2XMLOpts) => {
+const _snac2xml = (root: SNACItem[], snac: SNACItem[], path: number[], funcs: SNAC2XMLJSXFuncs, opts: SNACOpts) => {
     const { OpenTag, CloseTag, Text, CDATA, Comment, PI } = funcs
     let out: JSX.Element[] = []
 
@@ -22,16 +22,18 @@ const _snac2xml = (root: SNACItem[], snac: SNACItem[], path: number[], funcs: SN
 
         if (snac[i].hasOwnProperty("N")) {
             const snacElementNode: SNACElement = snac[i] as SNACElement;
-            if (snacElementNode["C"].length === 0 && opts.selfCloseTags) {
+            if (snacElementNode["C"].length === 0 && opts.xml_selfCloseTags) {
                 out = [...out, (
                     <OpenTag
+                        key={i}
                         root={root}
                         node={snacElementNode}
-                        path={path}
+                        path={newPath}
                         isNotEmpty={false}
                         showSelected={true}
                         showAttributesOpen={true}
                         showChildrenOpen={true}
+                        opts={opts}
                     />
                 )]
             }
@@ -41,18 +43,20 @@ const _snac2xml = (root: SNACItem[], snac: SNACItem[], path: number[], funcs: SN
                         <OpenTag
                             root={root}
                             node={snacElementNode}
-                            path={path}
+                            path={newPath}
                             isNotEmpty={true}
                             showSelected={true}
                             showAttributesOpen={true}
                             showChildrenOpen={true}
+                            opts={opts}
                         />
                         {_snac2xml(root, snacElementNode["C"], newPath, funcs, opts)}
                         <CloseTag
                             root={root}
                             node={snacElementNode}
-                            path={path}
+                            path={newPath}
                             showSelected={true}
+                            opts={opts}
                         />
                     </Fragment>
                 )]
@@ -62,7 +66,7 @@ const _snac2xml = (root: SNACItem[], snac: SNACItem[], path: number[], funcs: SN
         else if (snac[i].hasOwnProperty("T")) {
             const snacTextNode: SNACText = snac[i] as SNACText
             let text = escapeHtml(snacTextNode["T"])
-            if (opts.trimText) {
+            if (opts.xml_trimText) {
                 text = text.trim()
             }
             out = [...out, (
@@ -70,9 +74,10 @@ const _snac2xml = (root: SNACItem[], snac: SNACItem[], path: number[], funcs: SN
                     key={i}
                     root={root}
                     node={snacTextNode}
-                    path={path}
+                    path={newPath}
                     showSelected={true}
                     showOpen={true}
+                    opts={opts}
                 />
             )]
         }
@@ -84,40 +89,43 @@ const _snac2xml = (root: SNACItem[], snac: SNACItem[], path: number[], funcs: SN
                     key={i}
                     root={root}
                     node={snacCDATANode}
-                    path={path}
+                    path={newPath}
                     showSelected={true}
                     showOpen={true}
+                    opts={opts}
                 />
             )]
         }
 
         else if (snac[i].hasOwnProperty("M")) {
-            if (opts.allowComments) {
+            if (opts.xml_allowComments) {
                 const snacCommentNode: SNACComment = snac[i] as SNACComment
                 out = [...out, (
                     <Comment
                         key={i}
                         root={root}
                         node={snacCommentNode}
-                        path={path}
+                        path={newPath}
                         showSelected={true}
                         showOpen={true}
+                        opts={opts}
                     />
                 )]
             }
         }
 
         else if (snac[i].hasOwnProperty("L")) {
-            if (opts.allowPIs) {
+            if (opts.xml_allowPIs) {
                 const snacPINode: SNACPINode = snac[i] as SNACPINode
                 out = [...out, (
                     <PI
                         key={i}
                         root={root}
                         node={snacPINode}
-                        path={path}
+                        path={newPath}
                         showSelected={true}
                         showOpen={true}
+                        opts={opts}
                     />
                 )]
             }

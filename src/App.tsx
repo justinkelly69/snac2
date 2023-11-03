@@ -3,37 +3,19 @@ import "./App.css";
 
 import xmlInput from './lib/data/xml/waffle'
 import xml2snac from './lib/snac/xml2snac'
-import snac2xml from './lib/snac/snac2xml';
-import { SNAC2XMLOpts, XMLOpts } from './lib/snac/types'
+//import snac2xml from './lib/snac/snac2xml';
 import xmlOut from './lib/tsx/snac2xml';
-import { Attribute, Attributes, CDATA, CloseTag, Text, Comment, OpenTag, PI, Prefix } from './outFuncs';
+import { Attribute, Attributes, CDATA, CloseTag, Text, Comment, OpenTag, PI, Prefix } from './lib/tsx/outFuncs';
+import opts from './lib/snac/opts'
 
 
 function App() {
 
-    const xmlOpts: XMLOpts = {
-        prefiNewLine: true,
-        prefixShow: true,
-        prefixChar: "    ",
-        attributePrefix: "  ",
-        selfCloseTags: true,
-        trimText: true,
-        allowComments: true,
-        allowPIs: true,
-    }
-
-    const snac2xmlOpts : SNAC2XMLOpts = {
-        selfCloseTags: true,
-        trimText: true,
-        allowComments: true,
-        allowPIs: true,
-    }
-
     const funcs = { OpenTag, CloseTag, Text, CDATA, Comment, PI, Attributes, Attribute, Prefix }
     const snac = xml2snac(xmlInput)
 
-    const xml2 = snac2xml(snac, xmlOpts)
-    const xml3 = xmlOut(snac, snac, funcs, snac2xmlOpts)
+    //const xml2 = snac2xml(snac, xmlOpts)
+    const xml3 = xmlOut(snac, snac, funcs, opts)
 
     return (
         <>

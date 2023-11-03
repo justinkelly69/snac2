@@ -2,32 +2,41 @@
 
 export enum SwitchStates { 'ON', 'OFF', 'HIDDEN' }
 
-export type XMLOpts = {
-    prefiNewLine: boolean
-    prefixShow: boolean
-    prefixChar: string
-    attributePrefix: string
-    selfCloseTags: boolean
-    trimText: boolean
-    allowComments: boolean
-    allowPIs: boolean
+export type OnOffHiddenChars = {
+    on: string,
+    off: string,
+    hidden: string,
 }
 
-export type PrefixOpts = {
-    showPrefix: boolean
-    newLine: string
-    usePrefix: boolean
-    startChar: string
-    charOn: string
-    charOff: string
-    attributePrefix: string
-}
+export type SNACOpts = {
+    prefix_showPrefix: boolean,
+    prefix_newLine: string,
+    prefix_usePrefix: boolean,
+    prefix_startChar: string,
+    prefix_charOn: string,
+    prefix_charOff: string,
+    prefix_spaceBefore: string,
+    prefix_spaceAfter: string,
+    prefix_attributePrefix: string,
 
-export type SNAC2XMLOpts = {
-    selfCloseTags: boolean
-    trimText: boolean
-    allowComments: boolean
-    allowPIs: boolean
+    switch_selectOn: string,
+    switch_selectOff: string,
+    switch_selectHide: string,
+    switch_attributesOpen: string,
+    switch_attributesClose: string,
+    switch_attributesHide: string,
+    switch_elementOpen: string,
+    switch_elementClose: string,
+    switch_elementHide: string,
+    switch_selectChars: OnOffHiddenChars,
+    switch_attributeChars: OnOffHiddenChars,
+    switch_elementChars: OnOffHiddenChars,
+
+    xml_selfCloseTags: boolean,
+    xml_trimText: boolean,
+    xml_showCloseTags: boolean,
+    xml_allowComments: boolean,
+    xml_allowPIs: boolean,
 }
 
 export interface SNAC2XMLFuncs {
@@ -40,7 +49,7 @@ export interface SNAC2XMLFuncs {
     comment: (path: number[], comment: string) => string,
     pi: (path: number[], lang: string, body: string) => string,
     attribute: (path: number[], name: string, value: string) => string,
-    getPrefix: (path: number[], isAttribute: boolean, opts: PrefixOpts) => string,
+    getPrefix: (path: number[], isAttribute: boolean, opts: SNACOpts) => string,
 }
 
 export interface SNAC2XMLJSXFuncs {
@@ -56,56 +65,27 @@ export interface SNAC2XMLJSXFuncs {
 }
 
 export interface OpenTagJSXType {
-    // (props: {
-    //     path: number[], 
-    //     name: string, 
-    //     attributes: AttributesType,
-    //     isNotEmpty: boolean,
-    //     isSelected: boolean, 
-    //     attributesOpen: boolean, 
-    //     childrenOpen: boolean,
-    //     showSelected: boolean,
-    //     showAttributesOpen: boolean,
-    //     showChildrenOpen: boolean,
-    // }): JSX.Element
 
     (props: {
         root: SNACItem[],
         node: SNACElement
-        path: number[], 
+        path: number[],
         isNotEmpty: boolean,
         showSelected: boolean,
         showAttributesOpen: boolean,
         showChildrenOpen: boolean,
+        opts: SNACOpts,
     }): JSX.Element
 }
-/* 
-SNACElement
-<OpenTag
-path={path}
-
-name={snacElementNode["N"]}
-attributes={snacElementNode["A"]}
-attributesOpen={snacElementNode["a"]}
-childrenOpen={snacElementNode["o"]}
-isSelected={snacElementNode["q"]}
-
-
-isNotEmpty={false}
-showSelected={true}
-showAttributesOpen={true}
-showChildrenOpen={true}
-/> */
 
 export interface CloseTagJSXType {
     (props: {
         root: SNACItem[],
         node: SNACElement,
-        path: number[], 
-        //name: string,
+        path: number[],
         showSelected: boolean,
-        //isSelected: boolean
-    }): JSX.Element
+        opts: SNACOpts,
+    }): JSX.Element | null
 }
 
 export interface TextJSXType {
@@ -113,11 +93,9 @@ export interface TextJSXType {
         root: SNACItem[],
         node: SNACText,
         path: number[],
-        //text: string,
-        //isSelected: boolean,
         showSelected: boolean,
-        //isOpen: boolean,
         showOpen: boolean,
+        opts: SNACOpts,
     }): JSX.Element
 }
 export interface CDATAJSXType {
@@ -125,11 +103,9 @@ export interface CDATAJSXType {
         root: SNACItem[],
         node: SNACCDATA,
         path: number[],
-        //cdata: string,
-        //isSelected: boolean,
         showSelected: boolean,
-        //isOpen: boolean,
         showOpen: boolean,
+        opts: SNACOpts,
     }): JSX.Element
 }
 export interface CommentJSXType {
@@ -137,29 +113,24 @@ export interface CommentJSXType {
         root: SNACItem[],
         node: SNACComment,
         path: number[],
-        //comment: string,
-        //isSelected: boolean,
         showSelected: boolean,
-        //isOpen: boolean,
         showOpen: boolean,
-    }): JSX.Element
+        opts: SNACOpts,
+    }): JSX.Element | null
 }
 export interface PIJSXType {
     (props: {
         root: SNACItem[],
         node: SNACPINode,
         path: number[],
-        //lang: string,
-        //body: string,
-        //isSelected: boolean,
         showSelected: boolean,
-        //isOpen: boolean,
         showOpen: boolean,
-    }): JSX.Element
+        opts: SNACOpts,
+    }): JSX.Element | null
 }
-export interface AttributesJSXType { (props: { path: number[], attributes: AttributesType }): JSX.Element | null }
-export interface AttributeJSXType { (props: { path: number[], name: string, value: string }): JSX.Element }
-export interface PrefixJSXType { (props: { path: number[], opts: PrefixOpts }): JSX.Element | null }
+export interface AttributesJSXType { (props: { path: number[], attributes: AttributesType, opts: SNACOpts }): JSX.Element | null }
+export interface AttributeJSXType { (props: { path: number[], name: string, value: string, opts: SNACOpts }): JSX.Element }
+export interface PrefixJSXType { (props: { path: number[], opts: SNACOpts }): JSX.Element | null }
 
 export interface AttributesType {
     [name: string]: string

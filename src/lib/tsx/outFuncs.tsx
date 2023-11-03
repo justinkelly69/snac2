@@ -1,36 +1,8 @@
 import React, { Fragment } from 'react'
 
-import { SNACItem, SNACElement, SNACText, SNACCDATA, SNACComment, SNACPINode, AttributesType, PrefixOpts, SwitchStates } from './lib/snac/types'
-import { escapeHtml, escapeCDATA, escapeComment, escapePIBody } from './lib/snac/utils'
+import { SNACItem, SNACElement, SNACText, SNACCDATA, SNACComment, SNACPINode, AttributesType, SwitchStates, SNACOpts, OnOffHiddenChars } from '../snac/types'
+import { escapeCDATA, escapeComment, escapePIBody } from '../snac/utils'
 
-export const prefixOpts = {
-    showPrefix: true,
-    newLine: "\n",
-    usePrefix: true,
-    startChar: ">",
-    charOn: "    ",
-    charOff: "    ",
-    attributePrefix: "    ",
-}
-
-export const switchOpts = {
-    selectOn: "+",
-    selectOff: "-",
-    selectHide: " ",
-    attributesOpen: "+",
-    attributesClose: "-",
-    attributesHide: " ",
-    elementOpen: "+",
-    elementClose: "-",
-    elementHide: " "
-}
-
-export const xmlOpts = {
-    selfCloseTags: true,
-    trimText: true,
-    allowComments: true,
-    allowPIs: true,
-}
 
 export const OpenTag = (props: {
     root: SNACItem[],
@@ -40,6 +12,7 @@ export const OpenTag = (props: {
     showSelected: boolean,
     showAttributesOpen: boolean,
     showChildrenOpen: boolean,
+    opts: SNACOpts,
 }): JSX.Element => {
 
     let selectState = SwitchStates.HIDDEN
@@ -64,33 +37,24 @@ export const OpenTag = (props: {
 
     return (
         <div className='element'>
-            <ShowHideSwitch selected={selectState} off={switchOpts.selectOff} on={switchOpts.selectOn}
-                hide={switchOpts.selectHide} className='selected-show-hide' />
-            <Prefix path={props.path} opts={prefixOpts} />
-            <ShowHideSwitch selected={childrenOpenState} off={switchOpts.elementOpen} on={switchOpts.elementClose}
-                hide={switchOpts.elementHide} className='element-show-hide' />
+            <ShowHideSwitch path={props.path} selected={selectState} chars={props.opts.switch_selectChars} className='selected-show-hide' />
+            <Prefix path={props.path} opts={props.opts} />
+            <ShowHideSwitch path={props.path} selected={childrenOpenState} chars={props.opts.switch_elementChars} className='element-show-hide' />
             &lt;
             <NsName name={props.node.N} type='element' />
             <>
-                <Attributes
-                    path={props.path}
-                    attributes={props.node.A}
-                />
+                <Attributes path={props.path} attributes={props.node.A} opts={props.opts} />
                 {Object.keys(props.node.A).length > 0 ?
                     <>
-                        {" "}
-                        <Prefix
-                            path={props.path}
-                            opts={prefixOpts}
-                        />
-                        {" "}
+                        {props.opts.prefix_spaceBefore}
+                        <Prefix path={props.path} opts={props.opts} />
+                        {props.opts.prefix_spaceAfter}
                     </>
                     : null
                 }
             </>
             {closeSlash}&gt;
-            <ShowHideSwitch selected={attributesOpenState} off={switchOpts.attributesOpen} on={switchOpts.attributesClose}
-                hide={switchOpts.attributesHide} className='attributes-show-hide' />
+            <ShowHideSwitch path={props.path} selected={attributesOpenState} chars={props.opts.switch_attributeChars} className='attributes-show-hide' />
         </div>
     )
 }
@@ -100,12 +64,21 @@ export const CloseTag = (props: {
     node: SNACElement,
     path: number[],
     showSelected: boolean,
-}): JSX.Element => {
+    opts: SNACOpts,
+}): JSX.Element | null => {
+    if (!props.opts.xml_showCloseTags) {
+        return null
+    }
+    let selectState = SwitchStates.HIDDEN
+    if (props.showSelected) {
+        selectState = props.node.q ? SwitchStates.ON : SwitchStates.OFF
+    }
+    const childrenOpenState = props.node.o ? SwitchStates.ON : SwitchStates.OFF
     return (
         <div className='element'>
-            {switchOpts.selectHide}
-            <Prefix path={props.path} opts={prefixOpts} />
-            {switchOpts.selectHide}
+            <ShowHideSwitch path={props.path} selected={selectState} chars={props.opts.switch_selectChars} className='selected-show-hide' />
+            <Prefix path={props.path} opts={props.opts} />
+            <ShowHideSwitch path={props.path} selected={childrenOpenState} chars={props.opts.switch_elementChars} className='element-show-hide' />
             &lt;/
             <NsName name={props.node.N} type='element' />
             &gt;
@@ -119,6 +92,7 @@ export const Text = (props: {
     path: number[],
     showSelected: boolean,
     showOpen: boolean,
+    opts: SNACOpts,
 }): JSX.Element => {
     let selectState = SwitchStates.HIDDEN
     let openState = SwitchStates.HIDDEN
@@ -130,15 +104,10 @@ export const Text = (props: {
     }
     return (
         <div className='text'>
-            <ShowHideSwitch selected={selectState} off={switchOpts.selectOff} on={switchOpts.selectOn}
-                hide={switchOpts.selectHide} className='selected-show-hide' />
-            <Prefix
-                path={props.path}
-                opts={prefixOpts}
-            />
+            <ShowHideSwitch path={props.path} selected={selectState} chars={props.opts.switch_selectChars} className='selected-show-hide' />
+            <Prefix path={props.path} opts={props.opts} />
             [{props.showOpen ?
-                <ShowHideSwitch selected={openState} off={switchOpts.elementOpen} on={switchOpts.elementClose}
-                    hide={switchOpts.elementHide} className='element-show-hide' /> :
+                <ShowHideSwitch path={props.path} selected={openState} chars={props.opts.switch_elementChars} className='element-show-hide' /> :
                 null
             }]
             <span className='text-body'>{props.node.T}</span>
@@ -152,6 +121,7 @@ export const CDATA = (props: {
     path: number[],
     showSelected: boolean,
     showOpen: boolean,
+    opts: SNACOpts,
 }): JSX.Element => {
     let selectState = SwitchStates.HIDDEN
     let openState = SwitchStates.HIDDEN
@@ -163,15 +133,10 @@ export const CDATA = (props: {
     }
     return (
         <div className='cdata'>
-            <ShowHideSwitch selected={selectState} off={switchOpts.selectOff} on={switchOpts.selectOn}
-                hide={switchOpts.selectHide} className='selected-show-hide' />
-            <Prefix
-                path={props.path}
-                opts={prefixOpts}
-            />
+            <ShowHideSwitch path={props.path} selected={selectState} chars={props.opts.switch_selectChars} className='selected-show-hide' />
+            <Prefix path={props.path} opts={props.opts} />
             [{props.showOpen ?
-                <ShowHideSwitch selected={openState} off={switchOpts.elementOpen} on={switchOpts.elementClose}
-                    hide={switchOpts.elementHide} className='element-show-hide' /> :
+                <ShowHideSwitch path={props.path} selected={openState} chars={props.opts.switch_elementChars} className='element-show-hide' /> :
                 null
             }]
             &lt;![CDATA[
@@ -187,7 +152,11 @@ export const Comment = (props: {
     path: number[],
     showSelected: boolean,
     showOpen: boolean,
-}): JSX.Element => {
+    opts: SNACOpts,
+}): JSX.Element | null => {
+    if (!props.opts.xml_allowComments) {
+        return null
+    }
     let selectState = SwitchStates.HIDDEN
     let openState = SwitchStates.HIDDEN
     if (props.showSelected) {
@@ -198,15 +167,10 @@ export const Comment = (props: {
     }
     return (
         <div className='comment'>
-            <ShowHideSwitch selected={selectState} off={switchOpts.selectOff} on={switchOpts.selectOn}
-                hide={switchOpts.selectHide} className='selected-show-hide' />
-            <Prefix
-                path={props.path}
-                opts={prefixOpts}
-            />
+            <ShowHideSwitch path={props.path} selected={selectState} chars={props.opts.switch_selectChars} className='selected-show-hide' />
+            <Prefix path={props.path} opts={props.opts} />
             [{props.showOpen ?
-                <ShowHideSwitch selected={openState} off={switchOpts.elementOpen} on={switchOpts.elementClose}
-                    hide={switchOpts.elementHide} className='element-show-hide' /> :
+                <ShowHideSwitch path={props.path} selected={openState} chars={props.opts.switch_elementChars} className='element-show-hide' /> :
                 null
             }]
             &lt;!--
@@ -215,13 +179,18 @@ export const Comment = (props: {
         </div>
     )
 }
+
 export const PI = (props: {
     root: SNACItem[],
     node: SNACPINode,
     path: number[],
     showSelected: boolean,
     showOpen: boolean,
-}): JSX.Element => {
+    opts: SNACOpts,
+}): JSX.Element | null => {
+    if (!props.opts.xml_allowPIs) {
+        return null
+    }
     let selectState = SwitchStates.HIDDEN
     let openState = SwitchStates.HIDDEN
     if (props.showSelected) {
@@ -232,15 +201,10 @@ export const PI = (props: {
     }
     return (
         <div className='pi'>
-            <ShowHideSwitch selected={selectState} off={switchOpts.selectOff} on={switchOpts.selectOn}
-                hide={switchOpts.selectHide} className='selected-show-hide' />
-            <Prefix
-                path={props.path}
-                opts={prefixOpts}
-            />
+            <ShowHideSwitch path={props.path} selected={selectState} chars={props.opts.switch_selectChars} className='selected-show-hide' />
+            <Prefix path={props.path} opts={props.opts} />
             [{props.showOpen ?
-                <ShowHideSwitch selected={openState} off={switchOpts.elementOpen} on={switchOpts.elementClose}
-                    hide={switchOpts.elementHide} className='element-show-hide' /> :
+                <ShowHideSwitch path={props.path} selected={openState} chars={props.opts.switch_elementChars} className='element-show-hide' /> :
                 null
             }]
             &lt;?
@@ -253,7 +217,8 @@ export const PI = (props: {
 }
 export const Attributes = (props: {
     path: number[],
-    attributes: AttributesType
+    attributes: AttributesType,
+    opts: SNACOpts
 }): JSX.Element | null => {
     return Object.keys(props.attributes).length > 0 ?
         <div>
@@ -261,11 +226,7 @@ export const Attributes = (props: {
                 return (
                     <span key={i}>
                         {i > 0 ? <br /> : null}
-                        <Attribute
-                            path={props.path}
-                            name={a}
-                            value={props.attributes[a]}
-                        />
+                        <Attribute path={props.path} name={a} value={props.attributes[a]} opts={props.opts} />
                     </span>
                 )
             })}
@@ -276,14 +237,12 @@ export const Attributes = (props: {
 export const Attribute = (props: {
     path: number[],
     name: string,
-    value: string
+    value: string,
+    opts: SNACOpts
 }): JSX.Element =>
     <span className='attribute'>
-        <Prefix
-            path={props.path}
-            opts={prefixOpts}
-        />
-        {prefixOpts.attributePrefix}
+        <Prefix path={props.path} opts={props.opts} />
+        {props.opts.prefix_attributePrefix}
         <NsName name={props.name} type='attribute' />
         =&quot;
         <span className='attribute-value'>{props.value}</span>
@@ -292,14 +251,19 @@ export const Attribute = (props: {
 
 export const Prefix = (props: {
     path: number[],
-    opts: PrefixOpts
+    opts: SNACOpts
 }): JSX.Element | null => {
-    if (props.opts.showPrefix) {
+    if (props.opts.prefix_showPrefix) {
         return (<span className="prefix">{getPrefixString(props.path, props.opts)}</span>)
     }
     else {
         return null
     }
+}
+
+const getPrefixString = (path: number[], opts: SNACOpts): string => {
+    const init = ""
+    return path.reduce((out, p) => out + opts.prefix_charOn, init)
 }
 
 const NsName = (props: { name: string, type: string }): JSX.Element => {
@@ -314,22 +278,17 @@ const NsName = (props: { name: string, type: string }): JSX.Element => {
         <span className={`${props.type}-name`}>{tagName[0]}</span>
 }
 
-const ShowHideSwitch = (props: { on: string, off: string, hide: string, selected: SwitchStates, className: string }): JSX.Element => {
-    let out = props.hide
+const ShowHideSwitch = (props: { path: number[], chars: OnOffHiddenChars, selected: SwitchStates, className: string }): JSX.Element => {
+    let out = props.chars.hidden
     switch (props.selected) {
         case SwitchStates.OFF:
-            out = props.off
+            out = props.chars.off
             break;
         case SwitchStates.ON:
-            out = props.on
+            out = props.chars.on
     }
     return (
-        <span className={props.className}>{out}</span>
+        <span className={props.className} onClick={e => console.log(props.path.join(","))}>{out}</span>
     )
 }
 
-const getPrefixString = (path: number[], opts: PrefixOpts): string => {
-    let out = ""
-    const init = ""
-    return path.reduce((out, p) => out + opts.charOn, init)
-}

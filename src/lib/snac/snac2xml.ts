@@ -1,7 +1,7 @@
 import {
     SNACItem, SNACElement, AttributesType,
     SNACText, SNACCDATA, SNACComment, SNACPINode,
-    XMLOpts
+    SNACOpts
 } from './types'
 
 import {
@@ -9,11 +9,11 @@ import {
     escapePIBody,
 } from './utils'
 
-const render = (snac: SNACItem[], opts: XMLOpts) => {
+const render = (snac: SNACItem[], opts: SNACOpts) => {
     return _render(snac, [], opts)
 }
 
-const _render = (snac: SNACItem[], path: number[], opts: XMLOpts) => {
+const _render = (snac: SNACItem[], path: number[], opts: SNACOpts) => {
     let out: string = "";
     let prefix = getPrefix(path, true, opts)
 
@@ -23,7 +23,7 @@ const _render = (snac: SNACItem[], path: number[], opts: XMLOpts) => {
         if (snac[i].hasOwnProperty("N")) {
             const elementNode: SNACElement = snac[i] as SNACElement;
 
-            if (elementNode["C"].length === 0 && opts.selfCloseTags) {
+            if (elementNode["C"].length === 0 && opts.xml_selfCloseTags) {
                 out += `${prefix}<${elementNode["N"]} ${attributes(prefix, elementNode["A"], opts)} />`
             }
             else {
@@ -36,7 +36,7 @@ const _render = (snac: SNACItem[], path: number[], opts: XMLOpts) => {
         else if (snac[i].hasOwnProperty("T")) {
             const textNode: SNACText = snac[i] as SNACText
             let text = escapeHtml(textNode["T"])
-            if (opts.trimText) {
+            if (opts.xml_trimText) {
                 text = text.trim()
                 if (text.length > 0) {
                     out += `${prefix}[${text}]`
@@ -53,14 +53,14 @@ const _render = (snac: SNACItem[], path: number[], opts: XMLOpts) => {
         }
 
         else if (snac[i].hasOwnProperty("M")) {
-            if (opts.allowComments) {
+            if (opts.xml_allowComments) {
                 const commentNode: SNACComment = snac[i] as SNACComment
                 out += `${prefix}<!--${escapeComment(commentNode["M"])}-->`
             }
         }
 
         else if (snac[i].hasOwnProperty("L")) {
-            if (opts.allowPIs) {
+            if (opts.xml_allowPIs) {
                 const piNode: SNACPINode = snac[i] as SNACPINode
                 out += `${prefix}<?${piNode["L"]} ${escapePIBody(piNode["B"])} ?>`
             }
@@ -69,21 +69,21 @@ const _render = (snac: SNACItem[], path: number[], opts: XMLOpts) => {
     return out
 }
 
-const attributes = (prefix: string, atts: AttributesType, opts: XMLOpts) => {
+const attributes = (prefix: string, atts: AttributesType, opts: SNACOpts) => {
     let out: string = ""
-    const attPrefix = prefix + opts.attributePrefix
+    const attPrefix = prefix + opts.prefix_attributePrefix
     for (const name of Object.keys(atts)) {
         out += `${attPrefix}${name}="${escapeHtml(atts[name])}"`
     }
     return out;
 }
 
-const getPrefix = (path: number[], newline: boolean, opts: XMLOpts): string => {
+const getPrefix = (path: number[], newline: boolean, opts: SNACOpts): string => {
     let out = ""
-    if (opts.prefixShow) {
+    if (opts.prefix_showPrefix) {
         out = newline ? "\n" : ""
         for (let i in path) {
-            out += opts.prefixChar
+            out += opts.prefix_charOn
         }
     }
     return out
