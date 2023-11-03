@@ -1,19 +1,19 @@
 import {
     SNACItem, SNACElement, AttributesType,
     SNACText, SNACCDATA, SNACComment, SNACPINode,
-    SNACOpts
+    XMLOpts
 } from './types'
 
 import {
     escapeHtml, escapeCDATA, escapeComment,
     escapePIBody,
-} from './utils'
+} from './textutils'
 
-const render = (snac: SNACItem[], opts: SNACOpts) => {
+const render = (snac: SNACItem[], opts: XMLOpts) => {
     return _render(snac, [], opts)
 }
 
-const _render = (snac: SNACItem[], path: number[], opts: SNACOpts) => {
+const _render = (snac: SNACItem[], path: number[], opts: XMLOpts) => {
     let out: string = "";
     let prefix = getPrefix(path, true, opts)
 
@@ -24,10 +24,10 @@ const _render = (snac: SNACItem[], path: number[], opts: SNACOpts) => {
             const elementNode: SNACElement = snac[i] as SNACElement;
 
             if (elementNode["C"].length === 0 && opts.xml_selfCloseTags) {
-                out += `${prefix}<${elementNode["N"]} ${attributes(prefix, elementNode["A"], opts)} />`
+                out += `${prefix}<${elementNode["N"]}${attributes(prefix, elementNode["A"], opts)}/>`
             }
             else {
-                out += `${prefix}<${elementNode["N"]} ${attributes(prefix, elementNode["A"], opts)}>`
+                out += `${prefix}<${elementNode["N"]}${attributes(prefix, elementNode["A"], opts)}>`
                 out += _render(elementNode["C"], newPath, opts)
                 out += `${prefix}</${elementNode["N"]}>`
             }
@@ -39,11 +39,11 @@ const _render = (snac: SNACItem[], path: number[], opts: SNACOpts) => {
             if (opts.xml_trimText) {
                 text = text.trim()
                 if (text.length > 0) {
-                    out += `${prefix}[${text}]`
+                    out += `${prefix}${text}`
                 }
             }
             else {
-                out += `${prefix}[${text}]`
+                out += `${prefix}${text}`
             }
         }
 
@@ -69,21 +69,21 @@ const _render = (snac: SNACItem[], path: number[], opts: SNACOpts) => {
     return out
 }
 
-const attributes = (prefix: string, atts: AttributesType, opts: SNACOpts) => {
+const attributes = (prefix: string, atts: AttributesType, opts: XMLOpts) => {
     let out: string = ""
     const attPrefix = prefix + opts.prefix_attributePrefix
     for (const name of Object.keys(atts)) {
-        out += `${attPrefix}${name}="${escapeHtml(atts[name])}"`
+        out += ` ${attPrefix}${name}="${escapeHtml(atts[name])}"`
     }
     return out;
 }
 
-const getPrefix = (path: number[], newline: boolean, opts: SNACOpts): string => {
+const getPrefix = (path: number[], newline: boolean, opts: XMLOpts): string => {
     let out = ""
     if (opts.prefix_showPrefix) {
         out = newline ? "\n" : ""
         for (let i in path) {
-            out += opts.prefix_charOn
+            out += opts.prefix_char
         }
     }
     return out

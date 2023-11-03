@@ -7,7 +7,7 @@ import {
 
 import {
     escapeHtml
-} from '../snac/utils'
+} from '../snac/textutils'
 
 const snac2xml = (root: SNACItem[], snac: SNACItem[], funcs: SNAC2XMLJSXFuncs, opts: SNACOpts) => {
     return _snac2xml(root, snac, [], funcs, opts)

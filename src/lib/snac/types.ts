@@ -2,6 +2,20 @@
 
 export enum SwitchStates { 'ON', 'OFF', 'HIDDEN' }
 
+export type XMLOpts = {
+    prefix_showPrefix: boolean,
+    prefix_newLine: string,
+    prefix_char: string,
+    prefix_spaceBefore:string,
+    prefix_spaceAfter: string,
+    prefix_attributePrefix: string,
+
+    xml_selfCloseTags: boolean,
+    xml_trimText: boolean,
+    xml_allowComments: boolean,
+    xml_allowPIs: boolean,
+}
+
 export type OnOffHiddenChars = {
     on: string,
     off: string,
@@ -11,7 +25,6 @@ export type OnOffHiddenChars = {
 export type SNACOpts = {
     prefix_showPrefix: boolean,
     prefix_newLine: string,
-    prefix_usePrefix: boolean,
     prefix_startChar: string,
     prefix_charOn: string,
     prefix_charOff: string,

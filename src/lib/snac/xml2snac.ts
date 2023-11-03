@@ -3,7 +3,7 @@ import {
     AttributesType, QuoteChar, AttributeXMLType, AttributeValueType
 } from './types'
 
-import { unEscapeHtml } from './utils'
+import { unEscapeHtml } from './textutils'
 
 const render = (xml: string) => {
     const stack: SNACNamesNode[] = []
