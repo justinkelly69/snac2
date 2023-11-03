@@ -7,8 +7,6 @@ const find = (snac: SNACItem[], path: number[]): SNACItem | null => {
 }
 
 const _find = (snac: SNACItem, path: number[]): SNACItem | null => {
-    //console.log(snac)
-
     if (path.length === 0) {
         return snac
     }
@@ -16,7 +14,6 @@ const _find = (snac: SNACItem, path: number[]): SNACItem | null => {
         if (snac.hasOwnProperty('C')) {
             const S = snac as SNACElement
             const [i, ...p] = path;
-            //console.log('S.C',S.C, 'i', i, 'length', S.C.length, 'p', p)
             if (S.C.length > i) {
                 return _find(S.C[i], p)
             }
