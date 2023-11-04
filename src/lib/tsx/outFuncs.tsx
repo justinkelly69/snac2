@@ -1,9 +1,91 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 
 import { SNACItem, SNACElement, SNACText, SNACCDATA, SNACComment, SNACPINode, AttributesType, SwitchStates, SNACOpts, OnOffHiddenChars } from '../snac/types'
 import { escapeCDATA, escapeComment, escapePIBody } from '../snac/textutils'
 import { findElement } from '../snac/snac'
 
+export const Element = (props: {
+    root: SNACItem[],
+    node: SNACElement,
+    path: number[],
+    isNotEmpty: boolean,
+    showSelected: boolean,
+    showAttributesOpen: boolean,
+    showChildrenOpen: boolean,
+    opts: SNACOpts,
+}): JSX.Element => { 
+    const [isSelected, setSelected] = useState(props.node.q)
+    const [isAttributesOpen, setAttributesOpen] = useState(props.node.a)
+    const [isChildrenOpen, setChildrenOpen] = useState(props.node.o)
+
+    let selectState = SwitchStates.HIDDEN
+    let attributesOpenState = SwitchStates.HIDDEN
+    let childrenOpenState = SwitchStates.HIDDEN
+    let closeSlash = "/"
+
+    if (props.showSelected) {
+        selectState = isSelected ? SwitchStates.ON : SwitchStates.OFF
+    }
+
+    if (props.showAttributesOpen && Object.keys(props.node.A).length) {
+        attributesOpenState = isAttributesOpen ? SwitchStates.ON : SwitchStates.OFF
+    }
+
+    if (props.isNotEmpty) {
+        if (props.showChildrenOpen) {
+            childrenOpenState = isChildrenOpen ? SwitchStates.ON : SwitchStates.OFF
+        }
+        closeSlash = ""
+    }
+    return (
+        <div className='element'>
+            <ShowHideSwitch
+                root={props.root}
+                path={props.path}
+                selected={selectState}
+                chars={props.opts.switch_selectChars}
+                className='selected-show-hide'
+                openClose={e => setSelected(!isSelected)}
+            />
+            <Prefix path={props.path} opts={props.opts} />
+            <ShowHideSwitch
+                root={props.root}
+                path={props.path}
+                selected={childrenOpenState}
+                chars={props.opts.switch_elementChars}
+                className='element-show-hide'
+                openClose={e => setChildrenOpen(!isChildrenOpen)}
+            />
+            &lt;
+            <NsName name={props.node.N} type='element' />
+            <>
+                {isAttributesOpen ?
+                    <>
+                        <Attributes path={props.path} attributes={props.node.A} opts={props.opts} />
+                        {Object.keys(props.node.A).length > 0 ?
+                            <>
+                                {props.opts.prefix_spaceBefore}
+                                <Prefix path={props.path} opts={props.opts} />
+                                {props.opts.prefix_spaceAfter}
+                            </>
+                            : null
+                        }
+                    </> :
+                    null
+                }
+            </>
+            {closeSlash}&gt;
+            <ShowHideSwitch
+                root={props.root}
+                path={props.path}
+                selected={attributesOpenState}
+                chars={props.opts.switch_attributeChars}
+                className='attributes-show-hide'
+                openClose={e => setAttributesOpen(!isAttributesOpen)}
+            />
+        </div>
+    )
+}
 
 export const OpenTag = (props: {
     root: SNACItem[],
@@ -16,46 +98,76 @@ export const OpenTag = (props: {
     opts: SNACOpts,
 }): JSX.Element => {
 
+    const [isSelected, setSelected] = useState(props.node.q)
+    const [isAttributesOpen, setAttributesOpen] = useState(props.node.a)
+    const [isChildrenOpen, setChildrenOpen] = useState(props.node.o)
+
     let selectState = SwitchStates.HIDDEN
     let attributesOpenState = SwitchStates.HIDDEN
     let childrenOpenState = SwitchStates.HIDDEN
     let closeSlash = "/"
 
     if (props.showSelected) {
-        selectState = props.node.q ? SwitchStates.ON : SwitchStates.OFF
+        selectState = isSelected ? SwitchStates.ON : SwitchStates.OFF
     }
 
     if (props.showAttributesOpen && Object.keys(props.node.A).length) {
-        attributesOpenState = props.node.a ? SwitchStates.ON : SwitchStates.OFF
+        attributesOpenState = isAttributesOpen ? SwitchStates.ON : SwitchStates.OFF
     }
 
     if (props.isNotEmpty) {
         if (props.showChildrenOpen) {
-            childrenOpenState = props.node.o ? SwitchStates.ON : SwitchStates.OFF
+            childrenOpenState = isChildrenOpen ? SwitchStates.ON : SwitchStates.OFF
         }
         closeSlash = ""
     }
 
     return (
         <div className='element'>
-            <ShowHideSwitch root={props.root} path={props.path} selected={selectState} chars={props.opts.switch_selectChars} className='selected-show-hide' />
+            <ShowHideSwitch
+                root={props.root}
+                path={props.path}
+                selected={selectState}
+                chars={props.opts.switch_selectChars}
+                className='selected-show-hide'
+                openClose={e => setSelected(!isSelected)}
+            />
             <Prefix path={props.path} opts={props.opts} />
-            <ShowHideSwitch root={props.root} path={props.path} selected={childrenOpenState} chars={props.opts.switch_elementChars} className='element-show-hide' />
+            <ShowHideSwitch
+                root={props.root}
+                path={props.path}
+                selected={childrenOpenState}
+                chars={props.opts.switch_elementChars}
+                className='element-show-hide'
+                openClose={e => setChildrenOpen(!isChildrenOpen)}
+            />
             &lt;
             <NsName name={props.node.N} type='element' />
             <>
-                <Attributes path={props.path} attributes={props.node.A} opts={props.opts} />
-                {Object.keys(props.node.A).length > 0 ?
+                {isAttributesOpen ?
                     <>
-                        {props.opts.prefix_spaceBefore}
-                        <Prefix path={props.path} opts={props.opts} />
-                        {props.opts.prefix_spaceAfter}
-                    </>
-                    : null
+                        <Attributes path={props.path} attributes={props.node.A} opts={props.opts} />
+                        {Object.keys(props.node.A).length > 0 ?
+                            <>
+                                {props.opts.prefix_spaceBefore}
+                                <Prefix path={props.path} opts={props.opts} />
+                                {props.opts.prefix_spaceAfter}
+                            </>
+                            : null
+                        }
+                    </> :
+                    null
                 }
             </>
             {closeSlash}&gt;
-            <ShowHideSwitch root={props.root} path={props.path} selected={attributesOpenState} chars={props.opts.switch_attributeChars} className='attributes-show-hide' />
+            <ShowHideSwitch
+                root={props.root}
+                path={props.path}
+                selected={attributesOpenState}
+                chars={props.opts.switch_attributeChars}
+                className='attributes-show-hide'
+                openClose={e => setAttributesOpen(!isAttributesOpen)}
+            />
         </div>
     )
 }
@@ -77,9 +189,23 @@ export const CloseTag = (props: {
     const childrenOpenState = props.node.o ? SwitchStates.ON : SwitchStates.OFF
     return (
         <div className='element'>
-            <ShowHideSwitch root={props.root} path={props.path} selected={selectState} chars={props.opts.switch_selectChars} className='selected-show-hide' />
+            <ShowHideSwitch
+                root={props.root}
+                path={props.path}
+                selected={selectState}
+                chars={props.opts.switch_selectChars}
+                className='selected-show-hide'
+                openClose={f => f}
+            />
             <Prefix path={props.path} opts={props.opts} />
-            <ShowHideSwitch root={props.root} path={props.path} selected={childrenOpenState} chars={props.opts.switch_elementChars} className='element-show-hide' />
+            <ShowHideSwitch
+                root={props.root}
+                path={props.path}
+                selected={childrenOpenState}
+                chars={props.opts.switch_elementChars}
+                className='element-show-hide'
+                openClose={f => f}
+            />
             &lt;/
             <NsName name={props.node.N} type='element' />
             &gt;
@@ -105,10 +231,24 @@ export const Text = (props: {
     }
     return (
         <div className='text'>
-            <ShowHideSwitch root={props.root} path={props.path} selected={selectState} chars={props.opts.switch_selectChars} className='selected-show-hide' />
+            <ShowHideSwitch
+                root={props.root}
+                path={props.path}
+                selected={selectState}
+                chars={props.opts.switch_selectChars}
+                className='selected-show-hide'
+                openClose={f => f}
+            />
             <Prefix path={props.path} opts={props.opts} />
             [{props.showOpen ?
-                <ShowHideSwitch root={props.root} path={props.path} selected={openState} chars={props.opts.switch_elementChars} className='element-show-hide' /> :
+                <ShowHideSwitch
+                    root={props.root}
+                    path={props.path}
+                    selected={openState}
+                    chars={props.opts.switch_elementChars}
+                    className='element-show-hide'
+                    openClose={f => f}
+                /> :
                 null
             }]
             <span className='text-body'>{props.node.T}</span>
@@ -134,10 +274,24 @@ export const CDATA = (props: {
     }
     return (
         <div className='cdata'>
-            <ShowHideSwitch root={props.root} path={props.path} selected={selectState} chars={props.opts.switch_selectChars} className='selected-show-hide' />
+            <ShowHideSwitch
+                root={props.root}
+                path={props.path}
+                selected={selectState}
+                chars={props.opts.switch_selectChars}
+                className='selected-show-hide'
+                openClose={f => f}
+            />
             <Prefix path={props.path} opts={props.opts} />
             [{props.showOpen ?
-                <ShowHideSwitch root={props.root} path={props.path} selected={openState} chars={props.opts.switch_elementChars} className='element-show-hide' /> :
+                <ShowHideSwitch
+                    root={props.root}
+                    path={props.path}
+                    selected={openState}
+                    chars={props.opts.switch_elementChars}
+                    className='element-show-hide'
+                    openClose={f => f}
+                /> :
                 null
             }]
             &lt;![CDATA[
@@ -168,10 +322,24 @@ export const Comment = (props: {
     }
     return (
         <div className='comment'>
-            <ShowHideSwitch root={props.root} path={props.path} selected={selectState} chars={props.opts.switch_selectChars} className='selected-show-hide' />
+            <ShowHideSwitch
+                root={props.root}
+                path={props.path}
+                selected={selectState}
+                chars={props.opts.switch_selectChars}
+                className='selected-show-hide'
+                openClose={f => f}
+            />
             <Prefix path={props.path} opts={props.opts} />
             [{props.showOpen ?
-                <ShowHideSwitch root={props.root} path={props.path} selected={openState} chars={props.opts.switch_elementChars} className='element-show-hide' /> :
+                <ShowHideSwitch
+                    root={props.root}
+                    path={props.path}
+                    selected={openState}
+                    chars={props.opts.switch_elementChars}
+                    className='element-show-hide'
+                    openClose={f => f}
+                /> :
                 null
             }]
             &lt;!--
@@ -202,10 +370,24 @@ export const PI = (props: {
     }
     return (
         <div className='pi'>
-            <ShowHideSwitch root={props.root} path={props.path} selected={selectState} chars={props.opts.switch_selectChars} className='selected-show-hide' />
+            <ShowHideSwitch
+                root={props.root}
+                path={props.path}
+                selected={selectState}
+                chars={props.opts.switch_selectChars}
+                className='selected-show-hide'
+                openClose={f => f}
+            />
             <Prefix path={props.path} opts={props.opts} />
             [{props.showOpen ?
-                <ShowHideSwitch root={props.root} path={props.path} selected={openState} chars={props.opts.switch_elementChars} className='element-show-hide' /> :
+                <ShowHideSwitch
+                    root={props.root}
+                    path={props.path}
+                    selected={openState}
+                    chars={props.opts.switch_elementChars}
+                    className='element-show-hide'
+                    openClose={f => f}
+                /> :
                 null
             }]
             &lt;?
@@ -279,7 +461,15 @@ const NsName = (props: { name: string, type: string }): JSX.Element => {
         <span className={`${props.type}-name`}>{tagName[0]}</span>
 }
 
-const ShowHideSwitch = (props: { root: SNACItem[], path: number[], chars: OnOffHiddenChars, selected: SwitchStates, className: string }): JSX.Element => {
+const ShowHideSwitch = (props:
+    {
+        root: SNACItem[],
+        path: number[],
+        chars: OnOffHiddenChars,
+        selected: SwitchStates,
+        className: string
+        openClose: Function
+    }): JSX.Element => {
     let out = props.chars.hidden
     switch (props.selected) {
         case SwitchStates.OFF:
@@ -289,7 +479,7 @@ const ShowHideSwitch = (props: { root: SNACItem[], path: number[], chars: OnOffH
             out = props.chars.off
     }
     return (
-        <span className={props.className} onClick={e => {console.clear();findElement(props.root, props.path)}}>{out}</span>
+        <span className={props.className} onClick={e => props.openClose()}>{out}</span>
     )
 }
 
