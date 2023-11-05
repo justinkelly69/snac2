@@ -6,7 +6,7 @@ export type XMLOpts = {
     prefix_showPrefix: boolean,
     prefix_newLine: string,
     prefix_char: string,
-    prefix_spaceBefore:string,
+    prefix_spaceBefore: string,
     prefix_spaceAfter: string,
     prefix_attributePrefix: string,
 
@@ -45,11 +45,20 @@ export type SNACOpts = {
     switch_attributeChars: OnOffHiddenChars,
     switch_elementChars: OnOffHiddenChars,
 
+    xml_showSelected: boolean,
+    xml_showAttributesOpen: boolean,
+    xml_showChildrenOpen: boolean,
     xml_selfCloseTags: boolean,
     xml_trimText: boolean,
+    xml_trimTextLength: number,
+    xml_trimCDATA: boolean,
+    xml_trimCDATALength: number,
+    xml_trimComment: boolean,
+    xml_trimCommentLength: number,
     xml_showCloseTags: boolean,
     xml_allowComments: boolean,
     xml_allowPIs: boolean,
+    xml_ellipsis: string,
 }
 
 export interface SNAC2XMLFuncs {
@@ -66,6 +75,7 @@ export interface SNAC2XMLFuncs {
 }
 
 export interface SNAC2XMLJSXFuncs {
+    Tag: TagJSXType,
     OpenTag: OpenTagJSXType,
     CloseTag: CloseTagJSXType,
     Text: TextJSXType,
@@ -77,17 +87,30 @@ export interface SNAC2XMLJSXFuncs {
     Prefix: PrefixJSXType,
 }
 
-export interface OpenTagJSXType {
+export interface TagJSXType {
+    (props: {
+        root: SNACItem[],
+        node: SNACElement,
+        path: number[],
+        opts: SNACOpts,
+        getChildren: Function,
+        funcs: { [name: string]: any }
+    }): JSX.Element
+}
 
+export interface OpenTagJSXType {
     (props: {
         root: SNACItem[],
         node: SNACElement
         path: number[],
-        isNotEmpty: boolean,
-        showSelected: boolean,
-        showAttributesOpen: boolean,
-        showChildrenOpen: boolean,
+        isEmpty: boolean,
         opts: SNACOpts,
+        isSelected: boolean,
+        setSelected: Function,
+        isAttributesOpen: boolean,
+        setAttributesOpen: Function
+        isChildrenOpen: boolean,
+        setChildrenOpen: Function
     }): JSX.Element
 }
 
@@ -96,7 +119,11 @@ export interface CloseTagJSXType {
         root: SNACItem[],
         node: SNACElement,
         path: number[],
-        showSelected: boolean,
+        isEmpty: boolean,
+        isSelected: boolean,
+        setSelected: Function
+        isChildrenOpen: boolean,
+        setChildrenOpen: Function
         opts: SNACOpts,
     }): JSX.Element | null
 }

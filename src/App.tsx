@@ -5,13 +5,13 @@ import xmlInput from './lib/data/xml/waffle'
 import xml2snac from './lib/snac/xml2snac'
 //import snac2xml from './lib/snac/snac2xml';
 import xmlOut from './lib/tsx/snac2xml';
-import { Attribute, Attributes, CDATA, CloseTag, Text, Comment, OpenTag, PI, Prefix } from './lib/tsx/outFuncs';
+import { Tag, Attribute, Attributes, CDATA, CloseTag, Text, Comment, OpenTag, PI, Prefix } from './lib/tsx/outFuncs';
 import {snacOpts, xmlOpts} from './lib/snac/opts'
 
 
 function App() {
 
-    const funcs = { OpenTag, CloseTag, Text, CDATA, Comment, PI, Attributes, Attribute, Prefix }
+    const funcs = { Tag, OpenTag, CloseTag, Text, CDATA, Comment, PI, Attributes, Attribute, Prefix }
     const snac = xml2snac(xmlInput)[0]
 
     //const xml2 = snac2xml([snac], xmlOpts)

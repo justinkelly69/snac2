@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 
 import {
     SNAC2XMLJSXFuncs, SNACItem, SNACElement, SNACText,
-    SNACCDATA, SNACComment, SNACPINode, SNACOpts,
+    SNACCDATA, SNACComment, SNACPINode, SNACOpts, SwitchStates,
 } from '../snac/types'
 
 import {
@@ -10,11 +10,11 @@ import {
 } from '../snac/textutils'
 
 const snac2xml = (root: SNACItem[], snac: SNACItem[], funcs: SNAC2XMLJSXFuncs, opts: SNACOpts) => {
-    return _snac2xml(root, snac, [], funcs, opts)
+    return getChildren(root, snac, [], funcs, opts)
 }
 
-const _snac2xml = (root: SNACItem[], snac: SNACItem[], path: number[], funcs: SNAC2XMLJSXFuncs, opts: SNACOpts) => {
-    const { OpenTag, CloseTag, Text, CDATA, Comment, PI } = funcs
+const getChildren = (root: SNACItem[], snac: SNACItem[], path: number[], funcs: SNAC2XMLJSXFuncs, opts: SNACOpts) => {
+    const { Tag, OpenTag, CloseTag, Text, CDATA, Comment, PI } = funcs
     let out: JSX.Element[] = []
 
     for (let i in Object.keys(snac)) {
@@ -22,45 +22,18 @@ const _snac2xml = (root: SNACItem[], snac: SNACItem[], path: number[], funcs: SN
 
         if (snac[i].hasOwnProperty("N")) {
             const snacElementNode: SNACElement = snac[i] as SNACElement;
-            if (snacElementNode["C"].length === 0 && opts.xml_selfCloseTags) {
-                out = [...out, (
-                    <OpenTag
-                        key={i}
-                        root={root}
-                        node={snacElementNode}
-                        path={newPath}
-                        isNotEmpty={false}
-                        showSelected={true}
-                        showAttributesOpen={true}
-                        showChildrenOpen={true}
-                        opts={opts}
-                    />
-                )]
-            }
-            else {
-                out = [...out, (
-                    <Fragment key={i}>
-                        <OpenTag
-                            root={root}
-                            node={snacElementNode}
-                            path={newPath}
-                            isNotEmpty={true}
-                            showSelected={true}
-                            showAttributesOpen={true}
-                            showChildrenOpen={true}
-                            opts={opts}
-                        />
-                        {_snac2xml(root, snacElementNode["C"], newPath, funcs, opts)}
-                        <CloseTag
-                            root={root}
-                            node={snacElementNode}
-                            path={newPath}
-                            showSelected={true}
-                            opts={opts}
-                        />
-                    </Fragment>
-                )]
-            }
+
+            out = [...out, (
+                <Tag
+                    key={i}
+                    root={root}
+                    node={snacElementNode}
+                    path={newPath}
+                    opts={opts}
+                    getChildren={getChildren}
+                    funcs={funcs}
+                />
+            )]
         }
 
         else if (snac[i].hasOwnProperty("T")) {

@@ -16,6 +16,10 @@
   color: blue
 }
 
+.selected {
+  background-color: rgb(215, 180, 210);
+}
+
 .attribute {}
 
 .attribute-ns {
@@ -36,7 +40,6 @@
 
 .text-body {
   color: black;
-  background-color: #eee;
 }
 
 .cdata {

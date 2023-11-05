@@ -50,9 +50,18 @@ export const snacOpts:SNACOpts = {
         hidden: "?",
     },
 
+    xml_showSelected: true,
+    xml_showAttributesOpen: true,
+    xml_showChildrenOpen: true,
     xml_selfCloseTags: true,
     xml_trimText: true,
+    xml_trimTextLength: 10,
+    xml_trimCDATA: true,
+    xml_trimCDATALength: 10,
+    xml_trimComment: true,
+    xml_trimCommentLength: 10,
     xml_showCloseTags: true,
     xml_allowComments: true,
     xml_allowPIs: true,
+    xml_ellipsis: '...',
 }
