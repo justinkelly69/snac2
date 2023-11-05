@@ -37,17 +37,17 @@ export const snacOpts:SNACOpts = {
     switch_selectChars: {
         on: "+",
         off: "-",
-        hidden: "?",
+        hidden: " ",
     },
     switch_attributeChars: {
         on: "+",
         off: "-",
-        hidden: "?",
+        hidden: " ",
     },
     switch_elementChars: {
         on: "+",
         off: "-",
-        hidden: "?",
+        hidden: " ",
     },
 
     xml_showSelected: true,

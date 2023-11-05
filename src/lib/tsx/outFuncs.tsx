@@ -43,7 +43,7 @@ export const Tag = (props: {
                 isChildrenOpen={isChildrenOpen}
                 setChildrenOpen={setChildrenOpen}
             />
-            {isChildrenOpen && props.getChildren(props.root, props.node["C"], props.path, props.funcs, props.opts)}
+            {isChildrenOpen ? props.getChildren(props.root, props.node["C"], props.path, props.funcs, props.opts) : props.opts.xml_ellipsis}
             {!isEmpty && props.opts.xml_showCloseTags ? (
                 <CloseTag
                     root={props.root}
@@ -59,7 +59,6 @@ export const Tag = (props: {
             ) :
                 null
             }
-
         </div>
     )
 }
@@ -81,7 +80,7 @@ export const OpenTag = (props: {
     let selectState = SwitchStates.HIDDEN
     let attributesOpenState = SwitchStates.HIDDEN
     let childrenOpenState = SwitchStates.HIDDEN
-    let closeSlash = ""
+    let closeSlash = "/"
 
     if (props.opts.xml_showSelected) {
         selectState = props.isSelected ? SwitchStates.ON : SwitchStates.OFF
@@ -91,15 +90,15 @@ export const OpenTag = (props: {
         attributesOpenState = props.isAttributesOpen ? SwitchStates.ON : SwitchStates.OFF
     }
 
-    if (props.isEmpty) {
+    if (!props.isEmpty) {
         if (props.opts.xml_showChildrenOpen) {
             childrenOpenState = props.isChildrenOpen ? SwitchStates.ON : SwitchStates.OFF
         }
-        closeSlash = "/"
+        closeSlash = ""
     }
 
     return (
-        <Fragment>
+        <>
             <ShowHideSwitch
                 root={props.root}
                 path={props.path}
@@ -144,7 +143,7 @@ export const OpenTag = (props: {
                 className='attributes-show-hide'
                 openClose={e => props.setAttributesOpen(!props.isAttributesOpen)}
             />
-        </Fragment>
+        </>
     )
 }
 
@@ -174,23 +173,29 @@ export const CloseTag = (props: {
     }
     return (
         <Fragment>
-            <ShowHideSwitch
-                root={props.root}
-                path={props.path}
-                selected={selectState}
-                chars={props.opts.switch_selectChars}
-                className='selected-show-hide'
-                openClose={e => props.setSelected(!props.isSelected)}
-            />
-            <Prefix path={props.path} opts={props.opts} />
-            <ShowHideSwitch
-                root={props.root}
-                path={props.path}
-                selected={childrenOpenState}
-                chars={props.opts.switch_elementChars}
-                className='element-show-hide'
-                openClose={e => props.setChildrenOpen(!props.isChildrenOpen)}
-            />
+            {props.isChildrenOpen ?(
+                <>
+                    <ShowHideSwitch
+                        root={props.root}
+                        path={props.path}
+                        selected={selectState}
+                        chars={props.opts.switch_selectChars}
+                        className='selected-show-hide'
+                        openClose={e => props.setSelected(!props.isSelected)}
+                    />
+                    <Prefix path={props.path} opts={props.opts} />
+                    <ShowHideSwitch
+                        root={props.root}
+                        path={props.path}
+                        selected={childrenOpenState}
+                        chars={props.opts.switch_elementChars}
+                        className='element-show-hide'
+                        openClose={e => props.setChildrenOpen(!props.isChildrenOpen)}
+                    />
+                </>
+                ) :
+                null
+            }
             &lt;/
             <NsName name={props.node.N} type='element' />
             &gt;
@@ -223,7 +228,7 @@ export const Text = (props: {
     }
 
     let text = props.node.T
-    if(!isChildrenOpen) {
+    if (!isChildrenOpen) {
         text = `${text.substring(0, props.opts.xml_trimTextLength)} ${props.opts.xml_ellipsis}`
     }
 
@@ -280,7 +285,7 @@ export const CDATA = (props: {
     }
 
     let cdata = props.node.D
-    if(!isChildrenOpen) {
+    if (!isChildrenOpen) {
         cdata = `${cdata.substring(0, props.opts.xml_trimCDATALength)} ${props.opts.xml_ellipsis}`
     }
 
@@ -339,7 +344,7 @@ export const Comment = (props: {
     }
 
     let comment = props.node.M
-    if(!isChildrenOpen) {
+    if (!isChildrenOpen) {
         comment = `${comment.substring(0, props.opts.xml_trimCommentLength)} ${props.opts.xml_ellipsis}`
     }
 
@@ -397,7 +402,7 @@ export const PI = (props: {
     }
 
     let body = props.node.B
-    if(!isChildrenOpen) {
+    if (!isChildrenOpen) {
         body = `${props.opts.xml_ellipsis}`
     }
 
@@ -512,7 +517,9 @@ const ShowHideSwitch = (props:
             out = props.chars.off
     }
     return (
-        <span className={props.className} onClick={e => props.openClose()}>{out}</span>
+        <span className={props.className} onClick={e => {
+            props.selected !== SwitchStates.HIDDEN && props.openClose()
+        }}>{out}</span>
     )
 }
 
