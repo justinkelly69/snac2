@@ -1,8 +1,7 @@
 import React, { Fragment, useState } from 'react'
 
-import { SNACItem, SNACElement, SNACText, SNACCDATA, SNACComment, SNACPINode, AttributesType, SwitchStates, SNACOpts, OnOffHiddenChars, SNAC2XMLJSXFuncs } from '../snac/types'
+import { SNACItem, SNACElement, SNACText, SNACCDATA, SNACComment, SNACPINode, AttributesType, SwitchStates, SNACOpts, OnOffHiddenChars } from '../snac/types'
 import { escapeCDATA, escapeComment, escapePIBody } from '../snac/textutils'
-import { findElement } from '../snac/snac'
 
 export const Tag = (props: {
     root: SNACItem[],
@@ -13,9 +12,9 @@ export const Tag = (props: {
     funcs: { [name: string]: Function }
 }): JSX.Element => {
 
-    const [isSelected, setSelected] = useState(props.node.q)
-    const [isAttributesOpen, setAttributesOpen] = useState(props.node.a)
-    const [isChildrenOpen, setChildrenOpen] = useState(props.node.o)
+    const [isSelected, setSelected] = useState(false)
+    const [isAttributesOpen, setAttributesOpen] = useState(true)
+    const [isChildrenOpen, setChildrenOpen] = useState(true)
 
     let selectedClassName = 'element'
 
@@ -173,7 +172,7 @@ export const CloseTag = (props: {
     }
     return (
         <Fragment>
-            {props.isChildrenOpen ?(
+            {props.isChildrenOpen ? (
                 <>
                     <ShowHideSwitch
                         root={props.root}
@@ -193,7 +192,7 @@ export const CloseTag = (props: {
                         openClose={e => props.setChildrenOpen(!props.isChildrenOpen)}
                     />
                 </>
-                ) :
+            ) :
                 null
             }
             &lt;/
@@ -212,8 +211,8 @@ export const Text = (props: {
     opts: SNACOpts,
 }): JSX.Element => {
 
-    const [isSelected, setSelected] = useState(props.node.q)
-    const [isChildrenOpen, setChildrenOpen] = useState(props.node.o)
+    const [isSelected, setSelected] = useState(false)
+    const [isChildrenOpen, setChildrenOpen] = useState(true)
 
     let selectState = SwitchStates.HIDDEN
     let openState = SwitchStates.HIDDEN
@@ -268,8 +267,8 @@ export const CDATA = (props: {
     opts: SNACOpts,
 }): JSX.Element => {
 
-    const [isSelected, setSelected] = useState(props.node.q)
-    const [isChildrenOpen, setChildrenOpen] = useState(props.node.o)
+    const [isSelected, setSelected] = useState(false)
+    const [isChildrenOpen, setChildrenOpen] = useState(true)
 
     let selectState = SwitchStates.HIDDEN
     let openState = SwitchStates.HIDDEN
@@ -327,8 +326,8 @@ export const Comment = (props: {
     opts: SNACOpts,
 }): JSX.Element | null => {
 
-    const [isSelected, setSelected] = useState(props.node.q)
-    const [isChildrenOpen, setChildrenOpen] = useState(props.node.o)
+    const [isSelected, setSelected] = useState(false)
+    const [isChildrenOpen, setChildrenOpen] = useState(true)
 
     let selectState = SwitchStates.HIDDEN
     let openState = SwitchStates.HIDDEN
@@ -385,8 +384,8 @@ export const PI = (props: {
     showOpen: boolean,
     opts: SNACOpts,
 }): JSX.Element | null => {
-    const [isSelected, setSelected] = useState(props.node.q)
-    const [isChildrenOpen, setChildrenOpen] = useState(props.node.o)
+    const [isSelected, setSelected] = useState(false)
+    const [isChildrenOpen, setChildrenOpen] = useState(true)
 
     let selectState = SwitchStates.HIDDEN
     let openState = SwitchStates.HIDDEN

@@ -2,7 +2,7 @@ import xml2snac from "./xml2snac"
 import { SNACItem, SNACElement, SNACText, SNACCDATA, SNACComment, SNACPINode } from "./types"
 
 const find = (snac: SNACItem[], path: number[]): SNACItem | null => {
-    const element: SNACItem = { N: "", A: {}, C: snac, a: false, o: false, q: false }
+    const element: SNACItem = { N: "", A: {}, C: snac }
     return _find(element, path)
 }
 
@@ -55,26 +55,26 @@ export const findElement = (snac: SNACItem[], path: number[]) => {
     }
 }
 
-const getRemovePaths = (removeFrom: number[], removeTo: number[] ) => {
-    if(removeFrom.length !== removeTo.length) {
+const getRemovePaths = (removeFrom: number[], removeTo: number[]) => {
+    if (removeFrom.length !== removeTo.length) {
         return removeTo
     }
     else {
-        for(let i in removeFrom.slice(0, removeFrom.length - 1)) {
-            if(removeFrom[i] !== removeTo[i]) {
+        for (let i in removeFrom.slice(0, removeFrom.length - 1)) {
+            if (removeFrom[i] !== removeTo[i]) {
                 return removeTo
             }
         }
         const from = removeFrom[removeFrom.length - 1]
         const to = removeTo[removeTo.length - 1]
 
-        let out:number[] = []
-        if(from > to){
-            for(let i = to; i<=from; i++){
+        let out: number[] = []
+        if (from > to) {
+            for (let i = to; i <= from; i++) {
                 out = [...out, i]
             }
         }
-        else if(from < to) {
+        else if (from < to) {
 
         }
         else {

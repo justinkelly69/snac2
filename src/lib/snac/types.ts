@@ -180,31 +180,25 @@ export type SNACNamesNode = {
     N: string,
 }
 
-export interface SNACNode {
-    o: boolean,
-    q: boolean
-}
-
-export interface SNACElement extends SNACNode {
+export interface SNACElement {
     N: string,
     A: AttributesType,
     C: SNACItem[],
-    a: boolean,
 }
 
-export interface SNACText extends SNACNode {
+export interface SNACText {
     T: string
 }
 
-export interface SNACCDATA extends SNACNode {
+export interface SNACCDATA {
     D: string
 }
 
-export interface SNACComment extends SNACNode {
+export interface SNACComment {
     M: string
 }
 
-export interface SNACPINode extends SNACNode {
+export interface SNACPINode {
     L: string,
     B: string
 }
