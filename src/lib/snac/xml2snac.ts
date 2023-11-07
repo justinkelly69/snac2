@@ -7,7 +7,7 @@ import { unEscapeHtml } from './textutils'
 
 const render = (xml: string) => {
     const stack: SNACNamesNode[] = []
-
+    
     return _render(xml, stack)['out']
 }
 
@@ -32,6 +32,9 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
                 N: tagName,
                 A: attributes['attributes'],
                 C: [],
+                a: true,
+                o: true,
+                q: false
             }
 
             stack.push({
@@ -71,6 +74,8 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
             if (stack.length > 0) {
                 out.push({
                     D: dataTag[1],
+                    o: true,
+                    q: false
                 })
             }
             xml = dataTag[2]
@@ -80,6 +85,8 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
             if (stack.length > 0) {
                 out.push({
                     M: commentTag[1],
+                    o: true,
+                    q: false
                 })
             }
             xml = commentTag[2]
@@ -90,6 +97,8 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
                 out.push({
                     L: piTag[1],
                     B: piTag[2],
+                    o: true,
+                    q: false
                 })
             }
             xml = piTag[3]
@@ -99,6 +108,8 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
             if (stack.length > 0) {
                 out.push({
                     T: unEscapeHtml(textTag[1]),
+                    o: true,
+                    q: false
                 })
             }
             xml = textTag[2]
@@ -108,6 +119,8 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
             if (stack.length > 0) {
                 out.push({
                     T: "",
+                    o: true,
+                    q: false
                 })
             }
             xml = ""
