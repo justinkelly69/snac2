@@ -1,8 +1,12 @@
-import React, { Fragment, useState } from 'react';
-
 import {
-    SNAC2XMLJSXFuncs, SNACItem, SNACElement, SNACText,
-    SNACCDATA, SNACComment, SNACPINode, SNACOpts, SwitchStates,
+    SNAC2XMLJSXFuncs,
+    SNACItem,
+    SNACElement,
+    SNACText,
+    SNACCDATA,
+    SNACComment,
+    SNACPINode,
+    SNACOpts,
 } from '../snac/types'
 
 import {
@@ -14,7 +18,7 @@ const snac2xml = (root: SNACItem[], snac: SNACItem[], funcs: SNAC2XMLJSXFuncs, o
 }
 
 const getChildren = (root: SNACItem[], snac: SNACItem[], path: number[], funcs: SNAC2XMLJSXFuncs, opts: SNACOpts) => {
-    const { Tag, OpenTag, CloseTag, Text, CDATA, Comment, PI } = funcs
+    const { Tag, Text, CDATA, Comment, PI } = funcs
     let out: JSX.Element[] = []
 
     for (let i in Object.keys(snac)) {

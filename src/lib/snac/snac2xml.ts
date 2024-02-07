@@ -6,8 +6,7 @@ import {
 
 import {
     escapeHtml, escapeCDATA, escapeComment,
-    escapePIBody,
-} from './textutils'
+    escapePIBody} from './textutils'
 
 const render = (snac: SNACItem[], opts: XMLOpts) => {
     return _render(snac, [], opts)
@@ -15,7 +14,7 @@ const render = (snac: SNACItem[], opts: XMLOpts) => {
 
 const _render = (snac: SNACItem[], path: number[], opts: XMLOpts) => {
     let out: string = "";
-    let prefix = getPrefix(path, true, opts)
+    let prefix = getPrefix(path, opts)
 
     for (let i in Object.keys(snac)) {
         const newPath = [...path, parseInt(i)]
@@ -38,6 +37,8 @@ const _render = (snac: SNACItem[], path: number[], opts: XMLOpts) => {
             let text = escapeHtml(textNode["T"])
             if (opts.xml_trimText) {
                 text = text.trim()
+
+                
                 if (text.length > 0) {
                     out += `${prefix}${text}`
                 }
@@ -78,10 +79,10 @@ const attributes = (prefix: string, atts: AttributesType, opts: XMLOpts) => {
     return out;
 }
 
-const getPrefix = (path: number[], newline: boolean, opts: XMLOpts): string => {
+const getPrefix = (path: number[], opts: XMLOpts): string => {
     let out = ""
     if (opts.prefix_showPrefix) {
-        out = newline ? "\n" : ""
+        out = opts.prefix_startNewline ? "\n" : ""
         for (let i in path) {
             out += opts.prefix_char
         }

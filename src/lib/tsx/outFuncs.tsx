@@ -1,8 +1,23 @@
-import React, { Fragment, useState } from 'react'
+import { Fragment, useState } from 'react'
 
-import { SNACItem, SNACElement, SNACText, SNACCDATA, SNACComment, SNACPINode, AttributesType, SwitchStates, SNACOpts, OnOffHiddenChars, SNAC2XMLJSXFuncs } from '../snac/types'
-import { escapeCDATA, escapeComment, escapePIBody } from '../snac/textutils'
-import { findElement } from '../snac/snac'
+import {
+    SNACItem,
+    SNACElement,
+    SNACText,
+    SNACCDATA,
+    SNACComment,
+    SNACPINode,
+    AttributesType,
+    SwitchStates,
+    SNACOpts,
+    OnOffHiddenChars
+} from '../snac/types'
+
+import {
+    escapeCDATA,
+    escapeComment,
+    escapePIBody
+} from '../snac/textutils'
 
 export const Tag = (props: {
     root: SNACItem[],
@@ -105,7 +120,7 @@ export const OpenTag = (props: {
                 selected={selectState}
                 chars={props.opts.switch_selectChars}
                 className='selected-show-hide'
-                openClose={e => props.setSelected(!props.isSelected)}
+                openClose={() => props.setSelected(!props.isSelected)}
             />
             <Prefix path={props.path} opts={props.opts} />
             <ShowHideSwitch
@@ -114,7 +129,7 @@ export const OpenTag = (props: {
                 selected={childrenOpenState}
                 chars={props.opts.switch_elementChars}
                 className='element-show-hide'
-                openClose={e => props.setChildrenOpen(!props.isChildrenOpen)}
+                openClose={() => props.setChildrenOpen(!props.isChildrenOpen)}
             />
             &lt;
             <NsName name={props.node.N} type='element' />
@@ -141,7 +156,7 @@ export const OpenTag = (props: {
                 selected={attributesOpenState}
                 chars={props.opts.switch_attributeChars}
                 className='attributes-show-hide'
-                openClose={e => props.setAttributesOpen(!props.isAttributesOpen)}
+                openClose={() => props.setAttributesOpen(!props.isAttributesOpen)}
             />
         </>
     )
@@ -173,7 +188,7 @@ export const CloseTag = (props: {
     }
     return (
         <Fragment>
-            {props.isChildrenOpen ?(
+            {props.isChildrenOpen ? (
                 <>
                     <ShowHideSwitch
                         root={props.root}
@@ -181,7 +196,7 @@ export const CloseTag = (props: {
                         selected={selectState}
                         chars={props.opts.switch_selectChars}
                         className='selected-show-hide'
-                        openClose={e => props.setSelected(!props.isSelected)}
+                        openClose={() => props.setSelected(!props.isSelected)}
                     />
                     <Prefix path={props.path} opts={props.opts} />
                     <ShowHideSwitch
@@ -190,10 +205,10 @@ export const CloseTag = (props: {
                         selected={childrenOpenState}
                         chars={props.opts.switch_elementChars}
                         className='element-show-hide'
-                        openClose={e => props.setChildrenOpen(!props.isChildrenOpen)}
+                        openClose={() => props.setChildrenOpen(!props.isChildrenOpen)}
                     />
                 </>
-                ) :
+            ) :
                 null
             }
             &lt;/
@@ -240,7 +255,7 @@ export const Text = (props: {
                 selected={selectState}
                 chars={props.opts.switch_selectChars}
                 className='selected-show-hide'
-                openClose={e => setSelected(!isSelected)}
+                openClose={() => setSelected(!isSelected)}
             />
             <Prefix path={props.path} opts={props.opts} />
             {props.showOpen ?
@@ -250,7 +265,7 @@ export const Text = (props: {
                     selected={openState}
                     chars={props.opts.switch_elementChars}
                     className='element-show-hide'
-                    openClose={e => setChildrenOpen(!isChildrenOpen)}
+                    openClose={() => setChildrenOpen(!isChildrenOpen)}
                 /> :
                 null
             }
@@ -297,7 +312,7 @@ export const CDATA = (props: {
                 selected={selectState}
                 chars={props.opts.switch_selectChars}
                 className='selected-show-hide'
-                openClose={e => setSelected(!isSelected)}
+                openClose={() => setSelected(!isSelected)}
             />
             <Prefix path={props.path} opts={props.opts} />
             {props.showOpen ?
@@ -307,7 +322,7 @@ export const CDATA = (props: {
                     selected={openState}
                     chars={props.opts.switch_elementChars}
                     className='element-show-hide'
-                    openClose={e => setChildrenOpen(!isChildrenOpen)}
+                    openClose={() => setChildrenOpen(!isChildrenOpen)}
                 /> :
                 null
             }
@@ -356,7 +371,7 @@ export const Comment = (props: {
                 selected={selectState}
                 chars={props.opts.switch_selectChars}
                 className='selected-show-hide'
-                openClose={e => setSelected(!isSelected)}
+                openClose={() => setSelected(!isSelected)}
             />
             <Prefix path={props.path} opts={props.opts} />
             {props.showOpen ?
@@ -366,7 +381,7 @@ export const Comment = (props: {
                     selected={openState}
                     chars={props.opts.switch_elementChars}
                     className='element-show-hide'
-                    openClose={e => setChildrenOpen(!isChildrenOpen)}
+                    openClose={() => setChildrenOpen(!isChildrenOpen)}
                 /> :
                 null
             }
@@ -414,7 +429,7 @@ export const PI = (props: {
                 selected={selectState}
                 chars={props.opts.switch_selectChars}
                 className='selected-show-hide'
-                openClose={e => setSelected(!isSelected)}
+                openClose={() => setSelected(!isSelected)}
             />
             <Prefix path={props.path} opts={props.opts} />
             {props.showOpen ?
@@ -424,7 +439,7 @@ export const PI = (props: {
                     selected={openState}
                     chars={props.opts.switch_elementChars}
                     className='element-show-hide'
-                    openClose={e => setChildrenOpen(!isChildrenOpen)}
+                    openClose={() => setChildrenOpen(!isChildrenOpen)}
                 /> :
                 null
             }
@@ -447,7 +462,12 @@ export const Attributes = (props: {
                 return (
                     <span key={i}>
                         {i > 0 ? <br /> : null}
-                        <Attribute path={props.path} name={a} value={props.attributes[a]} opts={props.opts} />
+                        <Attribute
+                            path={props.path}
+                            name={a}
+                            value={props.attributes[a]}
+                            opts={props.opts}
+                        />
                     </span>
                 )
             })}
@@ -484,7 +504,7 @@ export const Prefix = (props: {
 
 const getPrefixString = (path: number[], opts: SNACOpts): string => {
     const init = ""
-    return path.reduce((out, p) => out + opts.prefix_charOn, init)
+    return path.reduce((out) => out + opts.prefix_charOn, init)
 }
 
 const NsName = (props: { name: string, type: string }): JSX.Element => {

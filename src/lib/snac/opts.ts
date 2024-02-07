@@ -3,6 +3,7 @@ import {XMLOpts, SNACOpts } from "../snac/types"
 
 export const xmlOpts:XMLOpts = {
     prefix_showPrefix: true,
+    prefix_startNewline: false,
     prefix_newLine: "\n",
     prefix_char: " ",
     prefix_spaceBefore: " ",
@@ -11,6 +12,7 @@ export const xmlOpts:XMLOpts = {
 
     xml_selfCloseTags: true,
     xml_trimText: true,
+    xml_normalizeText: true,
     xml_allowComments: true,
     xml_allowPIs: true,
 }

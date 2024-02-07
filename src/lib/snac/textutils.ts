@@ -10,8 +10,12 @@ export const unEscapeHtml = (text: string): string => {
     return text.replace(/&amp;/g, '&')
         .replace(/&lt;/g, '<')
         .replace(/&gt;/g, '>')
-        .replace(/&apos;/g, '\'')
+        .replace(/&apos;/g, "'")
         .replace(/&quot;/g, '"')
+}
+
+export const normalizeText = (text: string): string => {
+    return text.split(/[ \n\t]+/).join(' ').trim()
 }
 
 export const escapeCDATA = (text: string): string => {

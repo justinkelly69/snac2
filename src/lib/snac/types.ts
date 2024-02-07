@@ -1,9 +1,8 @@
-//import React from 'react'
-
 export enum SwitchStates { 'ON', 'OFF', 'HIDDEN' }
 
 export type XMLOpts = {
     prefix_showPrefix: boolean,
+    prefix_startNewline: boolean,
     prefix_newLine: string,
     prefix_char: string,
     prefix_spaceBefore: string,
@@ -12,6 +11,7 @@ export type XMLOpts = {
 
     xml_selfCloseTags: boolean,
     xml_trimText: boolean,
+    xml_normalizeText: boolean,
     xml_allowComments: boolean,
     xml_allowPIs: boolean,
 }

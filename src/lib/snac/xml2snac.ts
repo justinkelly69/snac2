@@ -3,7 +3,9 @@ import {
     AttributesType, QuoteChar, AttributeXMLType, AttributeValueType
 } from './types'
 
-import { unEscapeHtml } from './textutils'
+import { xmlOpts } from './opts'
+
+import { normalizeText, unEscapeHtml } from './textutils'
 
 const render = (xml: string) => {
     const stack: SNACNamesNode[] = []
@@ -106,8 +108,12 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
 
         else if (textTag !== null) {
             if (stack.length > 0) {
+                let text = unEscapeHtml(textTag[1])
+                if(xmlOpts.xml_normalizeText){
+                    text = normalizeText(text)
+                }
                 out.push({
-                    T: unEscapeHtml(textTag[1]),
+                    T: text,
                     o: true,
                     q: false
                 })
