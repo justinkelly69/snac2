@@ -1,3 +1,11 @@
+.left-side, .right-side {
+  width: 50%;
+  white-space: pre-wrap;
+  font-family: 'Courier New', Courier, monospace;
+  padding-top: 1em;
+  padding-left: 2em;
+}
+
 .App {
   text-align: center;
 }
@@ -38,6 +46,7 @@
 
 .text-body {
   color: black;
+  padding-left: 2em;
 }
 
 .cdata {

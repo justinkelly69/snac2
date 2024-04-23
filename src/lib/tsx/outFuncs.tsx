@@ -35,7 +35,9 @@ export const Tag = (props: {
     let selectedClassName = 'element'
 
     if (props.opts.xml_showSelected) {
-        selectedClassName = isSelected ? 'element selected' : 'element'
+        selectedClassName = isSelected ?
+            'element selected' :
+            'element'
     }
 
     let isEmpty = false
@@ -58,7 +60,16 @@ export const Tag = (props: {
                 isChildrenOpen={isChildrenOpen}
                 setChildrenOpen={setChildrenOpen}
             />
-            {isChildrenOpen ? props.getChildren(props.root, props.node["C"], props.path, props.funcs, props.opts) : props.opts.xml_ellipsis}
+            {isChildrenOpen ?
+                props.getChildren(
+                    props.root,
+                    props.node["C"],
+                    props.path,
+                    props.funcs,
+                    props.opts
+                ) :
+                props.opts.xml_ellipsis
+            }
             {!isEmpty && props.opts.xml_showCloseTags ? (
                 <CloseTag
                     root={props.root}
@@ -98,16 +109,22 @@ export const OpenTag = (props: {
     let closeSlash = "/"
 
     if (props.opts.xml_showSelected) {
-        selectState = props.isSelected ? SwitchStates.ON : SwitchStates.OFF
+        selectState = props.isSelected ?
+            SwitchStates.ON :
+            SwitchStates.OFF
     }
 
     if (props.opts.xml_showAttributesOpen && Object.keys(props.node.A).length) {
-        attributesOpenState = props.isAttributesOpen ? SwitchStates.ON : SwitchStates.OFF
+        attributesOpenState = props.isAttributesOpen ?
+            SwitchStates.ON :
+            SwitchStates.OFF
     }
 
     if (!props.isEmpty) {
         if (props.opts.xml_showChildrenOpen) {
-            childrenOpenState = props.isChildrenOpen ? SwitchStates.ON : SwitchStates.OFF
+            childrenOpenState = props.isChildrenOpen ?
+                SwitchStates.ON :
+                SwitchStates.OFF
         }
         closeSlash = ""
     }
@@ -132,15 +149,26 @@ export const OpenTag = (props: {
                 openClose={() => props.setChildrenOpen(!props.isChildrenOpen)}
             />
             &lt;
-            <NsName name={props.node.N} type='element' />
+            <NsName
+                name={props.node.N}
+                path={props.path}
+                type='element'
+            />
             <>
                 {props.isAttributesOpen ?
                     <>
-                        <Attributes path={props.path} attributes={props.node.A} opts={props.opts} />
+                        <Attributes
+                            path={props.path}
+                            attributes={props.node.A}
+                            opts={props.opts}
+                        />
                         {Object.keys(props.node.A).length > 0 ?
                             <>
                                 {props.opts.prefix_spaceBefore}
-                                <Prefix path={props.path} opts={props.opts} />
+                                <Prefix
+                                    path={props.path}
+                                    opts={props.opts}
+                                />
                                 {props.opts.prefix_spaceAfter}
                             </>
                             : null
@@ -178,16 +206,20 @@ export const CloseTag = (props: {
     let childrenOpenState = SwitchStates.HIDDEN
 
     if (props.opts.xml_showSelected) {
-        selectState = props.isSelected ? SwitchStates.ON : SwitchStates.OFF
+        selectState = props.isSelected ?
+            SwitchStates.ON :
+            SwitchStates.OFF
     }
 
     if (props.isEmpty) {
         if (props.opts.xml_showChildrenOpen) {
-            childrenOpenState = props.isChildrenOpen ? SwitchStates.ON : SwitchStates.OFF
+            childrenOpenState = props.isChildrenOpen ?
+                SwitchStates.ON :
+                SwitchStates.OFF
         }
     }
     return (
-        <Fragment>
+        <>
             {props.isChildrenOpen ? (
                 <>
                     <ShowHideSwitch
@@ -212,9 +244,13 @@ export const CloseTag = (props: {
                 null
             }
             &lt;/
-            <NsName name={props.node.N} type='element' />
+            <NsName
+                name={props.node.N}
+                path={props.path}
+                type='element'
+            />
             &gt;
-        </Fragment>
+        </>
     )
 }
 
@@ -235,11 +271,18 @@ export const Text = (props: {
     let selectedClassName = 'text'
 
     if (props.showSelected) {
-        selectState = isSelected ? SwitchStates.ON : SwitchStates.OFF
-        selectedClassName = isSelected ? 'text selected' : 'text'
+        selectState = isSelected ?
+            SwitchStates.ON :
+            SwitchStates.OFF
+
+        selectedClassName = isSelected ?
+            'text selected' :
+            'text'
     }
     if (props.showOpen) {
-        openState = isChildrenOpen ? SwitchStates.ON : SwitchStates.OFF
+        openState = isChildrenOpen ?
+            SwitchStates.ON :
+            SwitchStates.OFF
     }
 
     let text = props.node.T
@@ -269,7 +312,11 @@ export const Text = (props: {
                 /> :
                 null
             }
-            <span className='text-body'>{text}</span>
+            <span className='text-body'
+                onClick={e => console.log(`T[${props.path.join(',')}]`)}
+            >
+                ({props.path.join(',')}){text}
+            </span>
         </div>
     )
 }
@@ -291,12 +338,19 @@ export const CDATA = (props: {
     let selectedClassName = 'cdata'
 
     if (props.showSelected) {
-        selectState = isSelected ? SwitchStates.ON : SwitchStates.OFF
-        selectedClassName = isSelected ? 'cdata selected' : 'cdata'
+        selectState = isSelected ?
+            SwitchStates.ON :
+            SwitchStates.OFF
+
+        selectedClassName = isSelected ?
+            'cdata selected' :
+            'cdata'
     }
 
     if (props.showOpen) {
-        openState = isChildrenOpen ? SwitchStates.ON : SwitchStates.OFF
+        openState = isChildrenOpen ?
+            SwitchStates.ON :
+            SwitchStates.OFF
     }
 
     let cdata = props.node.D
@@ -327,7 +381,11 @@ export const CDATA = (props: {
                 null
             }
             &lt;![CDATA[
-            <span className='cdata-body'>{escapeCDATA(cdata)}</span>
+            <span className='cdata-body'
+                onClick={e => console.log(`D[${props.path.join(',')}]`)}
+            >
+                ({props.path.join(',')}){escapeCDATA(cdata)}
+            </span>
             ]]&gt;
         </div>
     )
@@ -350,12 +408,19 @@ export const Comment = (props: {
     let selectedClassName = 'comment'
 
     if (props.showSelected) {
-        selectState = isSelected ? SwitchStates.ON : SwitchStates.OFF
-        selectedClassName = isSelected ? 'comment selected' : 'comment'
+        selectState = isSelected ?
+            SwitchStates.ON :
+            SwitchStates.OFF
+
+        selectedClassName = isSelected ?
+            'comment selected' :
+            'comment'
     }
 
     if (props.showOpen) {
-        openState = isChildrenOpen ? SwitchStates.ON : SwitchStates.OFF
+        openState = isChildrenOpen ?
+            SwitchStates.ON :
+            SwitchStates.OFF
     }
 
     let comment = props.node.M
@@ -386,7 +451,11 @@ export const Comment = (props: {
                 null
             }
             &lt;!--
-            <span className='comment-body'>{escapeComment(comment)}</span>
+            <span className='comment-body'
+                onClick={e => console.log(`M[${props.path.join(',')}]`)}
+            >
+                ({props.path.join(',')}){escapeComment(comment)}
+            </span>
             --&gt;
         </div>
     )
@@ -408,12 +477,19 @@ export const PI = (props: {
     let selectedClassName = 'pi'
 
     if (props.showSelected) {
-        selectState = isSelected ? SwitchStates.ON : SwitchStates.OFF
-        selectedClassName = isSelected ? 'pi selected' : 'pi'
+        selectState = isSelected ?
+            SwitchStates.ON :
+            SwitchStates.OFF
+
+        selectedClassName = isSelected ?
+            'pi selected' :
+            'pi'
     }
 
     if (props.showOpen) {
-        openState = isChildrenOpen ? SwitchStates.ON : SwitchStates.OFF
+        openState = isChildrenOpen ?
+            SwitchStates.ON :
+            SwitchStates.OFF
     }
 
     let body = props.node.B
@@ -431,7 +507,12 @@ export const PI = (props: {
                 className='selected-show-hide'
                 openClose={() => setSelected(!isSelected)}
             />
-            <Prefix path={props.path} opts={props.opts} />
+
+            <Prefix
+                path={props.path}
+                opts={props.opts}
+            />
+
             {props.showOpen ?
                 <ShowHideSwitch
                     root={props.root}
@@ -446,7 +527,11 @@ export const PI = (props: {
             &lt;?
             <span className='pi-lang'>{props.node.L}</span>
             {" "}
-            <span className='pi-body'>{escapePIBody(body)}</span>
+            <span className='pi-body'
+                onClick={e => console.log(`P[${props.path.join(',')}]`)}
+            >
+                ({props.path.join(',')}){escapePIBody(body)}
+            </span>
             {" "}?&gt;
         </div>
     )
@@ -482,11 +567,20 @@ export const Attribute = (props: {
     opts: SNACOpts
 }): JSX.Element =>
     <span className='attribute'>
-        <Prefix path={props.path} opts={props.opts} />
+        <Prefix
+            path={props.path}
+            opts={props.opts}
+        />
         {props.opts.prefix_attributePrefix}
-        <NsName name={props.name} type='attribute' />
+        <ANsName
+            path={props.path}
+            name={props.name}
+            type='attribute'
+        />
         =&quot;
-        <span className='attribute-value'>{props.value}</span>
+        <span className='attribute-value'>
+            {props.value}
+        </span>
         &quot;
     </span>
 
@@ -495,28 +589,58 @@ export const Prefix = (props: {
     opts: SNACOpts
 }): JSX.Element | null => {
     if (props.opts.prefix_showPrefix) {
-        return (<span className="prefix">{getPrefixString(props.path, props.opts)}</span>)
+        return (
+            <span className="prefix">
+                {getPrefixString(props.path, props.opts)}
+            </span>
+        )
     }
     else {
         return null
     }
 }
 
-const getPrefixString = (path: number[], opts: SNACOpts): string => {
+export const getPrefixString = (path: number[], opts: SNACOpts): string => {
     const init = ""
     return path.reduce((out) => out + opts.prefix_charOn, init)
 }
 
-const NsName = (props: { name: string, type: string }): JSX.Element => {
+const NsName = (props: { path: number[], name: string, type: string }): JSX.Element => {
     const tagName = props.name.split(/:/)
     return tagName.length > 1 ?
         <>
-            <span className={`${props.type}-ns`}>{tagName[0]}</span>
+            <span className={`${props.type}-ns`}
+                onClick={e => console.log(`S[${props.path.join(',')}]`)}
+            >{tagName[0]}</span>
             :
-            <span className={`${props.type}-name`}>{tagName[1]}</span>
+            <span className={`${props.type}-name`}
+                onClick={e => console.log(`N[${props.path.join(',')}]`)}>
+                {tagName[1]}{' '}({props.path.join(',')})
+            </span>
         </>
         :
-        <span className={`${props.type}-name`}>{tagName[0]}</span>
+        <span className={`${props.type}-name`}
+            onClick={e => console.log(`N[${props.path.join(',')}]`)}
+        >{tagName[0]}{' '}({props.path.join(',')})</span>
+}
+
+const ANsName = (props: { path: number[], name: string, type: string }): JSX.Element => {
+    const tagName = props.name.split(/:/)
+    return tagName.length > 1 ?
+        <>
+            <span className={`${props.type}-ans`}
+                onClick={e => console.log(`AS[${props.path.join(',')},'${tagName}']`)}
+            >{tagName[0]}</span>
+            :
+            <span className={`${props.type}-aname`}
+                onClick={e => console.log(`AN[${props.path.join(',')},'${tagName}']]`)}>
+                {tagName[1]}{' '}({props.path.join(',')})
+            </span>
+        </>
+        :
+        <span className={`${props.type}-aname`}
+            onClick={e => console.log(`AN[${props.path.join(',')},'${tagName}']]`)}
+        >{tagName[0]}{' '}({props.path.join(',')})</span>
 }
 
 const ShowHideSwitch = (props:
@@ -529,6 +653,7 @@ const ShowHideSwitch = (props:
         openClose: Function
     }): JSX.Element => {
     let out = props.chars.hidden
+
     switch (props.selected) {
         case SwitchStates.OFF:
             out = props.chars.on
@@ -536,6 +661,7 @@ const ShowHideSwitch = (props:
         case SwitchStates.ON:
             out = props.chars.off
     }
+
     return (
         <span className={props.className} onClick={e => {
             props.selected !== SwitchStates.HIDDEN && props.openClose()
