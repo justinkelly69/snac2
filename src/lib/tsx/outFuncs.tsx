@@ -24,7 +24,14 @@ import {
     PrefixSkin,
     TagNameSkin,
     AttributeNameSkin,
-    ShowHideSwitchSkin
+    ShowHideSwitchSkin,
+    AttributeValueSkin,
+    PISkin,
+    CommentSkin,
+    CDATASkin,
+    TextSkin,
+    OpenCaret,
+    CloseCaret
 } from './outSkin'
 
 export const Tag = (props: {
@@ -114,7 +121,7 @@ export const OpenTag = (props: {
     let selectState = SwitchStates.HIDDEN
     let attributesOpenState = SwitchStates.HIDDEN
     let childrenOpenState = SwitchStates.HIDDEN
-    let closeSlash = "/"
+    let closeSlash = true
 
     if (props.opts.xml_showSelected) {
         selectState = props.isSelected ?
@@ -134,7 +141,7 @@ export const OpenTag = (props: {
                 SwitchStates.ON :
                 SwitchStates.OFF
         }
-        closeSlash = ""
+        closeSlash = false
     }
 
     return (
@@ -156,8 +163,8 @@ export const OpenTag = (props: {
                 className='element-show-hide'
                 openClose={() => props.setChildrenOpen(!props.isChildrenOpen)}
             />
-            &lt;
-            <NsName
+            <OpenCaret />
+            <NSTagName
                 name={props.node.N}
                 path={props.path}
                 type='element'
@@ -185,7 +192,9 @@ export const OpenTag = (props: {
                     null
                 }
             </>
-            {closeSlash}&gt;
+            <CloseCaret
+                closeSlash={closeSlash}
+            />
             <ShowHideSwitch
                 root={props.root}
                 path={props.path}
@@ -252,7 +261,7 @@ export const CloseTag = (props: {
                 null
             }
             &lt;/
-            <NsName
+            <NSTagName
                 name={props.node.N}
                 path={props.path}
                 type='element'
@@ -308,7 +317,12 @@ export const Text = (props: {
                 className='selected-show-hide'
                 openClose={() => setSelected(!isSelected)}
             />
-            <Prefix path={props.path} opts={props.opts} />
+
+            <Prefix
+                path={props.path}
+                opts={props.opts}
+            />
+
             {props.showOpen ?
                 <ShowHideSwitch
                     root={props.root}
@@ -320,11 +334,11 @@ export const Text = (props: {
                 /> :
                 null
             }
-            <span className='text-body'
-                onClick={e => console.log(`T[${props.path.join(',')}]`)}
-            >
-                ({props.path.join(',')}){text}
-            </span>
+
+            <TextSkin
+                path={props.path.join(',')}
+                text={text}
+            />
         </div>
     )
 }
@@ -376,7 +390,12 @@ export const CDATA = (props: {
                 className='selected-show-hide'
                 openClose={() => setSelected(!isSelected)}
             />
-            <Prefix path={props.path} opts={props.opts} />
+
+            <Prefix
+                path={props.path}
+                opts={props.opts}
+            />
+
             {props.showOpen ?
                 <ShowHideSwitch
                     root={props.root}
@@ -388,13 +407,11 @@ export const CDATA = (props: {
                 /> :
                 null
             }
-            &lt;![CDATA[
-            <span className='cdata-body'
-                onClick={e => console.log(`D[${props.path.join(',')}]`)}
-            >
-                ({props.path.join(',')}){escapeCDATA(cdata)}
-            </span>
-            ]]&gt;
+
+            <CDATASkin
+                cdata={escapeCDATA(cdata)}
+                path={props.path.join(',')}
+            />
         </div>
     )
 }
@@ -446,7 +463,12 @@ export const Comment = (props: {
                 className='selected-show-hide'
                 openClose={() => setSelected(!isSelected)}
             />
-            <Prefix path={props.path} opts={props.opts} />
+
+            <Prefix
+                path={props.path}
+                opts={props.opts}
+            />
+
             {props.showOpen ?
                 <ShowHideSwitch
                     root={props.root}
@@ -458,13 +480,11 @@ export const Comment = (props: {
                 /> :
                 null
             }
-            &lt;!--
-            <span className='comment-body'
-                onClick={e => console.log(`M[${props.path.join(',')}]`)}
-            >
-                ({props.path.join(',')}){escapeComment(comment)}
-            </span>
-            --&gt;
+
+            <CommentSkin
+                comment={escapeComment(comment)}
+                path={props.path.join(',')}
+            />
         </div>
     )
 }
@@ -532,15 +552,12 @@ export const PI = (props: {
                 /> :
                 null
             }
-            &lt;?
-            <span className='pi-lang'>{props.node.L}</span>
-            {" "}
-            <span className='pi-body'
-                onClick={e => console.log(`P[${props.path.join(',')}]`)}
-            >
-                ({props.path.join(',')}){escapePIBody(body)}
-            </span>
-            {" "}?&gt;
+
+            <PISkin
+                language={props.node.L}
+                body={escapePIBody(body)}
+                path={props.path.join(',')}
+            />
         </div>
     )
 }
@@ -567,7 +584,7 @@ export const Attributes = (props: {
         </div> :
         null
 }
-    
+
 
 export const Attribute = (props: {
     path: number[],
@@ -581,16 +598,14 @@ export const Attribute = (props: {
             opts={props.opts}
         />
         {props.opts.prefix_attributePrefix}
-        <ANsName
+        <AttributeTagName
             path={props.path}
             name={props.name}
             type='attribute'
         />
-        =&quot;
-        <span className='attribute-value'>
-            {props.value}
-        </span>
-        &quot;
+        <AttributeValueSkin
+            value={props.value}
+        />
     </span>
 
 export const Prefix = (props: {
@@ -617,7 +632,7 @@ export const getPrefixString = (
     return path.reduce((out) => out + opts.prefix_charOn, init)
 }
 
-const NsName = (props: {
+const NSTagName = (props: {
     path: number[],
     name: string,
     type: string
@@ -628,7 +643,7 @@ const NsName = (props: {
         path={props.path.join(',')}
     />
 
-const ANsName = (props: {
+const AttributeTagName = (props: {
     path: number[],
     name: string,
     type: string

@@ -7,6 +7,19 @@ export const PrefixSkin = (props: { prefix: string }) =>
         {props.prefix}
     </span>
 
+export const OpenCaret = () =>
+    <span className='caret'>
+        &lt;
+    </span>
+
+export const CloseCaret = (props: { closeSlash: boolean }) =>
+    props.closeSlash ?
+        <span className='caret'>
+            <span className='caret-slash'>/</span>
+            &gt;
+        </span> :
+        <span className='caret'>&gt;</span>
+
 export const TagNameSkinSegment = (props: {
     name: string,
     path: string,
@@ -103,6 +116,73 @@ export const AttributeNameSkin = (props: {
             klass={`${props.className}-aname`}
         />
 }
+
+export const AttributeValueSkin = (props: {
+    value: string
+}) =>
+    <>
+        =&quot;
+        <span className='attribute-value'>
+            {props.value}
+        </span>
+        &quot;
+    </>
+
+export const CDATASkin = (props: {
+    cdata: string,
+    path: string,
+}) =>
+    <>
+        &lt;![CDATA[
+        <span className='cdata-body'
+            onClick={e => console.log(`D[${props.path}]`)}
+        >
+            ({props.path}){props.cdata}
+        </span>
+        ]]&gt;
+    </>
+
+export const CommentSkin = (props: {
+    comment: string,
+    path: string,
+}) =>
+    <>
+        &lt;!--
+        <span className='comment-body'
+            onClick={e => console.log(`M[${props.path}]`)}
+        >
+            ({props.path}){props.comment}
+        </span>
+        --&gt;
+
+    </>
+
+export const PISkin = (props: {
+    language: string,
+    body: string,
+    path: string,
+}) =>
+    <>
+        &lt;?
+        <span className='pi-lang'>{props.language}</span>
+        {" "}
+        <span className='pi-body'
+            onClick={e => console.log(`P[${props.path}]`)}
+        >
+            ({props.path}){props.body}
+        </span>
+        {" "}?&gt;
+    </>
+
+export const TextSkin = (props: {
+    path: string,
+    text: string,
+}) =>
+    <span className='text-body'
+        onClick={e => console.log(`T[${props.path}]`)}
+    >
+        ({props.path}){props.text}
+    </span>
 
 export const ShowHideSwitchSkin = (props: {
     className: string,
