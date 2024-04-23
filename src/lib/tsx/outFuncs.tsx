@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 
 import {
     SNACItem,
@@ -10,7 +10,8 @@ import {
     AttributesType,
     SwitchStates,
     SNACOpts,
-    OnOffHiddenChars
+    OnOffHiddenChars,
+    PrefixJSXType
 } from '../snac/types'
 
 import {
@@ -18,6 +19,13 @@ import {
     escapeComment,
     escapePIBody
 } from '../snac/textutils'
+
+import {
+    PrefixSkin,
+    TagNameSkin,
+    AttributeNameSkin,
+    ShowHideSwitchSkin
+} from './outSkin'
 
 export const Tag = (props: {
     root: SNACItem[],
@@ -559,12 +567,13 @@ export const Attributes = (props: {
         </div> :
         null
 }
+    
 
 export const Attribute = (props: {
     path: number[],
     name: string,
     value: string,
-    opts: SNACOpts
+    opts: SNACOpts,
 }): JSX.Element =>
     <span className='attribute'>
         <Prefix
@@ -587,61 +596,48 @@ export const Attribute = (props: {
 export const Prefix = (props: {
     path: number[],
     opts: SNACOpts
-}): JSX.Element | null => {
-    if (props.opts.prefix_showPrefix) {
-        return (
-            <span className="prefix">
-                {getPrefixString(props.path, props.opts)}
-            </span>
-        )
-    }
-    else {
-        return null
-    }
-}
+}): JSX.Element | null =>
+    props.opts.prefix_showPrefix ?
+        <PrefixSkin
+            prefix={
+                getPrefixString(
+                    props.path,
+                    props.opts
+                )
+            }
+        />
+        : null
 
-export const getPrefixString = (path: number[], opts: SNACOpts): string => {
+
+export const getPrefixString = (
+    path: number[],
+    opts: SNACOpts
+): string => {
     const init = ""
     return path.reduce((out) => out + opts.prefix_charOn, init)
 }
 
-const NsName = (props: { path: number[], name: string, type: string }): JSX.Element => {
-    const tagName = props.name.split(/:/)
-    return tagName.length > 1 ?
-        <>
-            <span className={`${props.type}-ns`}
-                onClick={e => console.log(`S[${props.path.join(',')}]`)}
-            >{tagName[0]}</span>
-            :
-            <span className={`${props.type}-name`}
-                onClick={e => console.log(`N[${props.path.join(',')}]`)}>
-                {tagName[1]}{' '}({props.path.join(',')})
-            </span>
-        </>
-        :
-        <span className={`${props.type}-name`}
-            onClick={e => console.log(`N[${props.path.join(',')}]`)}
-        >{tagName[0]}{' '}({props.path.join(',')})</span>
-}
+const NsName = (props: {
+    path: number[],
+    name: string,
+    type: string
+}): JSX.Element =>
+    <TagNameSkin
+        name={props.name}
+        klass={props.type}
+        path={props.path.join(',')}
+    />
 
-const ANsName = (props: { path: number[], name: string, type: string }): JSX.Element => {
-    const tagName = props.name.split(/:/)
-    return tagName.length > 1 ?
-        <>
-            <span className={`${props.type}-ans`}
-                onClick={e => console.log(`AS[${props.path.join(',')},'${tagName}']`)}
-            >{tagName[0]}</span>
-            :
-            <span className={`${props.type}-aname`}
-                onClick={e => console.log(`AN[${props.path.join(',')},'${tagName}']]`)}>
-                {tagName[1]}{' '}({props.path.join(',')})
-            </span>
-        </>
-        :
-        <span className={`${props.type}-aname`}
-            onClick={e => console.log(`AN[${props.path.join(',')},'${tagName}']]`)}
-        >{tagName[0]}{' '}({props.path.join(',')})</span>
-}
+const ANsName = (props: {
+    path: number[],
+    name: string,
+    type: string
+}): JSX.Element =>
+    <AttributeNameSkin
+        name={props.name}
+        className={props.type}
+        path={props.path.join(',')}
+    />
 
 const ShowHideSwitch = (props:
     {
@@ -663,9 +659,12 @@ const ShowHideSwitch = (props:
     }
 
     return (
-        <span className={props.className} onClick={e => {
-            props.selected !== SwitchStates.HIDDEN && props.openClose()
-        }}>{out}</span>
+        <ShowHideSwitchSkin
+            className={props.className}
+            selected={props.selected}
+            openClose={props.openClose}
+            out={out}
+        />
     )
 }
 
