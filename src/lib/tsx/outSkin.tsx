@@ -1,4 +1,4 @@
-import { SwitchStates} from "../snac/types"
+import { SwitchStates } from "../snac/types"
 
 export const ShowHideSwitchSkin = (props: {
     className: string,

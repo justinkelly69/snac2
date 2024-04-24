@@ -1,18 +1,34 @@
 import {
-    SNACItem, SNACElement, AttributesType,
-    SNACText, SNACCDATA, SNACComment, SNACPINode,
+    SNACItem,
+    SNACElement,
+    AttributesType,
+    SNACText,
+    SNACCDATA,
+    SNACComment,
+    SNACPINode,
     XMLOpts
 } from './types'
 
 import {
-    escapeHtml, escapeCDATA, escapeComment,
-    escapePIBody} from './textutils'
+    escapeHtml,
+    escapeCDATA,
+    escapeComment,
+    escapePIBody
+} from './textutils'
 
-const render = (snac: SNACItem[], opts: XMLOpts) => {
+const render = (
+    snac: SNACItem[],
+    opts: XMLOpts
+) => {
     return _render(snac, [], opts)
 }
 
-const _render = (snac: SNACItem[], path: number[], opts: XMLOpts) => {
+const _render = (
+    snac: SNACItem[],
+    path: number[],
+    opts: XMLOpts
+) => {
+
     let out: string = "";
     let prefix = getPrefix(path, opts)
 
@@ -38,7 +54,7 @@ const _render = (snac: SNACItem[], path: number[], opts: XMLOpts) => {
             if (opts.xml_trimText) {
                 text = text.trim()
 
-                
+
                 if (text.length > 0) {
                     out += `${prefix}${text}`
                 }
@@ -70,7 +86,12 @@ const _render = (snac: SNACItem[], path: number[], opts: XMLOpts) => {
     return out
 }
 
-const attributes = (prefix: string, atts: AttributesType, opts: XMLOpts) => {
+const attributes = (
+    prefix: string,
+    atts: AttributesType,
+    opts: XMLOpts
+) => {
+
     let out: string = ""
     const attPrefix = prefix + opts.prefix_attributePrefix
     for (const name of Object.keys(atts)) {
@@ -79,7 +100,11 @@ const attributes = (prefix: string, atts: AttributesType, opts: XMLOpts) => {
     return out;
 }
 
-const getPrefix = (path: number[], opts: XMLOpts): string => {
+const getPrefix = (
+    path: number[],
+    opts: XMLOpts
+): string => {
+
     let out = ""
     if (opts.prefix_showPrefix) {
         out = opts.prefix_startNewline ? "\n" : ""

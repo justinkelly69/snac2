@@ -63,16 +63,59 @@ export type SNACOpts = {
 }
 
 export interface SNAC2XMLFuncs {
-    openTag: (path: number[], elementName: string, attrs: string) => string,
-    children: (children: string) => string,
-    closeTag: (path: number[], elementName: string) => string,
-    emptyTag: (path: number[], elementName: string, attrs: string) => string,
-    text: (path: number[], text: string) => string,
-    cdata: (path: number[], cdata: string) => string,
-    comment: (path: number[], comment: string) => string,
-    pi: (path: number[], lang: string, body: string) => string,
-    attribute: (path: number[], name: string, value: string) => string,
-    getPrefix: (path: number[], isAttribute: boolean, opts: SNACOpts) => string,
+    openTag: (
+        path: number[],
+        elementName: string,
+        attrs: string
+    ) => string,
+
+    children: (
+        children: string
+    ) => string,
+
+    closeTag: (
+        path: number[],
+        elementName: string
+    ) => string,
+
+    emptyTag: (
+        path: number[],
+        elementName: string,
+        attrs: string
+    ) => string,
+
+    text: (
+        path: number[],
+        text: string
+    ) => string,
+
+    cdata: (
+        path: number[],
+        cdata: string
+    ) => string,
+
+    comment: (
+        path: number[],
+        comment: string
+    ) => string,
+
+    pi: (
+        path: number[],
+        lang: string,
+        body: string
+    ) => string,
+
+    attribute: (
+        path: number[],
+        name: string,
+        value: string
+    ) => string,
+
+    getPrefix: (
+        path: number[],
+        isAttribute: boolean,
+        opts: SNACOpts
+    ) => string,
 }
 
 export interface SNAC2XMLJSXFuncs {
@@ -169,9 +212,34 @@ export interface PIJSXType {
         opts: SNACOpts,
     }): JSX.Element | null
 }
-export interface AttributesJSXType { (props: { path: number[], attributes: AttributesType, opts: SNACOpts }): JSX.Element | null }
-export interface AttributeJSXType { (props: { path: number[], name: string, value: string, opts: SNACOpts }): JSX.Element }
-export interface PrefixJSXType { (props: { path: number[], opts: SNACOpts }): JSX.Element | null }
+export interface AttributesJSXType {
+    (
+        props: {
+            path: number[],
+            attributes: AttributesType,
+            opts: SNACOpts
+        }
+    ): JSX.Element | null
+}
+
+export interface AttributeJSXType {
+    (
+        props: {
+            path: number[],
+            name: string,
+            value: string,
+            opts: SNACOpts
+        }
+    ): JSX.Element
+}
+export interface PrefixJSXType {
+    (
+        props: {
+            path: number[],
+            opts: SNACOpts
+        }
+    ): JSX.Element | null
+}
 
 export interface AttributesType {
     [name: string]: string

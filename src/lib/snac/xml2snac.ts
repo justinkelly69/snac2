@@ -1,15 +1,24 @@
 import {
-    SNACNamesNode, SNACItem, SNACElement, AttributesXMLhasChildrenType,
-    AttributesType, QuoteChar, AttributeXMLType, AttributeValueType
+    SNACNamesNode,
+    SNACItem,
+    SNACElement,
+    AttributesXMLhasChildrenType,
+    AttributesType,
+    QuoteChar,
+    AttributeXMLType,
+    AttributeValueType
 } from './types'
 
 import { xmlOpts } from './opts'
 
-import { normalizeText, unEscapeHtml } from './textutils'
+import {
+    normalizeText,
+    unEscapeHtml
+} from './textutils'
 
 const render = (xml: string) => {
     const stack: SNACNamesNode[] = []
-    
+
     return _render(xml, stack)['out']
 }
 
@@ -109,7 +118,7 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
         else if (textTag !== null) {
             if (stack.length > 0) {
                 let text = unEscapeHtml(textTag[1])
-                if(xmlOpts.xml_normalizeText){
+                if (xmlOpts.xml_normalizeText) {
                     text = normalizeText(text)
                 }
                 out.push({
@@ -183,7 +192,13 @@ const getAttributes = (xml: string): AttributesXMLhasChildrenType => {
     }
 }
 
-const addAttribute = (attributes: AttributesType, nameStr: string, quoteChar: QuoteChar, xml: string): AttributeXMLType => {
+const addAttribute = (
+    attributes: AttributesType,
+    nameStr: string,
+    quoteChar: QuoteChar,
+    xml: string
+): AttributeXMLType => {
+
     const attVal = getAttributeValue(xml, quoteChar)
     attributes[nameStr] = attVal['value']
 
@@ -193,7 +208,11 @@ const addAttribute = (attributes: AttributesType, nameStr: string, quoteChar: Qu
     }
 }
 
-const getAttributeValue = (text: string, quoteChar: QuoteChar): AttributeValueType => {
+const getAttributeValue = (
+    text: string,
+    quoteChar: QuoteChar
+): AttributeValueType => {
+
     const values = getValueString(text, quoteChar)
     if (values === null) {
         throw Error(`BAD XML ${text}`)
@@ -206,7 +225,11 @@ const getAttributeValue = (text: string, quoteChar: QuoteChar): AttributeValueTy
     }
 }
 
-const getValueString = (text: string, quoteChar: QuoteChar): AttributeValueType | null => {
+const getValueString = (
+    text: string,
+    quoteChar: QuoteChar
+): AttributeValueType | null => {
+
     for (let i = 0; i < text.length; i++) {
         if (text.charAt(i) === quoteChar && text.charAt(i - 1) !== '\\') {
             return {

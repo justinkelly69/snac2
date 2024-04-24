@@ -15,7 +15,6 @@ import {
 
 import { snacOpts } from "../snac/opts"
 
-
 import {
     escapeCDATA,
     escapeComment,

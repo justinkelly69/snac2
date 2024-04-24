@@ -13,11 +13,22 @@ import {
     escapeHtml
 } from '../snac/textutils'
 
-const snac2xml = (snac: SNACItem[], funcs: SNAC2XMLJSXFuncs, opts: SNACOpts) => {
+const snac2xml = (
+    snac: SNACItem[],
+    funcs: SNAC2XMLJSXFuncs,
+    opts: SNACOpts
+) => {
     return getChildren([], snac, [], funcs, opts)
 }
 
-const getChildren = (root: SNACItem[], snac: SNACItem[], path: number[], funcs: SNAC2XMLJSXFuncs, opts: SNACOpts) => {
+const getChildren = (
+    root: SNACItem[],
+    snac: SNACItem[],
+    path: number[],
+    funcs: SNAC2XMLJSXFuncs,
+    opts: SNACOpts
+) => {
+
     const { Tag, Text, CDATA, Comment, PI } = funcs
     let out: JSX.Element[] = []
 
