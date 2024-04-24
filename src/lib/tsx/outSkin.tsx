@@ -1,5 +1,5 @@
 import { SNACOpts, SwitchStates } from "../snac/types"
-import { Prefix } from "./outFuncs"
+import { Attribute, Prefix } from "./outFuncs"
 
 
 export const PrefixSkin = (props: { prefix: string }) =>
@@ -7,26 +7,29 @@ export const PrefixSkin = (props: { prefix: string }) =>
         {props.prefix}
     </span>
 
-export const OpenCaret = () =>
-    <span className='caret'>
-        &lt;
-    </span>
+export const OpenCaret = (props: { isClose: boolean }) =>
+    props.isClose ?
+        <span className='caret'>
+            &lt;
+            <span className='caret-slash'>/</span>
+        </span> :
+        <span className='caret'>&lt;</span>
 
-export const CloseCaret = (props: { closeSlash: boolean }) =>
-    props.closeSlash ?
+export const CloseCaret = (props: { isEmpty: boolean }) =>
+    props.isEmpty ?
         <span className='caret'>
             <span className='caret-slash'>/</span>
             &gt;
         </span> :
         <span className='caret'>&gt;</span>
 
-export const TagNameSkinSegment = (props: {
+export const TagNameSegment = (props: {
     name: string,
     path: string,
-    klass: string
+    className: string
 }) => {
     return (
-        <span className={props.klass}
+        <span className={props.className}
             onClick={e => console.log(props.path)}
         >
             {props.name}{' '}({props.path})
@@ -34,32 +37,32 @@ export const TagNameSkinSegment = (props: {
     )
 }
 
-export const TagNameSkin = (props: {
+export const TagName = (props: {
     name: string,
     path: string,
-    klass: string
+    ClassName: string
 }) => {
     const tagName = props.name.split(/:/)
 
     return tagName.length > 1 ?
         <>
-            <TagNameSkinSegment
+            <TagNameSegment
                 name={tagName[0]}
                 path={props.path}
-                klass={`${props.klass}-ns`}
+                className={`${props.ClassName}-ns`}
             />
             :
-            <TagNameSkinSegment
+            <TagNameSegment
                 name={tagName[1]}
                 path={props.path}
-                klass={`${props.klass}-name`}
+                className={`${props.ClassName}-name`}
             />
         </>
         :
-        <TagNameSkinSegment
+        <TagNameSegment
             name={props.name}
             path={props.path}
-            klass={`${props.klass}-name`}
+            className={`${props.ClassName}-name`}
         />
 }
 
@@ -68,27 +71,24 @@ export const AttributeSkin = (props: {
     name: string,
     value: string,
     opts: SNACOpts,
-    klass: string,
+    index: number,
 }) =>
-    <span className='attribute'>
-        <Prefix
+    <span className="attribute">
+        {
+            props.index > 0 ?
+                <br />
+                : null
+        }
+
+        <Attribute
             path={props.path}
+            name={props.name}
+            value={props.value}
             opts={props.opts}
         />
-        {props.opts.prefix_attributePrefix}
-        <AttributeNameSkin
-            name={props.name}
-            className={props.klass}
-            path={props.path.join(',')}
-        />
-        =&quot;
-        <span className='attribute-value'>
-            {props.value}
-        </span>
-        &quot;
     </span>
 
-export const AttributeNameSkin = (props: {
+export const AttributeNSName = (props: {
     name: string,
     path: string,
     className: string
@@ -97,23 +97,23 @@ export const AttributeNameSkin = (props: {
 
     return tagName.length > 1 ?
         <>
-            <TagNameSkinSegment
+            <TagNameSegment
                 name={tagName[0]}
                 path={props.path}
-                klass={`${props.className}-ans`}
+                className={`${props.className}-ans`}
             />
             :
-            <TagNameSkinSegment
+            <TagNameSegment
                 name={tagName[1]}
                 path={props.path}
-                klass={`${props.className}-aname`}
+                className={`${props.className}-aname`}
             />
         </>
         :
-        <TagNameSkinSegment
+        <TagNameSegment
             name={props.name}
             path={props.path}
-            klass={`${props.className}-aname`}
+            className={`${props.className}-aname`}
         />
 }
 
