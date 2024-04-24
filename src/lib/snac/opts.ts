@@ -1,6 +1,5 @@
 import {XMLOpts, SNACOpts } from "../snac/types"
 
-
 export const xmlOpts:XMLOpts = {
     prefix_showPrefix: true,
     prefix_startNewline: false,
@@ -20,6 +19,7 @@ export const xmlOpts:XMLOpts = {
 export const snacOpts:SNACOpts = {
     prefix_showPrefix: true,
     prefix_newLine: "\n",
+    prefix_separator: ":",
     prefix_startChar: ">",
     prefix_charOn: " ",
     prefix_charOff: " ",

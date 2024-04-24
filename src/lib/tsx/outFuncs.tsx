@@ -13,6 +13,9 @@ import {
     OnOffHiddenChars,
 } from '../snac/types'
 
+import { snacOpts } from "../snac/opts"
+
+
 import {
     escapeCDATA,
     escapeComment,
@@ -24,15 +27,70 @@ import {
     TagName,
     AttributeNSName,
     ShowHideSwitchSkin,
-    AttributeValueSkin,
+    AttributeValue,
     PISkin,
     CommentSkin,
     CDATASkin,
     TextSkin,
     OpenCaret,
     CloseCaret,
-    AttributeSkin
+    AttributePreSpace,
+    Span,
+    Div
 } from './outSkin'
+
+export const Prefix = (props: {
+    path: number[],
+    opts: SNACOpts
+}): JSX.Element | null => {
+
+    return props.opts.prefix_showPrefix ? (
+        <PrefixSkin
+            prefix={
+                getPrefixString(
+                    props.path,
+                    props.opts
+                )
+            }
+        />
+    ) : null
+}
+export const getPrefixString = (
+    path: number[],
+    opts: SNACOpts
+): string => {
+    const init = ""
+    return path.reduce((out) => out + opts.prefix_charOn, init)
+}
+
+const ShowHideSwitch = (props:
+    {
+        root: SNACItem[],
+        path: number[],
+        chars: OnOffHiddenChars,
+        selected: SwitchStates,
+        className: string
+        openClose: Function
+    }): JSX.Element => {
+
+    let out = props.chars.hidden
+
+    switch (props.selected) {
+        case SwitchStates.OFF:
+            out = props.chars.on
+            break;
+
+        case SwitchStates.ON:
+            out = props.chars.off
+    }
+
+    return (
+        <ShowHideSwitchSkin
+            {...props}
+            out={out}
+        />
+    )
+}
 
 export const Tag = (props: {
     root: SNACItem[],
@@ -61,7 +119,7 @@ export const Tag = (props: {
     }
 
     return (
-        <div className={selectedClassName}>
+        <Div className={selectedClassName}>
             <OpenTag
                 {...props}
                 isEmpty={isEmpty}
@@ -96,7 +154,7 @@ export const Tag = (props: {
             ) :
                 null
             }
-        </div>
+        </Div>
     )
 }
 
@@ -149,7 +207,7 @@ export const OpenTag = (props: {
                 className='selected-show-hide'
                 openClose={() => props.setSelected(!props.isSelected)}
             />
-            
+
             <Prefix {...props} />
 
             <ShowHideSwitch
@@ -160,36 +218,26 @@ export const OpenTag = (props: {
                 openClose={() => props.setChildrenOpen(!props.isChildrenOpen)}
             />
 
-            <OpenCaret
-                isClose={false}
-            />
+            <OpenCaret isClose={false} />
 
             <NSTagName
+                {...props}
                 name={props.node.N}
-                path={props.path}
                 type='element'
             />
 
             {props.isAttributesOpen ?
                 <>
                     <Attributes
-                        path={props.path}
+                        {...props}
                         attributes={props.node.A}
-                        opts={props.opts}
-                    />
-
-                    <PostAttributeSpacing
-                        A={props.node.A}
-                        path={props.path}
-                        opts={props.opts}
                     />
                 </> :
                 null
             }
 
-            <CloseCaret
-                isEmpty={isEmpty}
-            />
+            <CloseCaret isEmpty={isEmpty} />
+
             <ShowHideSwitch
                 {...props}
                 selected={attributesOpenState}
@@ -200,25 +248,6 @@ export const OpenTag = (props: {
         </>
     )
 }
-
-const PostAttributeSpacing = (props: {
-    A: AttributesType,
-    path: number[],
-    opts: SNACOpts,
-}): JSX.Element | null =>
-    <>
-        {Object.keys(props.A).length > 0 ?  // Blank line after attributes
-            <>
-                {props.opts.prefix_spaceBefore}
-                <Prefix
-                    path={props.path}
-                    opts={props.opts}
-                />
-                {props.opts.prefix_spaceAfter}
-            </>
-            : null
-        }
-    </>
 
 export const CloseTag = (props: {
     root: SNACItem[],
@@ -254,22 +283,15 @@ export const CloseTag = (props: {
             {props.isChildrenOpen ? (
                 <>
                     <ShowHideSwitch
-                        root={props.root}
-                        path={props.path}
+                        {...props}
                         selected={selectState}
                         chars={props.opts.switch_selectChars}
                         className='selected-show-hide'
                         openClose={() => props.setSelected(!props.isSelected)}
                     />
-
-                    <Prefix
-                        path={props.path}
-                        opts={props.opts}
-                    />
-
+                    <Prefix {...props} />
                     <ShowHideSwitch
-                        root={props.root}
-                        path={props.path}
+                        {...props}
                         selected={childrenOpenState}
                         chars={props.opts.switch_elementChars}
                         className='element-show-hide'
@@ -281,16 +303,93 @@ export const CloseTag = (props: {
             }
 
             <OpenCaret isClose={true} />
-
             <NSTagName
+                {...props}
                 name={props.node.N}
-                path={props.path}
                 type='element'
             />
-
             <CloseCaret isEmpty={false} />
         </>
     )
+}
+
+const NSTagName = (props: {
+    path: number[],
+    name: string,
+    type: string
+}): JSX.Element => {
+
+    return (
+        <TagName
+            {...props}
+            className={props.type}
+            separator={snacOpts.prefix_separator}
+        />
+    )
+}
+
+export const Attributes = (props: {
+    path: number[],
+    attributes: AttributesType,
+    opts: SNACOpts
+}): JSX.Element | null => {
+
+    return Object.keys(props.attributes).length > 0 ? (
+        <>
+            <Div className='attributes'>
+                {Object.keys(props.attributes).map((a, i) =>
+                    <Span key={i} className="attribute">
+                        <AttributePreSpace index={i} />
+                        <Attribute
+                            {...props}
+                            name={a}
+                            value={props.attributes[a]}
+                        />
+                    </Span>
+                )}
+            </Div>
+
+            <AttributesPostSpacing
+                {...props}
+                A={props.attributes}
+            />
+        </>
+    ) : null
+}
+
+export const Attribute = (props: {
+    path: number[],
+    name: string,
+    value: string,
+    opts: SNACOpts,
+}): JSX.Element => {
+
+    return (
+        <Span className='attribute'>
+            <Prefix {...props} />
+            {props.opts.prefix_attributePrefix}
+            <AttributeNSName
+                {...props}
+                className={'attribute'}
+            />
+            <AttributeValue {...props} />
+        </Span>
+    )
+}
+
+const AttributesPostSpacing = (props: {
+    A: AttributesType,
+    path: number[],
+    opts: SNACOpts,
+}): JSX.Element | null => {
+
+    return Object.keys(props.A).length > 0 ? (
+        <>
+            {props.opts.prefix_spaceBefore}
+            <Prefix {...props} />
+            {props.opts.prefix_spaceAfter}
+        </>
+    ) : null
 }
 
 export const Text = (props: {
@@ -330,25 +429,20 @@ export const Text = (props: {
     }
 
     return (
-        <div className={selectedClassName}>
+        <Div className={selectedClassName}>
             <ShowHideSwitch
-                root={props.root}
-                path={props.path}
+                {...props}
                 selected={selectState}
                 chars={props.opts.switch_selectChars}
                 className='selected-show-hide'
                 openClose={() => setSelected(!isSelected)}
             />
 
-            <Prefix
-                path={props.path}
-                opts={props.opts}
-            />
+            <Prefix {...props} />
 
             {props.showOpen ?
                 <ShowHideSwitch
-                    root={props.root}
-                    path={props.path}
+                    {...props}
                     selected={openState}
                     chars={props.opts.switch_elementChars}
                     className='element-show-hide'
@@ -358,10 +452,10 @@ export const Text = (props: {
             }
 
             <TextSkin
-                path={props.path.join(',')}
+                path={props.path}
                 text={text}
             />
-        </div>
+        </Div>
     )
 }
 
@@ -403,25 +497,20 @@ export const CDATA = (props: {
     }
 
     return (
-        <div className={selectedClassName}>
+        <Div className={selectedClassName}>
             <ShowHideSwitch
-                root={props.root}
-                path={props.path}
+                {...props}
                 selected={selectState}
                 chars={props.opts.switch_selectChars}
                 className='selected-show-hide'
                 openClose={() => setSelected(!isSelected)}
             />
 
-            <Prefix
-                path={props.path}
-                opts={props.opts}
-            />
+            <Prefix {...props} />
 
             {props.showOpen ?
                 <ShowHideSwitch
-                    root={props.root}
-                    path={props.path}
+                    {...props}
                     selected={openState}
                     chars={props.opts.switch_elementChars}
                     className='element-show-hide'
@@ -432,9 +521,9 @@ export const CDATA = (props: {
 
             <CDATASkin
                 cdata={escapeCDATA(cdata)}
-                path={props.path.join(',')}
+                path={props.path}
             />
-        </div>
+        </Div>
     )
 }
 
@@ -476,25 +565,20 @@ export const Comment = (props: {
     }
 
     return (
-        <div className={selectedClassName}>
+        <Div className={selectedClassName}>
             <ShowHideSwitch
-                root={props.root}
-                path={props.path}
+                {...props}
                 selected={selectState}
                 chars={props.opts.switch_selectChars}
                 className='selected-show-hide'
                 openClose={() => setSelected(!isSelected)}
             />
 
-            <Prefix
-                path={props.path}
-                opts={props.opts}
-            />
+            <Prefix {...props} />
 
             {props.showOpen ?
                 <ShowHideSwitch
-                    root={props.root}
-                    path={props.path}
+                    {...props}
                     selected={openState}
                     chars={props.opts.switch_elementChars}
                     className='element-show-hide'
@@ -505,9 +589,9 @@ export const Comment = (props: {
 
             <CommentSkin
                 comment={escapeComment(comment)}
-                path={props.path.join(',')}
+                path={props.path}
             />
-        </div>
+        </Div>
     )
 }
 
@@ -519,6 +603,7 @@ export const PI = (props: {
     showOpen: boolean,
     opts: SNACOpts,
 }): JSX.Element | null => {
+
     const [isSelected, setSelected] = useState(props.node.q)
     const [isChildrenOpen, setChildrenOpen] = useState(props.node.o)
 
@@ -548,25 +633,20 @@ export const PI = (props: {
     }
 
     return (
-        <div className={selectedClassName}>
+        <Div className={selectedClassName}>
             <ShowHideSwitch
-                root={props.root}
-                path={props.path}
+                {...props}
                 selected={selectState}
                 chars={props.opts.switch_selectChars}
                 className='selected-show-hide'
                 openClose={() => setSelected(!isSelected)}
             />
 
-            <Prefix
-                path={props.path}
-                opts={props.opts}
-            />
+            <Prefix {...props} />
 
             {props.showOpen ?
                 <ShowHideSwitch
-                    root={props.root}
-                    path={props.path}
+                    {...props}
                     selected={openState}
                     chars={props.opts.switch_elementChars}
                     className='element-show-hide'
@@ -578,129 +658,8 @@ export const PI = (props: {
             <PISkin
                 language={props.node.L}
                 body={escapePIBody(body)}
-                path={props.path.join(',')}
+                path={props.path}
             />
-        </div>
+        </Div>
     )
 }
-
-export const Attributes = (props: {
-    path: number[],
-    attributes: AttributesType,
-    opts: SNACOpts
-}): JSX.Element | null => {
-    return Object.keys(props.attributes).length > 0 ?
-        <div>
-            {Object.keys(props.attributes).map((a, i) =>
-                <AttributeSkin
-                    key={i}
-                    path={props.path}
-                    name={a}
-                    value={props.attributes[a]}
-                    opts={props.opts}
-                    index={i}
-                />
-            )}
-        </div> :
-        null
-}
-
-
-export const Attribute = (props: {
-    path: number[],
-    name: string,
-    value: string,
-    opts: SNACOpts,
-}): JSX.Element =>
-    <span className='attribute'>
-{/*         <Prefix
-            path={props.path}
-            opts={props.opts}
-        /> */}
-        <Prefix {...props} />
-        {props.opts.prefix_attributePrefix}
-        <AttributeTagName
-            path={props.path}
-            name={props.name}
-            type='attribute'
-        />
-        <AttributeValueSkin
-            value={props.value}
-        />
-    </span>
-
-export const Prefix = (props: {
-    path: number[],
-    opts: SNACOpts
-}): JSX.Element | null =>
-    props.opts.prefix_showPrefix ?
-        <PrefixSkin
-            prefix={
-                getPrefixString(
-                    props.path,
-                    props.opts
-                )
-            }
-        />
-        : null
-
-
-export const getPrefixString = (
-    path: number[],
-    opts: SNACOpts
-): string => {
-    const init = ""
-    return path.reduce((out) => out + opts.prefix_charOn, init)
-}
-
-const NSTagName = (props: {
-    path: number[],
-    name: string,
-    type: string
-}): JSX.Element =>
-    <TagName
-        name={props.name}
-        ClassName={props.type}
-        path={props.path.join(',')}
-    />
-
-const AttributeTagName = (props: {
-    path: number[],
-    name: string,
-    type: string
-}): JSX.Element =>
-    <AttributeNSName
-        name={props.name}
-        className={props.type}
-        path={props.path.join(',')}
-    />
-
-const ShowHideSwitch = (props:
-    {
-        root: SNACItem[],
-        path: number[],
-        chars: OnOffHiddenChars,
-        selected: SwitchStates,
-        className: string
-        openClose: Function
-    }): JSX.Element => {
-    let out = props.chars.hidden
-
-    switch (props.selected) {
-        case SwitchStates.OFF:
-            out = props.chars.on
-            break;
-        case SwitchStates.ON:
-            out = props.chars.off
-    }
-
-    return (
-        <ShowHideSwitchSkin
-            className={props.className}
-            selected={props.selected}
-            openClose={props.openClose}
-            out={out}
-        />
-    )
-}
-

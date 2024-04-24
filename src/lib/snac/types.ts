@@ -25,6 +25,7 @@ export type OnOffHiddenChars = {
 export type SNACOpts = {
     prefix_showPrefix: boolean,
     prefix_newLine: string,
+    prefix_separator: string,
     prefix_startChar: string,
     prefix_charOn: string,
     prefix_charOff: string,
