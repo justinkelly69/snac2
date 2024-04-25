@@ -8,7 +8,6 @@ export const xmlOpts:XMLOpts = {
     prefix_spaceBefore: " ",
     prefix_spaceAfter: " ",
     prefix_attributePrefix: "    ",
-
     xml_selfCloseTags: true,
     xml_trimText: true,
     xml_normalizeText: true,
@@ -26,7 +25,6 @@ export const snacOpts:SNACOpts = {
     prefix_spaceBefore: " ",
     prefix_spaceAfter: " ",
     prefix_attributePrefix: "    ",
-
     switch_selectOn: "+",
     switch_selectOff: "-",
     switch_selectHide: "#",
@@ -51,7 +49,6 @@ export const snacOpts:SNACOpts = {
         off: "-",
         hidden: " ",
     },
-
     xml_showSelected: true,
     xml_showAttributesOpen: true,
     xml_showChildrenOpen: true,

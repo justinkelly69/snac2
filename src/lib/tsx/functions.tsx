@@ -21,22 +21,9 @@ import {
     escapePIBody
 } from '../snac/textutils'
 
-import {
-    PrefixSkin,
-    TagName,
-    AttributeNSName,
-    ShowHideSwitchSkin,
-    AttributeValue,
-    PISkin,
-    CommentSkin,
-    CDATASkin,
-    TextSkin,
-    OpenCaret,
-    CloseCaret,
-    AttributePreSpace,
-    Span,
-    Div
-} from './outSkin'
+import { getPrefixString } from '../snac/html'
+
+import * as HTML from './html'
 
 export const Prefix = (props: {
     path: number[],
@@ -44,7 +31,7 @@ export const Prefix = (props: {
 }): JSX.Element | null => {
 
     return props.opts.prefix_showPrefix ? (
-        <PrefixSkin
+        <HTML.Prefix
             prefix={
                 getPrefixString(
                     props.path,
@@ -52,15 +39,10 @@ export const Prefix = (props: {
                 )
             }
         />
-    ) : null
+    ) :
+        null
 }
-export const getPrefixString = (
-    path: number[],
-    opts: SNACOpts
-): string => {
-    const init = ""
-    return path.reduce((out) => out + opts.prefix_charOn, init)
-}
+
 
 const ShowHideSwitch = (props:
     {
@@ -84,7 +66,7 @@ const ShowHideSwitch = (props:
     }
 
     return (
-        <ShowHideSwitchSkin
+        <HTML.ShowHideSwitch
             {...props}
             out={out}
         />
@@ -118,7 +100,7 @@ export const Tag = (props: {
     }
 
     return (
-        <Div className={selectedClassName}>
+        <HTML.Div className={selectedClassName}>
             <OpenTag
                 {...props}
                 isEmpty={isEmpty}
@@ -153,7 +135,7 @@ export const Tag = (props: {
             ) :
                 null
             }
-        </Div>
+        </HTML.Div>
     )
 }
 
@@ -217,7 +199,7 @@ export const OpenTag = (props: {
                 openClose={() => props.setChildrenOpen(!props.isChildrenOpen)}
             />
 
-            <OpenCaret isClose={false} />
+            <HTML.OpenCaret isClose={false} />
 
             <NSTagName
                 {...props}
@@ -226,16 +208,14 @@ export const OpenTag = (props: {
             />
 
             {props.isAttributesOpen ?
-                <>
-                    <Attributes
-                        {...props}
-                        attributes={props.node.A}
-                    />
-                </> :
+                <Attributes
+                    {...props}
+                    attributes={props.node.A}
+                /> :
                 null
             }
 
-            <CloseCaret isEmpty={isEmpty} />
+            <HTML.CloseCaret isEmpty={isEmpty} />
 
             <ShowHideSwitch
                 {...props}
@@ -301,13 +281,15 @@ export const CloseTag = (props: {
                 null
             }
 
-            <OpenCaret isClose={true} />
+            <HTML.OpenCaret isClose={true} />
+
             <NSTagName
                 {...props}
                 name={props.node.N}
                 type='element'
             />
-            <CloseCaret isEmpty={false} />
+
+            <HTML.CloseCaret isEmpty={false} />
         </>
     )
 }
@@ -319,7 +301,7 @@ const NSTagName = (props: {
 }): JSX.Element => {
 
     return (
-        <TagName
+        <HTML.TagName
             {...props}
             className={props.type}
             separator={snacOpts.prefix_separator}
@@ -335,25 +317,26 @@ export const Attributes = (props: {
 
     return Object.keys(props.attributes).length > 0 ? (
         <>
-            <Div className='attributes'>
+            <HTML.Div className='attributes'>
                 {Object.keys(props.attributes).map((a, i) =>
-                    <Span key={i} className="attribute">
-                        <AttributePreSpace index={i} />
+                    <HTML.Span key={i} className="attribute">
+                        <HTML.AttributePreSpace index={i} />
                         <Attribute
                             {...props}
                             name={a}
                             value={props.attributes[a]}
                         />
-                    </Span>
+                    </HTML.Span>
                 )}
-            </Div>
+            </HTML.Div>
 
             <AttributesPostSpacing
                 {...props}
                 A={props.attributes}
             />
         </>
-    ) : null
+    ) :
+        null
 }
 
 export const Attribute = (props: {
@@ -364,15 +347,15 @@ export const Attribute = (props: {
 }): JSX.Element => {
 
     return (
-        <Span className='attribute'>
+        <HTML.Span className='attribute'>
             <Prefix {...props} />
             {props.opts.prefix_attributePrefix}
-            <AttributeNSName
+            <HTML.AttributeNSName
                 {...props}
                 className={'attribute'}
             />
-            <AttributeValue {...props} />
-        </Span>
+            <HTML.AttributeValue {...props} />
+        </HTML.Span>
     )
 }
 
@@ -388,7 +371,8 @@ const AttributesPostSpacing = (props: {
             <Prefix {...props} />
             {props.opts.prefix_spaceAfter}
         </>
-    ) : null
+    ) :
+        null
 }
 
 export const Text = (props: {
@@ -428,7 +412,7 @@ export const Text = (props: {
     }
 
     return (
-        <Div className={selectedClassName}>
+        <HTML.Div className={selectedClassName}>
             <ShowHideSwitch
                 {...props}
                 selected={selectState}
@@ -450,11 +434,11 @@ export const Text = (props: {
                 null
             }
 
-            <TextSkin
+            <HTML.Text
                 path={props.path}
                 text={text}
             />
-        </Div>
+        </HTML.Div>
     )
 }
 
@@ -496,7 +480,7 @@ export const CDATA = (props: {
     }
 
     return (
-        <Div className={selectedClassName}>
+        <HTML.Div className={selectedClassName}>
             <ShowHideSwitch
                 {...props}
                 selected={selectState}
@@ -518,11 +502,11 @@ export const CDATA = (props: {
                 null
             }
 
-            <CDATASkin
+            <HTML.CDATA
                 cdata={escapeCDATA(cdata)}
                 path={props.path}
             />
-        </Div>
+        </HTML.Div>
     )
 }
 
@@ -564,7 +548,7 @@ export const Comment = (props: {
     }
 
     return (
-        <Div className={selectedClassName}>
+        <HTML.Div className={selectedClassName}>
             <ShowHideSwitch
                 {...props}
                 selected={selectState}
@@ -586,11 +570,11 @@ export const Comment = (props: {
                 null
             }
 
-            <CommentSkin
+            <HTML.Comment
                 comment={escapeComment(comment)}
                 path={props.path}
             />
-        </Div>
+        </HTML.Div>
     )
 }
 
@@ -632,7 +616,7 @@ export const PI = (props: {
     }
 
     return (
-        <Div className={selectedClassName}>
+        <HTML.Div className={selectedClassName}>
             <ShowHideSwitch
                 {...props}
                 selected={selectState}
@@ -654,11 +638,11 @@ export const PI = (props: {
                 null
             }
 
-            <PISkin
+            <HTML.PI
                 language={props.node.L}
                 body={escapePIBody(body)}
                 path={props.path}
             />
-        </Div>
+        </HTML.Div>
     )
 }

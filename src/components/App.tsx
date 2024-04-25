@@ -17,7 +17,7 @@ import {
     OpenTag,
     PI,
     Prefix
-} from '../lib/tsx/outFuncs';
+} from '../lib/tsx/functions';
 
 function App() {
 
@@ -33,7 +33,7 @@ function App() {
         Attribute,
         Prefix
     }
-    
+
     const snac = xml2snac(xmlInput)[0]
     const xml = xmlOut([snac], funcs, snacOpts)
 

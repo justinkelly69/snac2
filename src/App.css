@@ -26,7 +26,7 @@
   background-color: rgb(215, 180, 210);
 }
 
-.attribute {}
+/* .attribute {} */
 
 .attribute-ns {
   color: darkred
@@ -77,4 +77,4 @@
   color: green
 }
 
-.prefix {}
+/* .prefix {} */

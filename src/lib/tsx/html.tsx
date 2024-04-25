@@ -1,6 +1,10 @@
 import { SwitchStates } from "../snac/types"
 
-export const ShowHideSwitchSkin = (props: {
+
+
+
+
+export const ShowHideSwitch = (props: {
     className: string,
     selected: SwitchStates,
     openClose: Function
@@ -17,33 +21,11 @@ export const ShowHideSwitchSkin = (props: {
     )
 }
 
-export const PrefixSkin = (props: { prefix: string }) => {
+export const Prefix = (props: { prefix: string }) => {
     return (
         <span className="prefix">
             {props.prefix}
         </span>
-    )
-}
-
-export const OpenCaret = (props: { isClose: boolean }) => {
-    return props.isClose ? (
-        <span className='caret'>
-            &lt;
-            <span className='caret-slash'>/</span>
-        </span>
-    ) : (
-        <span className='caret'>&lt;</span>
-    )
-}
-
-export const CloseCaret = (props: { isEmpty: boolean }) => {
-    return props.isEmpty ? (
-        <span className='caret'>
-            <span className='caret-slash'>/</span>
-            &gt;
-        </span>
-    ) : (
-        <span className='caret'>&gt;</span>
     )
 }
 
@@ -65,6 +47,34 @@ export const Span = (props: {
     return (
         <span className={props.className}>
             {props.children}
+        </span>
+    )
+}
+
+export const OpenCaret = (props: { isClose: boolean }) => {
+    //return isClose ? '&lt;/' : '&lt;'
+    return (
+        <span className="caret">
+            &lt;
+            {props.isClose &&
+                <span className="caret-slash">
+                    /
+                </span>
+            }
+        </span>
+    )
+}
+
+export const CloseCaret = (props: { isEmpty: boolean }) => {
+    //return isEmpty ? '/&gt;' : '&gt;'
+    return (
+        <span className="caret">
+            {props.isEmpty &&
+                <span className="caret-slash">
+                    /
+                </span>
+            }
+            &gt;
         </span>
     )
 }
@@ -116,12 +126,7 @@ export const TagName = (props: {
     )
 }
 
-export const AttributePreSpace = (props: { index: number }) => {
-    return props.index > 0 ? (
-        <br />
-    ) :
-        null
-}
+
 
 export const AttributeNSName = (props: {
     name: string,
@@ -167,7 +172,13 @@ export const AttributeValue = (props: {
     )
 }
 
-export const CDATASkin = (props: {
+export const AttributePreSpace = (props: { index: number }) => {
+    return props.index > 0 ?
+        <br /> :
+        null
+}
+
+export const CDATA = (props: {
     cdata: string,
     path: number[],
 }) => {
@@ -184,7 +195,7 @@ export const CDATASkin = (props: {
     )
 }
 
-export const CommentSkin = (props: {
+export const Comment = (props: {
     comment: string,
     path: number[],
 }) => {
@@ -201,7 +212,7 @@ export const CommentSkin = (props: {
     )
 }
 
-export const PISkin = (props: {
+export const PI = (props: {
     language: string,
     body: string,
     path: number[],
@@ -221,7 +232,7 @@ export const PISkin = (props: {
     )
 }
 
-export const TextSkin = (props: {
+export const Text = (props: {
     path: number[],
     text: string,
 }) => {
