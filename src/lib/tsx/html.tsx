@@ -1,9 +1,5 @@
 import { SwitchStates } from "../snac/types"
 
-
-
-
-
 export const ShowHideSwitch = (props: {
     className: string,
     selected: SwitchStates,
@@ -88,7 +84,7 @@ export const TagNameSegment = (props: {
         <span className={props.className}
             onClick={e => console.log(`N[${props.path}]`)}
         >
-            {props.name}{' '}({props.path})
+            {props.name}{/* {' '}({props.path}) */}
         </span>
     )
 }
@@ -125,8 +121,6 @@ export const TagName = (props: {
         />
     )
 }
-
-
 
 export const AttributeNSName = (props: {
     name: string,
@@ -188,7 +182,7 @@ export const CDATA = (props: {
             <span className='cdata-body'
                 onClick={e => console.log(`D[${props.path}]`)}
             >
-                ({props.path}){props.cdata}
+                {/* ({props.path}) */}{props.cdata}
             </span>
             ]]&gt;
         </>
@@ -205,7 +199,7 @@ export const Comment = (props: {
             <span className='comment-body'
                 onClick={e => console.log(`M[${props.path}]`)}
             >
-                ({props.path}){props.comment}
+                {/* ({props.path}) */}{props.comment}
             </span>
             --&gt;
         </>
@@ -225,7 +219,7 @@ export const PI = (props: {
             <span className='pi-body'
                 onClick={e => console.log(`P[${props.path}]`)}
             >
-                ({props.path}){props.body}
+                {/* ({props.path}) */}{props.body}
             </span>
             {" "}?&gt;
         </>
@@ -240,7 +234,7 @@ export const Text = (props: {
         <span className='text-body'
             onClick={e => console.log(`T[${props.path}]`)}
         >
-            ({props.path}){props.text}
+            {/* ({props.path}) */}[{props.text}]
         </span>
     )
 }

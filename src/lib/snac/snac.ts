@@ -17,9 +17,6 @@ const find = (
         N: "",
         A: {},
         C: snac,
-        a: true,
-        o: true,
-        q: false
     }
 
     return _find(element, path)
@@ -82,55 +79,83 @@ export const findElement = (
     }
 }
 
-const getRemovePaths = (
-    removeFrom: number[],
-    removeTo: number[]
-) => {
+export const comparePaths = (
+    p1: number[],
+    p2: number[]
+): number | null => {
 
-    if (removeFrom.length !== removeTo.length) {
-        return removeTo
+    if (
+        p1.length === 0 ||
+        p2.length === 0 ||
+        p1.length !== p2.length
+    ) {
+        return null
+    }
+
+    const len = p1.length - 1
+
+    for (const i in p1) {
+        if (p1[i] !== p2[i]) {
+            return null
+        }
+    }
+
+    return p1[len] - p2[len]
+}
+
+export const selectNode = (
+    newPath: number[],
+    selected: number[][]
+): number[][] => {
+
+    const len = selected.length
+
+    if (len === 0) {
+        return [newPath]
+    }
+
+    const startSelected = comparePaths(newPath, selected[0])
+
+    if (startSelected === null) {
+        return [newPath]
+    }
+    else if (startSelected === -1) {
+        return [newPath, ...selected]
+    }
+    else if (startSelected === 0) {
+        return selected.slice(1)
+    }
+
+    const endSelected = comparePaths(newPath, selected[len - 1])
+
+    if (endSelected === 1) {
+        return [...selected, newPath]
+    }
+    else if (endSelected === 0) {
+        return selected.slice(len - 1)
     }
     else {
-
-        for (let i in removeFrom.slice(0, removeFrom.length - 1)) {
-            if (removeFrom[i] !== removeTo[i]) {
-                return removeTo
-            }
-        }
-
-        const from = removeFrom[removeFrom.length - 1]
-        const to = removeTo[removeTo.length - 1]
-
-        let out: number[] = []
-        if (from > to) {
-            for (let i = to; i <= from; i++) {
-                out = [...out, i]
-            }
-        }
-        else if (from < to) {
-
-        }
-        else {
-
-        }
+        return [newPath]
     }
 }
 
-const clone = (
-    snac: SNACItem[],
-    removeFrom: number[],
-    removeTo: number[],
-    replace: SNACItem[] | null
-): SNACItem[] => {
+export const isSelected = (
+    testPath: number[],
+    selected: number[][]
+): boolean => {
 
-    const snac1: SNACItem[] = []
-    for (const s in snac) {
-        if (removeFrom[0] === parseInt(s)) {
-
-        }
-        else {
-            snac1.push(snac[s])
+    for (const i in selected) {
+        if (comparePaths(testPath, selected[i]) === 0) {
+            return true
         }
     }
-    return snac1
+
+    return false
 }
+
+
+
+
+
+
+

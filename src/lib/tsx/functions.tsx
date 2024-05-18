@@ -1,33 +1,15 @@
 import { useState } from 'react'
 
-import {
-    SNACItem,
-    SNACElement,
-    SNACText,
-    SNACCDATA,
-    SNACComment,
-    SNACPINode,
-    AttributesType,
-    SwitchStates,
-    SNACOpts,
-    OnOffHiddenChars,
-} from '../snac/types'
-
-import { snacOpts } from "../snac/opts"
-
-import {
-    escapeCDATA,
-    escapeComment,
-    escapePIBody
-} from '../snac/textutils'
-
-import { getPrefixString } from '../snac/html'
-
+import * as SNAC from '../snac/types'
 import * as HTML from './html'
+import * as TEXT from '../snac/textutils'
+
+import { snacOpts } from '../snac/opts'
+import { getPrefixString } from '../snac/html'
 
 export const Prefix = (props: {
     path: number[],
-    opts: SNACOpts
+    opts: SNAC.SNACOpts
 }): JSX.Element | null => {
 
     return props.opts.prefix_showPrefix ? (
@@ -43,13 +25,12 @@ export const Prefix = (props: {
         null
 }
 
-
 const ShowHideSwitch = (props:
     {
-        root: SNACItem[],
+        root: SNAC.SNACItem[],
         path: number[],
-        chars: OnOffHiddenChars,
-        selected: SwitchStates,
+        chars: SNAC.OnOffHiddenChars,
+        selected: SNAC.SwitchStates,
         className: string
         openClose: Function
     }): JSX.Element => {
@@ -57,11 +38,11 @@ const ShowHideSwitch = (props:
     let out = props.chars.hidden
 
     switch (props.selected) {
-        case SwitchStates.OFF:
+        case SNAC.SwitchStates.OFF:
             out = props.chars.on
             break;
 
-        case SwitchStates.ON:
+        case SNAC.SwitchStates.ON:
             out = props.chars.off
     }
 
@@ -74,17 +55,17 @@ const ShowHideSwitch = (props:
 }
 
 export const Tag = (props: {
-    root: SNACItem[],
-    node: SNACElement,
+    root: SNAC.SNACItem[],
+    node: SNAC.SNACElement,
     path: number[],
-    opts: SNACOpts,
+    opts: SNAC.SNACOpts,
     getChildren: Function,
     funcs: { [name: string]: Function }
 }): JSX.Element => {
 
-    const [isSelected, setSelected] = useState(props.node.q)
-    const [isAttributesOpen, setAttributesOpen] = useState(props.node.a)
-    const [isChildrenOpen, setChildrenOpen] = useState(props.node.o)
+    const [isSelected, setSelected] = useState(false)
+    const [isAttributesOpen, setAttributesOpen] = useState(true)
+    const [isChildrenOpen, setChildrenOpen] = useState(true)
 
     let selectedClassName = 'element'
 
@@ -140,11 +121,11 @@ export const Tag = (props: {
 }
 
 export const OpenTag = (props: {
-    root: SNACItem[],
-    node: SNACElement,
+    root: SNAC.SNACItem[],
+    node: SNAC.SNACElement,
     path: number[],
     isEmpty: boolean,
-    opts: SNACOpts,
+    opts: SNAC.SNACOpts,
     isSelected: boolean,
     setSelected: Function
     isAttributesOpen: boolean,
@@ -153,28 +134,28 @@ export const OpenTag = (props: {
     setChildrenOpen: Function
 }): JSX.Element => {
 
-    let selectState = SwitchStates.HIDDEN
-    let attributesOpenState = SwitchStates.HIDDEN
-    let childrenOpenState = SwitchStates.HIDDEN
+    let selectState = SNAC.SwitchStates.HIDDEN
+    let attributesOpenState = SNAC.SwitchStates.HIDDEN
+    let childrenOpenState = SNAC.SwitchStates.HIDDEN
     let isEmpty = true
 
     if (props.opts.xml_showSelected) {
         selectState = props.isSelected ?
-            SwitchStates.ON :
-            SwitchStates.OFF
+            SNAC.SwitchStates.ON :
+            SNAC.SwitchStates.OFF
     }
 
     if (props.opts.xml_showAttributesOpen && Object.keys(props.node.A).length) {
         attributesOpenState = props.isAttributesOpen ?
-            SwitchStates.ON :
-            SwitchStates.OFF
+            SNAC.SwitchStates.ON :
+            SNAC.SwitchStates.OFF
     }
 
     if (!props.isEmpty) {
         if (props.opts.xml_showChildrenOpen) {
             childrenOpenState = props.isChildrenOpen ?
-                SwitchStates.ON :
-                SwitchStates.OFF
+                SNAC.SwitchStates.ON :
+                SNAC.SwitchStates.OFF
         }
         isEmpty = false
     }
@@ -229,31 +210,31 @@ export const OpenTag = (props: {
 }
 
 export const CloseTag = (props: {
-    root: SNACItem[],
-    node: SNACElement,
+    root: SNAC.SNACItem[],
+    node: SNAC.SNACElement,
     path: number[],
     isEmpty: boolean,
     isSelected: boolean,
     setSelected: Function
     isChildrenOpen: boolean,
     setChildrenOpen: Function
-    opts: SNACOpts,
+    opts: SNAC.SNACOpts,
 }): JSX.Element | null => {
 
-    let selectState = SwitchStates.HIDDEN
-    let childrenOpenState = SwitchStates.HIDDEN
+    let selectState = SNAC.SwitchStates.HIDDEN
+    let childrenOpenState = SNAC.SwitchStates.HIDDEN
 
     if (props.opts.xml_showSelected) {
         selectState = props.isSelected ?
-            SwitchStates.ON :
-            SwitchStates.OFF
+            SNAC.SwitchStates.ON :
+            SNAC.SwitchStates.OFF
     }
 
     if (props.isEmpty) {
         if (props.opts.xml_showChildrenOpen) {
             childrenOpenState = props.isChildrenOpen ?
-                SwitchStates.ON :
-                SwitchStates.OFF
+                SNAC.SwitchStates.ON :
+                SNAC.SwitchStates.OFF
         }
     }
 
@@ -311,8 +292,8 @@ const NSTagName = (props: {
 
 export const Attributes = (props: {
     path: number[],
-    attributes: AttributesType,
-    opts: SNACOpts
+    attributes: SNAC.AttributesType,
+    opts: SNAC.SNACOpts
 }): JSX.Element | null => {
 
     return Object.keys(props.attributes).length > 0 ? (
@@ -343,7 +324,7 @@ export const Attribute = (props: {
     path: number[],
     name: string,
     value: string,
-    opts: SNACOpts,
+    opts: SNAC.SNACOpts,
 }): JSX.Element => {
 
     return (
@@ -360,9 +341,9 @@ export const Attribute = (props: {
 }
 
 const AttributesPostSpacing = (props: {
-    A: AttributesType,
+    A: SNAC.AttributesType,
     path: number[],
-    opts: SNACOpts,
+    opts: SNAC.SNACOpts,
 }): JSX.Element | null => {
 
     return Object.keys(props.A).length > 0 ? (
@@ -376,25 +357,25 @@ const AttributesPostSpacing = (props: {
 }
 
 export const Text = (props: {
-    root: SNACItem[],
-    node: SNACText,
+    root: SNAC.SNACItem[],
+    node: SNAC.SNACText,
     path: number[],
     showSelected: boolean,
     showOpen: boolean,
-    opts: SNACOpts,
+    opts: SNAC.SNACOpts,
 }): JSX.Element => {
 
-    const [isSelected, setSelected] = useState(props.node.q)
-    const [isChildrenOpen, setChildrenOpen] = useState(props.node.o)
+    const [isSelected, setSelected] = useState(false)
+    const [isChildrenOpen, setChildrenOpen] = useState(true)
 
-    let selectState = SwitchStates.HIDDEN
-    let openState = SwitchStates.HIDDEN
+    let selectState = SNAC.SwitchStates.HIDDEN
+    let openState = SNAC.SwitchStates.HIDDEN
     let selectedClassName = 'text'
 
     if (props.showSelected) {
         selectState = isSelected ?
-            SwitchStates.ON :
-            SwitchStates.OFF
+            SNAC.SwitchStates.ON :
+            SNAC.SwitchStates.OFF
 
         selectedClassName = isSelected ?
             'text selected' :
@@ -402,8 +383,8 @@ export const Text = (props: {
     }
     if (props.showOpen) {
         openState = isChildrenOpen ?
-            SwitchStates.ON :
-            SwitchStates.OFF
+            SNAC.SwitchStates.ON :
+            SNAC.SwitchStates.OFF
     }
 
     let text = props.node.T
@@ -443,25 +424,25 @@ export const Text = (props: {
 }
 
 export const CDATA = (props: {
-    root: SNACItem[],
-    node: SNACCDATA,
+    root: SNAC.SNACItem[],
+    node: SNAC.SNACCDATA,
     path: number[],
     showSelected: boolean,
     showOpen: boolean,
-    opts: SNACOpts,
+    opts: SNAC.SNACOpts,
 }): JSX.Element => {
 
-    const [isSelected, setSelected] = useState(props.node.q)
-    const [isChildrenOpen, setChildrenOpen] = useState(props.node.o)
+    const [isSelected, setSelected] = useState(false)
+    const [isChildrenOpen, setChildrenOpen] = useState(true)
 
-    let selectState = SwitchStates.HIDDEN
-    let openState = SwitchStates.HIDDEN
+    let selectState = SNAC.SwitchStates.HIDDEN
+    let openState = SNAC.SwitchStates.HIDDEN
     let selectedClassName = 'cdata'
 
     if (props.showSelected) {
         selectState = isSelected ?
-            SwitchStates.ON :
-            SwitchStates.OFF
+            SNAC.SwitchStates.ON :
+            SNAC.SwitchStates.OFF
 
         selectedClassName = isSelected ?
             'cdata selected' :
@@ -470,8 +451,8 @@ export const CDATA = (props: {
 
     if (props.showOpen) {
         openState = isChildrenOpen ?
-            SwitchStates.ON :
-            SwitchStates.OFF
+            SNAC.SwitchStates.ON :
+            SNAC.SwitchStates.OFF
     }
 
     let cdata = props.node.D
@@ -503,7 +484,7 @@ export const CDATA = (props: {
             }
 
             <HTML.CDATA
-                cdata={escapeCDATA(cdata)}
+                cdata={TEXT.escapeCDATA(cdata)}
                 path={props.path}
             />
         </HTML.Div>
@@ -511,25 +492,25 @@ export const CDATA = (props: {
 }
 
 export const Comment = (props: {
-    root: SNACItem[],
-    node: SNACComment,
+    root: SNAC.SNACItem[],
+    node: SNAC.SNACComment,
     path: number[],
     showSelected: boolean,
     showOpen: boolean,
-    opts: SNACOpts,
+    opts: SNAC.SNACOpts,
 }): JSX.Element | null => {
 
-    const [isSelected, setSelected] = useState(props.node.q)
-    const [isChildrenOpen, setChildrenOpen] = useState(props.node.o)
+    const [isSelected, setSelected] = useState(false)
+    const [isChildrenOpen, setChildrenOpen] = useState(true)
 
-    let selectState = SwitchStates.HIDDEN
-    let openState = SwitchStates.HIDDEN
+    let selectState = SNAC.SwitchStates.HIDDEN
+    let openState = SNAC.SwitchStates.HIDDEN
     let selectedClassName = 'comment'
 
     if (props.showSelected) {
         selectState = isSelected ?
-            SwitchStates.ON :
-            SwitchStates.OFF
+            SNAC.SwitchStates.ON :
+            SNAC.SwitchStates.OFF
 
         selectedClassName = isSelected ?
             'comment selected' :
@@ -538,8 +519,8 @@ export const Comment = (props: {
 
     if (props.showOpen) {
         openState = isChildrenOpen ?
-            SwitchStates.ON :
-            SwitchStates.OFF
+            SNAC.SwitchStates.ON :
+            SNAC.SwitchStates.OFF
     }
 
     let comment = props.node.M
@@ -571,7 +552,7 @@ export const Comment = (props: {
             }
 
             <HTML.Comment
-                comment={escapeComment(comment)}
+                comment={TEXT.escapeComment(comment)}
                 path={props.path}
             />
         </HTML.Div>
@@ -579,25 +560,25 @@ export const Comment = (props: {
 }
 
 export const PI = (props: {
-    root: SNACItem[],
-    node: SNACPINode,
+    root: SNAC.SNACItem[],
+    node: SNAC.SNACPINode,
     path: number[],
     showSelected: boolean,
     showOpen: boolean,
-    opts: SNACOpts,
+    opts: SNAC.SNACOpts,
 }): JSX.Element | null => {
 
-    const [isSelected, setSelected] = useState(props.node.q)
-    const [isChildrenOpen, setChildrenOpen] = useState(props.node.o)
+    const [isSelected, setSelected] = useState(false)
+    const [isChildrenOpen, setChildrenOpen] = useState(true)
 
-    let selectState = SwitchStates.HIDDEN
-    let openState = SwitchStates.HIDDEN
+    let selectState = SNAC.SwitchStates.HIDDEN
+    let openState = SNAC.SwitchStates.HIDDEN
     let selectedClassName = 'pi'
 
     if (props.showSelected) {
         selectState = isSelected ?
-            SwitchStates.ON :
-            SwitchStates.OFF
+            SNAC.SwitchStates.ON :
+            SNAC.SwitchStates.OFF
 
         selectedClassName = isSelected ?
             'pi selected' :
@@ -606,8 +587,8 @@ export const PI = (props: {
 
     if (props.showOpen) {
         openState = isChildrenOpen ?
-            SwitchStates.ON :
-            SwitchStates.OFF
+            SNAC.SwitchStates.ON :
+            SNAC.SwitchStates.OFF
     }
 
     let body = props.node.B
@@ -640,7 +621,7 @@ export const PI = (props: {
 
             <HTML.PI
                 language={props.node.L}
-                body={escapePIBody(body)}
+                body={TEXT.escapePIBody(body)}
                 path={props.path}
             />
         </HTML.Div>

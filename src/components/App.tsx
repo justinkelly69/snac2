@@ -1,41 +1,16 @@
-import React from 'react';
-import "../App.css";
+import React from 'react'
+import "../App.css"
 
 import xmlInput from '../lib/data/xml/waffle'
 import xml2snac from '../lib/snac/xml2snac'
-import xmlOut from '../lib/tsx/snac2xml';
+import snac2xml from '../lib/tsx/snac2xml'
 import { snacOpts } from '../lib/snac/opts'
-
-import {
-    Tag,
-    Attribute,
-    Attributes,
-    CDATA,
-    CloseTag,
-    Text,
-    Comment,
-    OpenTag,
-    PI,
-    Prefix
-} from '../lib/tsx/functions';
+import * as FUNC from '../lib/tsx/functions'
 
 function App() {
-
-    const funcs = {
-        Tag,
-        OpenTag,
-        CloseTag,
-        Text,
-        CDATA,
-        Comment,
-        PI,
-        Attributes,
-        Attribute,
-        Prefix
-    }
-
-    const snac = xml2snac(xmlInput)[0]
-    const xml = xmlOut([snac], funcs, snacOpts)
+    const snac = xml2snac(xmlInput)
+    console.log(JSON.stringify(snac, null, 4))
+    const xml = snac2xml(snac, FUNC, snacOpts)
 
     return (
         <div>
@@ -45,4 +20,4 @@ function App() {
     )
 }
 
-export default App;
+export default App

@@ -7,6 +7,7 @@ import {
     SNACComment,
     SNACPINode,
     SNACOpts,
+    SNACRoot,
 } from '../snac/types'
 
 import {
@@ -14,11 +15,11 @@ import {
 } from '../snac/textutils'
 
 const snac2xml = (
-    snac: SNACItem[],
+    snac: SNACRoot,
     funcs: SNAC2XMLJSXFuncs,
     opts: SNACOpts
 ) => {
-    return getChildren([], snac, [], funcs, opts)
+    return getChildren([], snac.S, [], funcs, opts)
 }
 
 const getChildren = (

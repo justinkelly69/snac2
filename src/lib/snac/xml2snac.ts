@@ -6,7 +6,9 @@ import {
     AttributesType,
     QuoteChar,
     AttributeXMLType,
-    AttributeValueType
+    AttributeValueType,
+    SNACRoot,
+    SNACOut
 } from './types'
 
 import { xmlOpts } from './opts'
@@ -16,13 +18,16 @@ import {
     unEscapeHtml
 } from './textutils'
 
-const render = (xml: string) => {
+const render = (xml: string): SNACRoot => {
     const stack: SNACNamesNode[] = []
 
-    return _render(xml, stack)['out']
+    return {
+        Q: [],
+        S: _render(xml, stack)['out']
+    }
 }
 
-const _render = (xml: string, stack: SNACNamesNode[]) => {
+const _render = (xml: string, stack: SNACNamesNode[]): SNACOut => {
     const out: SNACItem[] = []
 
     while (xml.length > 0) {
@@ -42,10 +47,7 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
             const snac: SNACElement = {
                 N: tagName,
                 A: attributes['attributes'],
-                C: [],
-                a: true,
-                o: true,
-                q: false
+                C: []
             }
 
             stack.push({
@@ -60,7 +62,7 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
 
             } else {
                 out.push(snac)
-                const prev = stack.pop()
+                stack.pop()
             }
         }
 
@@ -84,9 +86,7 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
         else if (dataTag !== null) {
             if (stack.length > 0) {
                 out.push({
-                    D: dataTag[1],
-                    o: true,
-                    q: false
+                    D: dataTag[1]
                 })
             }
             xml = dataTag[2]
@@ -95,9 +95,7 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
         else if (commentTag !== null) {
             if (stack.length > 0) {
                 out.push({
-                    M: commentTag[1],
-                    o: true,
-                    q: false
+                    M: commentTag[1]
                 })
             }
             xml = commentTag[2]
@@ -107,9 +105,7 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
             if (stack.length > 0) {
                 out.push({
                     L: piTag[1],
-                    B: piTag[2],
-                    o: true,
-                    q: false
+                    B: piTag[2]
                 })
             }
             xml = piTag[3]
@@ -122,9 +118,7 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
                     text = normalizeText(text)
                 }
                 out.push({
-                    T: text,
-                    o: true,
-                    q: false
+                    T: text
                 })
             }
             xml = textTag[2]
@@ -133,9 +127,7 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
         else if (blankTag !== null) {
             if (stack.length > 0) {
                 out.push({
-                    T: "",
-                    o: true,
-                    q: false
+                    T: ""
                 })
             }
             xml = ""
