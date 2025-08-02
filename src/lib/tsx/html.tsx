@@ -82,7 +82,7 @@ export const TagNameSegment = (props: {
 }) => {
     return (
         <span className={props.className}
-            onClick={e => console.log(`N[${props.path}]`)}
+            //onClick={e => console.log(`N[${props.path}]`)}
         >
             {props.name}{/* {' '}({props.path}) */}
         </span>
@@ -180,7 +180,7 @@ export const CDATA = (props: {
         <>
             &lt;![CDATA[
             <span className='cdata-body'
-                onClick={e => console.log(`D[${props.path}]`)}
+                //onClick={e => console.log(`D[${props.path}]`)}
             >
                 {/* ({props.path}) */}{props.cdata}
             </span>
@@ -197,7 +197,7 @@ export const Comment = (props: {
         <>
             &lt;!--
             <span className='comment-body'
-                onClick={e => console.log(`M[${props.path}]`)}
+                //onClick={e => console.log(`M[${props.path}]`)}
             >
                 {/* ({props.path}) */}{props.comment}
             </span>
@@ -217,7 +217,7 @@ export const PI = (props: {
             <span className='pi-lang'>{props.language}</span>
             {" "}
             <span className='pi-body'
-                onClick={e => console.log(`P[${props.path}]`)}
+                //onClick={e => console.log(`P[${props.path}]`)}
             >
                 {/* ({props.path}) */}{props.body}
             </span>
@@ -232,7 +232,7 @@ export const Text = (props: {
 }) => {
     return (
         <span className='text-body'
-            onClick={e => console.log(`T[${props.path}]`)}
+            //onClick={e => console.log(`T[${props.path}]`)}
         >
             {/* ({props.path}) */}[{props.text}]
         </span>
